@@ -1,9 +1,9 @@
 package io.mpolivaha.maven.plugin.editorconfig.parser;
 
+import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ExecutionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.GlobExpression;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section.SectionBuilder;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.parser.ParsingUtils.KeyValue;
 import java.io.BufferedReader;
@@ -17,7 +17,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 
 public class EditorconfigParser {
 
-  private String editorconfigLocation;
+  private final String editorconfigLocation;
 
   private static final BiFunction<String, Integer, String> KEY_VALUE_PARSE_ERROR = (line, lineNumber) ->
       "For line number '%d' with content : '%s' expected to contain key/value pair, but we cannot parse it".formatted(
@@ -35,50 +35,81 @@ public class EditorconfigParser {
   public EditorconfigParser(String editorconfigLocation) {
     InputStream resourceAsStream = ClassLoader.getSystemClassLoader().getResourceAsStream(editorconfigLocation);
     this.editorconfigLocation = editorconfigLocation;
+    init(resourceAsStream);
   }
 
-  public void init(InputStream resourceAsStream) throws MojoExecutionException {
+  public void init(InputStream resourceAsStream) {
     try (var reader = new BufferedReader(new InputStreamReader(resourceAsStream))) {
       parseInternally(reader);
     } catch (IOException e) {
-      throw new MojoExecutionException("Unable to read .editorconfig file in '%s'".formatted(editorconfigLocation), e);
+      Assert.sneakyThrows(new MojoExecutionException("Unable to read .editorconfig file in '%s'".formatted(editorconfigLocation), e));
     }
   }
 
-  private static void parseInternally(BufferedReader reader) throws IOException, MojoExecutionException {
+  private static void parseInternally(BufferedReader reader) throws IOException {
     String line;
-    int lineNumber = 0;
-    SectionBuilder builder = Section.builder();
+    ParingContext context = null;
 
-    while ((line = reader.readLine()) != null) {
-      lineNumber++;
-
-      if (line.isBlank()) {
-        continue;
+    do {
+      line = reader.readLine();
+      if (line == null) {
+        break;
+      }
+      if (context == null) {
+        context = new ParingContext(line, Section.builder());
+      } else {
+        context.newline(line);
       }
 
-      if (!ParsingUtils.isComment(line)) {
-        if (ParsingUtils.isSection(line)) {
-          builder.globExpression(GlobExpression.from(line.trim()));
-        } else {
-          final var holder = new LineNumberAndLine(line, lineNumber); // see javadoc on holder class
-          Optional<KeyValue> keyValue = ParsingUtils.parseKeyValue(line);
+      parseLineInternally(context);
+    }
+    while (true);
+  }
 
-          if (keyValue.isEmpty()) {
-            ExecutionUtils.handleError(KEY_VALUE_PARSE_ERROR.apply(holder.line, holder.lineNumber));
-            continue;
-          }
+  private static void parseLineInternally(ParingContext context) {
+    String line = context.getLine();
 
-          Optional<Option> option = Option.from(keyValue.get().key());
+    if (line.isBlank()) {
+      return;
+    }
 
-          if (option.isEmpty()) {
-            ExecutionUtils.handleError(UNRECOGNIZED_KEY_ERROR.apply(holder.line, holder.lineNumber));
-            continue;
-          }
+    if (!ParsingUtils.isComment(line)) {
+      parseSignificantLine(context);
+    }
+  }
 
-          ;
-        }
+  private static void parseSignificantLine(ParingContext context) {
+    String line = context.getLine();
+
+    if (ParsingUtils.isSection(line)) {
+      context.getSectionBuilder().globExpression(GlobExpression.from(line.trim()));
+    } else {
+      final var holder = new LineNumberAndLine(line, context.getLineNumber()); // see javadoc on holder class
+      Optional<KeyValue> optKeyValue = ParsingUtils.parseKeyValue(line);
+
+      if (optKeyValue.isEmpty()) {
+        ExecutionUtils.handleError(KEY_VALUE_PARSE_ERROR.apply(holder.line, holder.lineNumber));
+        return;
       }
+
+      KeyValue keyValue = optKeyValue.get();
+
+      Optional<Option> option = Option.from(keyValue.key());
+
+      if (option.isEmpty()) {
+        checkForRoot(context, holder, keyValue);
+        return;
+      }
+
+      option.get().merge(keyValue, context.getSectionBuilder());
+    }
+  }
+
+  private static void checkForRoot(ParingContext context, LineNumberAndLine holder, KeyValue keyValue) {
+    if (keyValue.key().equalsIgnoreCase("root")) {
+      context.getSectionBuilder().getEditorconfig().markAsRoot();
+    } else {
+      ExecutionUtils.handleError(UNRECOGNIZED_KEY_ERROR.apply(holder.line, holder.lineNumber));
     }
   }
 
@@ -87,5 +118,5 @@ public class EditorconfigParser {
    * @param line
    * @param lineNumber
    */
-  private static record LineNumberAndLine(String line, int lineNumber) {}
+  private record LineNumberAndLine(String line, int lineNumber) {}
 }

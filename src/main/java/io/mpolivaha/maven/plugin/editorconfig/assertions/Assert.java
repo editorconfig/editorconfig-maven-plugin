@@ -1,6 +1,5 @@
 package io.mpolivaha.maven.plugin.editorconfig.assertions;
 
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.apache.maven.plugin.MojoExecutionException;
 

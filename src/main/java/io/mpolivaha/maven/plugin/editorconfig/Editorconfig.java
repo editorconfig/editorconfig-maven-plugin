@@ -27,15 +27,20 @@ public class Editorconfig {
     return this;
   }
 
-  public Editorconfig setRoot() {
+  public Editorconfig markAsRoot() {
     this.isRoot = true;
     return this;
   }
 
   /**
    * Corresponds to a particular section of the .editorconfig file
+   * <p>
+   * This class is <strong>intentionally</strong> not static, as it is, by design, is created
+   * within the {@link Editorconfig}. There might be an option to just composite the {@link Editorconfig}
+   * instance within {@link Section current section}, but the design decicion was made to try to solve this
+   * via java inner classes.
    */
-  public static class Section {
+  public class Section {
 
     /**
      * Location of .editorconfig file relative to the classpath root
@@ -66,60 +71,80 @@ public class Editorconfig {
     }
 
     public static SectionBuilder builder() {
-      return new SectionBuilder();
-    }
-
-    public static class SectionBuilder {
-
-      private String location;
-      private IndentationStyle indentationStyle;
-      private GlobExpression globExpression;
-      private EndOfLine endOfLine;
-      private Charset charset;
-      private TrueFalse trimTrailingWhitespace;
-
-      private TrueFalse insertFinalNewLine;
-
-      public SectionBuilder location(String location) {
-        this.location = location;
-        return this;
-      }
-
-      public SectionBuilder indentationStyle(IndentationStyle indentationStyle) {
-        this.indentationStyle = indentationStyle;
-        return this;
-      }
-
-      public SectionBuilder globExpression(GlobExpression globExpression) {
-        this.globExpression = globExpression;
-        return this;
-      }
-
-      public SectionBuilder endOfLine(EndOfLine endOfLine) {
-        this.endOfLine = endOfLine;
-        return this;
-      }
-
-      public SectionBuilder charset(Charset charset) {
-        this.charset = charset;
-        return this;
-      }
-
-      public SectionBuilder trimTrailingWhitespace(TrueFalse trimTrailingWhitespace) {
-        this.trimTrailingWhitespace = trimTrailingWhitespace;
-        return this;
-      }
-
-      public SectionBuilder insertFinalNewLine(TrueFalse insertFinalNewLine) {
-        this.insertFinalNewLine = insertFinalNewLine;
-        return this;
-      }
-
-      public Section build() {
-        return new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine);
-      }
+      return new Editorconfig().new SectionBuilder();
     }
   }
+
+  /**
+   * Builder for {@link Section section}.
+   *
+   * <p>
+   * This class is <strong>intentionally</strong> not static, as it is, by design, is created
+   * within the {@link Editorconfig}. There might be an option to just composite the {@link Editorconfig}
+   * instance within {@link Section current section}, but the design decicion was made to try to solve this
+   * via java inner classes.
+   */
+  public class SectionBuilder {
+
+    private String location;
+    private IndentationStyle indentationStyle;
+    private GlobExpression globExpression;
+    private EndOfLine endOfLine;
+    private Charset charset;
+    private TrueFalse trimTrailingWhitespace;
+
+    private TrueFalse insertFinalNewLine;
+
+    public SectionBuilder location(String location) {
+      this.location = location;
+      return this;
+    }
+
+    public SectionBuilder indentationStyle(IndentationStyle indentationStyle) {
+      this.indentationStyle = indentationStyle;
+      return this;
+    }
+
+    public SectionBuilder globExpression(GlobExpression globExpression) {
+      this.globExpression = globExpression;
+      return this;
+    }
+
+    public SectionBuilder endOfLine(EndOfLine endOfLine) {
+      this.endOfLine = endOfLine;
+      return this;
+    }
+
+    public SectionBuilder charset(Charset charset) {
+      this.charset = charset;
+      return this;
+    }
+
+    public SectionBuilder trimTrailingWhitespace(TrueFalse trimTrailingWhitespace) {
+      this.trimTrailingWhitespace = trimTrailingWhitespace;
+      return this;
+    }
+
+    public SectionBuilder insertFinalNewLine(TrueFalse insertFinalNewLine) {
+      this.insertFinalNewLine = insertFinalNewLine;
+      return this;
+    }
+
+    /**
+     * Obtain the enclosing editroconfig
+     */
+    public Editorconfig getEditorconfig() {
+      return Editorconfig.this;
+    }
+
+    /**
+     * Build section withing {@link Editorconfig editorconfig}, that is the enclosing for this {@link SectionBuilder builder}.
+     */
+    public Section build() {
+      return new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine);
+    }
+  }
+
 
   /**
    * Glob expression of the particular {@link Section}
