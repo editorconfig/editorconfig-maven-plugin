@@ -1,4 +1,4 @@
-package io.mpolivaha.maven.plugin.editorconfig.processing;
+package io.mpolivaha.maven.plugin.editorconfig.model;
 
 public enum IndentationStyle {
 

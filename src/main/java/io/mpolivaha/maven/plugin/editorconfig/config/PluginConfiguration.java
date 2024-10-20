@@ -30,8 +30,8 @@ public class PluginConfiguration {
   }
 
   @SuppressWarnings("unchecked")
-  public <T> T getFailOnError() {
-    return (T) this.parameters.get(Param.FAIL_ON_ERROR);
+  public <T> T isStrictMode() {
+    return (T) this.parameters.get(Param.STRICT_MODE);
   }
 
   @SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class PluginConfiguration {
   }
 
   public enum Param {
-    FAIL_ON_ERROR,
+    STRICT_MODE,
     LOG
   }
 }
