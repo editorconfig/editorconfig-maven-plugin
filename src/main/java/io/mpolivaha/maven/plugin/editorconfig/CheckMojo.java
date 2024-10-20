@@ -13,8 +13,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "check", defaultPhase = LifecyclePhase.VALIDATE)
 public class CheckMojo extends AbstractMojo {
 
-  @Parameter(name = "failOnError", defaultValue = "true", required = true)
-  private boolean failOnError;
+  @Parameter(name = "strictMode", defaultValue = "true", required = true)
+  private boolean strictMode;
 
   @Parameter(name = "editorconfig")
   private String editorConfigLocation;
@@ -22,7 +22,7 @@ public class CheckMojo extends AbstractMojo {
   public void execute() throws MojoExecutionException, MojoFailureException {
     PluginConfiguration.buildInstance(
         Map.of(
-            Param.STRICT_MODE, failOnError,
+            Param.STRICT_MODE, strictMode,
             Param.LOG, getLog()
         )
     );

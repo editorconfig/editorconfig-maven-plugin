@@ -1,8 +1,8 @@
 package io.mpolivaha.maven.plugin.editorconfig.assertions;
 
-import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
 
 /**
  * Assertion class
@@ -17,11 +17,14 @@ public class Assert {
 
   public static <T> void notNull(T element, String message) {
     if (element == null) {
-      if (PluginConfiguration.getInstance().isStrictMode()) {
-        sneakyThrows(new MojoExecutionException(message));
-      } else {
-        PluginConfiguration.getInstance().<Log>getLog().warn(message);
-      }
+      sneakyThrows(new MojoExecutionException(message));
+    }
+  }
+
+  public static void state(Supplier<Boolean> element, String message) {
+    notNull(element, "Supplier<Boolean> cannot be null");
+    if (!element.get()) {
+      sneakyThrows(new MojoExecutionException(message));
     }
   }
 }
