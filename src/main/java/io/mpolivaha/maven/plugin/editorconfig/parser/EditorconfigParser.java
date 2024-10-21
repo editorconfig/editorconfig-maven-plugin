@@ -1,5 +1,6 @@
 package io.mpolivaha.maven.plugin.editorconfig.parser;
 
+import io.mpolivaha.maven.plugin.editorconfig.Editorconfig;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ExecutionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.GlobExpression;
@@ -17,8 +18,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 
 public class EditorconfigParser {
 
-  private final String editorconfigLocation;
-
   private static final BiFunction<String, Integer, String> KEY_VALUE_PARSE_ERROR = (line, lineNumber) ->
       "For line number '%d' with content : '%s' expected to contain key/value pair, but we cannot parse it".formatted(
           lineNumber,
@@ -32,21 +31,16 @@ public class EditorconfigParser {
           Arrays.toString(Option.values())
       );
 
-  public EditorconfigParser(String editorconfigLocation) {
-    InputStream resourceAsStream = ClassLoader.getSystemClassLoader().getResourceAsStream(editorconfigLocation);
-    this.editorconfigLocation = editorconfigLocation;
-    init(resourceAsStream);
-  }
-
-  public void init(InputStream resourceAsStream) {
+  public Editorconfig parse(InputStream resourceAsStream) {
     try (var reader = new BufferedReader(new InputStreamReader(resourceAsStream))) {
-      parseInternally(reader);
+      return parseInternally(reader);
     } catch (IOException e) {
-      Assert.sneakyThrows(new MojoExecutionException("Unable to read .editorconfig file in '%s'".formatted(editorconfigLocation), e));
+      Assert.sneakyThrows(new MojoExecutionException("Unable to read .editorconfig file", e));
+      return null; // unreachable code
     }
   }
 
-  private static void parseInternally(BufferedReader reader) throws IOException {
+  private static Editorconfig parseInternally(BufferedReader reader) throws IOException {
     String line;
     ParingContext context = null;
 
@@ -64,6 +58,12 @@ public class EditorconfigParser {
       parseLineInternally(context);
     }
     while (true);
+
+    if (context.getSectionBuilder().getGlobExpression() != null) {
+      return context.getSectionBuilder().build();
+    } else {
+      return context.getSectionBuilder().getEditorconfig();
+    }
   }
 
   private static void parseLineInternally(ParingContext context) {
@@ -82,6 +82,9 @@ public class EditorconfigParser {
     String line = context.getLine();
 
     if (ParsingUtils.isSection(line)) {
+      if (context.getSectionBuilder().getGlobExpression() != null) {
+        context.getSectionBuilder().build();
+      }
       context.getSectionBuilder().globExpression(GlobExpression.from(line.trim()));
     } else {
       final var holder = new LineNumberAndLine(line, context.getLineNumber()); // see javadoc on holder class

@@ -130,6 +130,10 @@ public class Editorconfig {
       return this;
     }
 
+    public GlobExpression getGlobExpression() {
+      return this.globExpression;
+    }
+
     /**
      * Obtain the enclosing editroconfig
      */
@@ -140,8 +144,12 @@ public class Editorconfig {
     /**
      * Build section withing {@link Editorconfig editorconfig}, that is the enclosing for this {@link SectionBuilder builder}.
      */
-    public Section build() {
-      return new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine);
+    public Editorconfig build() {
+      Editorconfig editorconfig = getEditorconfig();
+      editorconfig.addSection(
+          new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine)
+      );
+      return editorconfig;
     }
   }
 
