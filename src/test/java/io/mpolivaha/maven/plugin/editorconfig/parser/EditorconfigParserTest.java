@@ -1,12 +1,8 @@
 package io.mpolivaha.maven.plugin.editorconfig.parser;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Objects;
-import org.junit.jupiter.api.BeforeEach;
+import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
+import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration.Param;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,7 +14,8 @@ class EditorconfigParserTest {
 
   @Test
   void testFileParsing() {
+    PluginConfiguration.buildInstance(Map.of(Param.STRICT_MODE, true));
     EditorconfigParser editorconfigParser = new EditorconfigParser();
-//    editorconfigParser.parse();
+    editorconfigParser.parse("test-files/.root-editorconfig");
   }
 }

@@ -5,13 +5,16 @@ import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ExecutionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.GlobExpression;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.common.TripleFunction;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.parser.ParsingUtils.KeyValue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -24,15 +27,17 @@ public class EditorconfigParser {
           line
       );
 
-  private static final BiFunction<String, Integer, String> UNRECOGNIZED_KEY_ERROR = (line, lineNumber) ->
+  private static final TripleFunction<String, Integer, String, String> UNRECOGNIZED_KEY_ERROR = (line, lineNumber, key) ->
       "For line number '%d' with content : '%s' parsed the key : '%s', which is not among the recognized keys : %s".formatted(
           lineNumber,
           line,
+          key,
           Arrays.toString(Option.values())
       );
 
-  public Editorconfig parse(InputStream resourceAsStream) {
-    try (var reader = new BufferedReader(new InputStreamReader(resourceAsStream))) {
+  public Editorconfig parse(String filePath) {
+    try (var reader = new BufferedReader(new InputStreamReader(
+        Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResourceAsStream(filePath))))) {
       return parseInternally(reader);
     } catch (IOException e) {
       Assert.sneakyThrows(new MojoExecutionException("Unable to read .editorconfig file", e));
@@ -112,7 +117,7 @@ public class EditorconfigParser {
     if (keyValue.key().equalsIgnoreCase("root")) {
       context.getSectionBuilder().getEditorconfig().markAsRoot();
     } else {
-      ExecutionUtils.handleError(UNRECOGNIZED_KEY_ERROR.apply(holder.line, holder.lineNumber));
+      ExecutionUtils.handleError(UNRECOGNIZED_KEY_ERROR.apply(holder.line, holder.lineNumber, keyValue.key()));
     }
   }
 

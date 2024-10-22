@@ -6,10 +6,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Charset {
-  // TODO: complete possible charsets and add possible aliases
-  UTF_8(),
-  LATIN(),
-  ASCII();
+  UTF_8("utf-8", "utf-8-bom"),
+  UTF_16("utf-16be", "utf-16le"),
+  LATIN("latin1");
 
   private final Set<String> aliases;
 

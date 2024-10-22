@@ -159,10 +159,14 @@ public class Editorconfig {
    */
   public static class GlobExpression {
 
-    private String raw;
+    private final String raw;
+
+    private GlobExpression(String raw) {
+      this.raw = raw;
+    }
 
     public static GlobExpression from(String raw) {
-      throw new UnsupportedOperationException();
+      return new GlobExpression(raw);
     }
 
     private boolean accepts(Path path) {

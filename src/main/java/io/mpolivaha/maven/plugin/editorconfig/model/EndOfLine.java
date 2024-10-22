@@ -4,19 +4,21 @@ import java.util.Optional;
 
 public enum EndOfLine {
 
-  CARRIAGE_RERUN("\r"),
-  CARRIAGE_RERUN_LINE_FEED("\r\n"),
-  LINE_FEED("\n");
+  CARRIAGE_RERUN("\r", "cr"),
+  CARRIAGE_RERUN_LINE_FEED("\r\n", "crlf"),
+  LINE_FEED("\n", "lf");
 
   private final String eolSymbol;
+  private final String specMarker;
 
-  EndOfLine(String eolSymbol) {
+  EndOfLine(String eolSymbol, String specMarker) {
     this.eolSymbol = eolSymbol;
+    this.specMarker = specMarker;
   }
 
   public static Optional<EndOfLine> from(String symbol) {
     for (EndOfLine value : values()) {
-      if (value.eolSymbol.equals(symbol)) {
+      if (value.specMarker.equals(symbol)) {
         return Optional.of(value);
       }
     }

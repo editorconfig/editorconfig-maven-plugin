@@ -9,7 +9,7 @@ public class OptionUtils {
   public static final String END_OF_LINE = "end_of_line";
   public static final String CHARSET = "charset";
   public static final String TRIM_TRAILING_WHITESPACE = "trim_trailing_whitespace";
-  public static final String INSERT_FINAL_NEW_LINE = "insert_final_new_line";
+  public static final String INSERT_FINAL_NEW_LINE = "insert_final_newline";
 
   /**
    * Error message function. Accepts option we were trying to set, the value for the option that was provided, and the
