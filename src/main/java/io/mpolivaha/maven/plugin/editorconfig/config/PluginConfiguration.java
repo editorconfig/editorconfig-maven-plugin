@@ -18,6 +18,13 @@ public class PluginConfiguration {
     }
   }
 
+  /**
+   * For tests only
+   */
+  public static void destroyInstance() {
+    INSTANCE = null;
+  }
+
   public static PluginConfiguration getInstance() {
     if (INSTANCE == null) {
       throw new IllegalArgumentException("initialize PluginConfiguration before calling getInstance()");

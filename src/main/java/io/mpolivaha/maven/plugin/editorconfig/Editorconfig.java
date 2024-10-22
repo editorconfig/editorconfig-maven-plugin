@@ -32,6 +32,14 @@ public class Editorconfig {
     return this;
   }
 
+  public boolean isRoot() {
+    return this.isRoot;
+  }
+
+  public List<Section> getSections() {
+    return sections;
+  }
+
   /**
    * Corresponds to a particular section of the .editorconfig file
    * <p>
@@ -68,6 +76,34 @@ public class Editorconfig {
       this.charset = charset;
       this.trimTrailingWhitespace = trimTrailingWhitespace;
       this.insertFinalNewLine = insertFinalNewLine;
+    }
+
+    public String getLocation() {
+      return location;
+    }
+
+    public IndentationStyle getIndentationStyle() {
+      return indentationStyle;
+    }
+
+    public GlobExpression getGlobExpression() {
+      return globExpression;
+    }
+
+    public EndOfLine getEndOfLine() {
+      return endOfLine;
+    }
+
+    public Charset getCharset() {
+      return charset;
+    }
+
+    public TrueFalse getTrimTrailingWhitespace() {
+      return trimTrailingWhitespace;
+    }
+
+    public TrueFalse getInsertFinalNewLine() {
+      return insertFinalNewLine;
     }
 
     public static SectionBuilder builder() {
@@ -163,6 +199,10 @@ public class Editorconfig {
 
     private GlobExpression(String raw) {
       this.raw = raw;
+    }
+
+    public String getRaw() {
+      return raw;
     }
 
     public static GlobExpression from(String raw) {
