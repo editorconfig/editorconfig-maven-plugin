@@ -1,6 +1,7 @@
-package io.mpolivaha.maven.plugin.editorconfig.model;
+package io.mpolivaha.maven.plugin.editorconfig.utils;
 
 import io.mpolivaha.maven.plugin.editorconfig.common.TripleFunction;
+import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import java.util.Arrays;
 
 public class OptionUtils {

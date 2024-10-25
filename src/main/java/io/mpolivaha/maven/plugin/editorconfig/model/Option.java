@@ -1,11 +1,12 @@
 package io.mpolivaha.maven.plugin.editorconfig.model;
 
-import static io.mpolivaha.maven.plugin.editorconfig.model.OptionUtils.ERROR_MESSAGE;
+import static io.mpolivaha.maven.plugin.editorconfig.utils.OptionUtils.ERROR_MESSAGE;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.SectionBuilder;
-import io.mpolivaha.maven.plugin.editorconfig.common.ExecutionUtils;
-import io.mpolivaha.maven.plugin.editorconfig.parser.ParsingUtils.KeyValue;
+import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
+import io.mpolivaha.maven.plugin.editorconfig.utils.OptionUtils;
+import io.mpolivaha.maven.plugin.editorconfig.utils.ParsingUtils.KeyValue;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

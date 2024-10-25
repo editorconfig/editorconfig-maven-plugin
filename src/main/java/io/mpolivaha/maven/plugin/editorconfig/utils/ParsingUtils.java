@@ -1,4 +1,4 @@
-package io.mpolivaha.maven.plugin.editorconfig.parser;
+package io.mpolivaha.maven.plugin.editorconfig.utils;
 
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import java.util.Optional;
