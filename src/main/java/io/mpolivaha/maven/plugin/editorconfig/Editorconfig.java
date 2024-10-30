@@ -7,6 +7,7 @@ import io.mpolivaha.maven.plugin.editorconfig.model.TrueFalse;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * .editorconfig file representation
@@ -16,6 +17,8 @@ import java.util.List;
 public class Editorconfig {
 
   private boolean isRoot = false;
+
+  private Path location;
 
   private List<Section> sections;
 
@@ -38,6 +41,19 @@ public class Editorconfig {
 
   public List<Section> getSections() {
     return sections;
+  }
+
+  public Path getLocation() {
+    return location;
+  }
+
+  public Editorconfig setLocation(Path location) {
+    this.location = location;
+    return this;
+  }
+
+  public Optional<Section> findTargetSection(Path file) {
+    throw new UnsupportedOperationException();
   }
 
   /**

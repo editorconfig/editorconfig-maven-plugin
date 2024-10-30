@@ -1,19 +1,20 @@
 package io.mpolivaha.maven.plugin.editorconfig.parser;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig;
-import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
-import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.GlobExpression;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.TripleFunction;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
+import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ParsingUtils;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ParsingUtils.KeyValue;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -35,16 +36,16 @@ public class EditorconfigParser {
       );
 
   public Editorconfig parse(String filePath) {
-    try (var reader = new BufferedReader(new InputStreamReader(
-        Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResourceAsStream(filePath))))) {
-      return parseInternally(reader);
+    Path path = Paths.get(filePath);
+    try (var reader = new BufferedReader(new FileReader(path.toFile()))) {
+      return parseInternally(reader, path);
     } catch (IOException e) {
       Assert.sneakyThrows(new MojoExecutionException("Unable to read .editorconfig file", e));
       return null; // unreachable code
     }
   }
 
-  private static Editorconfig parseInternally(BufferedReader reader) throws IOException {
+  private static Editorconfig parseInternally(BufferedReader reader, Path location) throws IOException {
     String line;
     ParingContext context = null;
 
@@ -63,11 +64,15 @@ public class EditorconfigParser {
     }
     while (true);
 
+    Editorconfig result;
+
     if (context.getSectionBuilder().getGlobExpression() != null) {
-      return context.getSectionBuilder().build();
+      result = context.getSectionBuilder().build();
     } else {
-      return context.getSectionBuilder().getEditorconfig();
+      result = context.getSectionBuilder().getEditorconfig();
     }
+    result.setLocation(location);
+    return result;
   }
 
   private static void parseLineInternally(ParingContext context) {

@@ -1,9 +1,13 @@
 package io.mpolivaha.maven.plugin.editorconfig.file;
 
+import io.mpolivaha.maven.plugin.editorconfig.common.ThrowingSupplier;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ExceptionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -11,7 +15,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import org.apache.maven.plugin.logging.Log;
 
 public class FileWalker {
@@ -22,7 +30,7 @@ public class FileWalker {
   private static final BiFunction<String, Exception, String> FILE_INSPECTION_ERROR = (path, error) ->
       "Error during inspecting the file : '%s'. Exception: \n%s".formatted(path, ExceptionUtils.getStackTrace(error));
 
-  public void walkRecursiveFilesInDirectory(Path root) throws IOException {
+  public void walkRecursiveFilesInDirectory(Path root, BiConsumer<Path, ThrowingSupplier<InputStream, Throwable>> contentConsumer) throws IOException {
     Files.walkFileTree(
         root,
         Set.of(FileVisitOption.FOLLOW_LINKS),
@@ -30,13 +38,16 @@ public class FileWalker {
         new FileVisitor<>() {
 
           @Override
-          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-            return null;
-          }
+          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) { return null; }
 
           @Override
           public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            return null;
+            try {
+              contentConsumer.accept(file, () -> new FileInputStream(file.toFile()));
+            } catch (Throwable t) {
+              return FileVisitResult.TERMINATE;
+            }
+            return FileVisitResult.CONTINUE;
           }
 
           @Override
