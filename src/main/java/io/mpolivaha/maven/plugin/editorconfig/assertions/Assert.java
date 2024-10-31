@@ -26,4 +26,8 @@ public class Assert {
       sneakyThrows(new MojoExecutionException(message));
     }
   }
+
+  public static void fail(String message) {
+    sneakyThrows(new MojoExecutionException(message));
+  }
 }

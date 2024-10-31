@@ -17,7 +17,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.assertj.core.api.Assertions;
 
 @Mojo(name = "check", defaultPhase = LifecyclePhase.VALIDATE)
 public class CheckMojo extends AbstractMojo {
@@ -54,7 +53,7 @@ public class CheckMojo extends AbstractMojo {
 
   private static void delegateToOptionsManager(ThrowingSupplier<InputStream, Throwable> inputStreamProducer, Section section) {
     try {
-      OptionsManager.getInstance().accept(inputStreamProducer.get(), section);
+      OptionsManager.getInstance().check(inputStreamProducer.get(), section);
     } catch (Throwable e) {
       Assert.sneakyThrows(e);
     }
