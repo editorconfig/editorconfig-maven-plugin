@@ -13,10 +13,21 @@ import java.util.List;
  */
 public class OptionValidationResult {
 
-  private final List<String> errorMessages = new LinkedList<>();
-  private Path file;
-  private Option option;
-  private Object optionValue;
+  private final List<String> errorMessages;
+  private final Path file;
+  private final Option option;
+  private final Object optionValue;
+
+  public OptionValidationResult(Path file, Option option, Object optionValue) {
+    this.file = file;
+    this.option = option;
+    this.optionValue = optionValue;
+    this.errorMessages = new LinkedList<>();
+  }
+
+  public void addErrorMessage(String errorMessage) {
+    errorMessages.add(errorMessage);
+  }
 
   public boolean noErrors() {
     return errorMessages.isEmpty();
