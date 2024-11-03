@@ -10,6 +10,7 @@ import io.mpolivaha.maven.plugin.editorconfig.file.FileWalker;
 import io.mpolivaha.maven.plugin.editorconfig.parser.EditorconfigParser;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Map;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -40,8 +41,10 @@ public class CheckMojo extends AbstractMojo {
       try {
         new FileWalker().walkRecursiveFilesInDirectory(
             editorconfig.getLocation(),
-            (path, inputStreamProducer) -> {
-              editorconfig.findTargetSection(path).ifPresent(section -> delegateToOptionsManager(inputStreamProducer, section));
+            (recursivelyFoundFile) -> {
+              editorconfig
+                  .findTargetSection(recursivelyFoundFile)
+                  .ifPresent(section -> delegateToOptionsManager(recursivelyFoundFile, section));
             });
       } catch (IOException e) {
         Assert.sneakyThrows(e);
@@ -51,9 +54,9 @@ public class CheckMojo extends AbstractMojo {
     }
   }
 
-  private static void delegateToOptionsManager(ThrowingSupplier<InputStream, Throwable> inputStreamProducer, Section section) {
+  private static void delegateToOptionsManager(Path file, Section section) {
     try {
-      OptionsManager.getInstance().check(inputStreamProducer.get(), section);
+      OptionsManager.getInstance().check(file, section);
     } catch (Throwable e) {
       Assert.sneakyThrows(e);
     }

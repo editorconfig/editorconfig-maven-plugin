@@ -14,12 +14,10 @@ import java.util.List;
 public class OptionValidationResult {
 
   private final List<String> errorMessages;
-  private final Path file;
   private final Option option;
   private final Object optionValue;
 
-  public OptionValidationResult(Path file, Option option, Object optionValue) {
-    this.file = file;
+  public OptionValidationResult(Option option, Object optionValue) {
     this.option = option;
     this.optionValue = optionValue;
     this.errorMessages = new LinkedList<>();
@@ -38,11 +36,10 @@ public class OptionValidationResult {
       Assert.fail("Called renderErrorMessage() on non-erroneous OptionViolations");
       return null; // unreachable code
     }
-    var finalErrorMessage = new StringBuilder("For .editorconfig option %s=%s found %d violation on file : %s:\n".formatted(
+    var finalErrorMessage = new StringBuilder("For .editorconfig option %s=%s found %d violation(-s):\n".formatted(
         option.getKey(),
         optionValue,
-        errorMessages.size(),
-        file.getFileName()
+        errorMessages.size()
     ));
     errorMessages.forEach(s -> finalErrorMessage.append("\t- %s\n".formatted(s)));
     return finalErrorMessage.toString();

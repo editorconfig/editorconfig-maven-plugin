@@ -30,7 +30,7 @@ public class FileWalker {
   private static final BiFunction<String, Exception, String> FILE_INSPECTION_ERROR = (path, error) ->
       "Error during inspecting the file : '%s'. Exception: \n%s".formatted(path, ExceptionUtils.getStackTrace(error));
 
-  public void walkRecursiveFilesInDirectory(Path root, BiConsumer<Path, ThrowingSupplier<InputStream, Throwable>> contentConsumer) throws IOException {
+  public void walkRecursiveFilesInDirectory(Path root, Consumer<Path> contentConsumer) throws IOException {
     Files.walkFileTree(
         root,
         Set.of(FileVisitOption.FOLLOW_LINKS),
@@ -43,7 +43,7 @@ public class FileWalker {
           @Override
           public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
             try {
-              contentConsumer.accept(file, () -> new FileInputStream(file.toFile()));
+              contentConsumer.accept(file);
             } catch (Throwable t) {
               return FileVisitResult.TERMINATE;
             }
