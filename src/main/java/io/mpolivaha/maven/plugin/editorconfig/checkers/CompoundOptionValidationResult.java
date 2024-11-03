@@ -23,4 +23,14 @@ public class CompoundOptionValidationResult {
   public void add(OptionValidationResult result) {
     this.validationResults.add(result);
   }
+
+  @Override
+  public String toString() {
+    var toString = new StringBuilder(
+        "In the target file : '%s' in total encountered %d violations: \n"
+            .formatted(targetFile.toFile().getAbsolutePath(), validationResults.stream().mapToInt(OptionValidationResult::violationsCount).sum())
+    );
+    validationResults.forEach(result -> toString.append(result.renderErrorMessage()));
+    return toString.toString();
+  }
 }

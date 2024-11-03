@@ -2,7 +2,6 @@ package io.mpolivaha.maven.plugin.editorconfig.checkers;
 
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +26,10 @@ public class OptionValidationResult {
     errorMessages.add(errorMessage);
   }
 
+  public int violationsCount() {
+    return errorMessages.size();
+  }
+
   public boolean noErrors() {
     return errorMessages.isEmpty();
   }
@@ -36,7 +39,7 @@ public class OptionValidationResult {
       Assert.fail("Called renderErrorMessage() on non-erroneous OptionViolations");
       return null; // unreachable code
     }
-    var finalErrorMessage = new StringBuilder("For .editorconfig option %s=%s found %d violation(-s):\n".formatted(
+    var finalErrorMessage = new StringBuilder("For option %s=%s found %d violation(-s):\n".formatted(
         option.getKey(),
         optionValue,
         errorMessages.size()
