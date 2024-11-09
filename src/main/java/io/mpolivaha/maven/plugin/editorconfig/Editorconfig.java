@@ -53,7 +53,7 @@ public class Editorconfig {
   }
 
   public Optional<Section> findTargetSection(Path file) {
-    throw new UnsupportedOperationException();
+    return this.sections.stream().filter(section -> section.accepts(file)).findFirst();
   }
 
   /**
@@ -120,6 +120,10 @@ public class Editorconfig {
 
     public TrueFalse getInsertFinalNewLine() {
       return insertFinalNewLine;
+    }
+
+    public boolean accepts(Path file) {
+      return this.globExpression.accepts(file);
     }
 
     public static SectionBuilder builder() {

@@ -1,9 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.checkers;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
-import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -28,20 +26,10 @@ public class OptionsManager {
   @SuppressWarnings("rawtypes")
   public CompoundOptionValidationResult check(Path file, Section section) throws IOException {
     var compoundResult = new CompoundOptionValidationResult(file);
-    String content = getContent(Files.newInputStream(file));
     for (SpecOptionVerifier specOptionVerifier : specOptionVerifiers) {
-      OptionValidationResult check = specOptionVerifier.check(content, section);
+      OptionValidationResult check = specOptionVerifier.check(Files.newInputStream(file), section);
       compoundResult.add(check);
     }
     return compoundResult;
-  }
-
-  private static String getContent(InputStream inputStream) {
-    try {
-      return new String(inputStream.readAllBytes());
-    } catch (IOException e) {
-      Assert.sneakyThrows(e);
-      return null; // unreachable code
-    }
   }
 }

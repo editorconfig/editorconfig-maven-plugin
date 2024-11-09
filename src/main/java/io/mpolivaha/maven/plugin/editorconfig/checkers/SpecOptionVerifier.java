@@ -3,6 +3,7 @@ package io.mpolivaha.maven.plugin.editorconfig.checkers;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
+import java.io.InputStream;
 
 /**
  * This is base class for all other that aim to check for a specific {@link Option option}
@@ -16,13 +17,13 @@ public abstract class SpecOptionVerifier<T> {
   /**
    * The option that this {@link SpecOptionVerifier verifier} checks
    */
-  private final Option targetOption;
+  protected final Option targetOption;
 
   protected SpecOptionVerifier(Option targetOption) {
     this.targetOption = targetOption;
   }
 
-  public OptionValidationResult check(String content, Section section) {
+  public OptionValidationResult check(InputStream content, Section section) {
     return checkInternal(content, getValueFromSection(section));
   }
 
@@ -33,7 +34,7 @@ public abstract class SpecOptionVerifier<T> {
    * @param optionValue value of option to check against
    * @return OptionViolations wrapped
    */
-  abstract OptionValidationResult checkInternal(String content, T optionValue);
+  abstract OptionValidationResult checkInternal(InputStream content, T optionValue);
 
   /**
    * Function that extracts the value of the required type from given {@link Section}
