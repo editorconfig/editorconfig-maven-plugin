@@ -8,7 +8,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
+/**
+ * {@link SpecOptionVerifier} for {@link EndOfLine} option
+ *
+ * @author Mikhail Polivakha
+ */
 public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
 
   protected EndOfLineOptionVerifier(Option targetOption) {
@@ -24,6 +30,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    return null;
   }
 
   @Override
