@@ -1,6 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.checkers;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.common.BufferedInputStream;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.utils.StreamUtils;
@@ -23,10 +24,8 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
 
   @Override
   OptionValidationResult checkInternal(InputStream content, EndOfLine optionValue) {
-    try (var buffer = new BufferedReader(new InputStreamReader(content))) {
-      StreamUtils.forEachIndexed(buffer.lines(), (row, rowNumber) -> {
-
-      });
+    try (var buffer = new BufferedInputStream(content)) {
+      int lineNumber = 0;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
