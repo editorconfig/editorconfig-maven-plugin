@@ -1,8 +1,11 @@
-package io.mpolivaha.maven.plugin.editorconfig.checkers;
+package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.common.BufferedInputStream;
+import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -34,7 +37,23 @@ public abstract class SpecOptionVerifier<T> {
    * @param optionValue value of option to check against
    * @return OptionViolations wrapped
    */
-  abstract OptionValidationResult checkInternal(InputStream content, T optionValue);
+  protected OptionValidationResult checkInternal(InputStream content, T optionValue) {
+    try (var reader = new BufferedInputStream(content)) {
+      int lineNumber = 1;
+      ByteArrayLine line;
+      OptionValidationResult result = new OptionValidationResult(targetOption, optionValue);
+      do {
+        line = reader.readLine();
+        forEachLine(line, lineNumber, optionValue, result);
+        lineNumber++;
+      } while (!line.isTheLastLine());
+      return result;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  protected abstract void forEachLine(ByteArrayLine line, int lineNumber, T optionValue, OptionValidationResult result);
 
   /**
    * Function that extracts the value of the required type from given {@link Section}

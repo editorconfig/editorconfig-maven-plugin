@@ -1,4 +1,4 @@
-package io.mpolivaha.maven.plugin.editorconfig.checkers;
+package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 
 import java.nio.file.Path;
 import java.util.LinkedList;

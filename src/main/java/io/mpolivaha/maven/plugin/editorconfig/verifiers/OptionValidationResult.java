@@ -1,4 +1,4 @@
-package io.mpolivaha.maven.plugin.editorconfig.checkers;
+package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
