@@ -1,5 +1,6 @@
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
+import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 
 public class ByteArrayLine {
@@ -9,6 +10,7 @@ public class ByteArrayLine {
   private final EndOfLine endOfLine;
 
   public ByteArrayLine(byte[] line, int eolStartsIndex, EndOfLine endOfLine) {
+    // TODO: add assertions for parameters not being null
     this.line = line;
     this.eolStartsIndex = eolStartsIndex;
     this.endOfLine = endOfLine;
@@ -20,5 +22,9 @@ public class ByteArrayLine {
 
   public EndOfLine getEndOfLine() {
     return endOfLine;
+  }
+
+  public boolean isTheLastLine() {
+    return this.endOfLine.equals(EndOfLine.EOF);
   }
 }
