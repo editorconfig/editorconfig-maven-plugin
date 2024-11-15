@@ -32,6 +32,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
 
   @Override
   OptionValidationResult checkInternal(InputStream content, EndOfLine optionValue) {
+    // TODO: yeahm this try/catch can be moved to the separate abstraction
     try (var buffer = new BufferedInputStream(content)) {
       int lineNumber = 1;
       ByteArrayLine line;
@@ -49,6 +50,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
       } while (!line.isTheLastLine());
 
     } catch (IOException e) {
+      // TODO add exception handling
       throw new RuntimeException(e);
     }
     return null;
