@@ -5,8 +5,10 @@ import static io.mpolivaha.maven.plugin.editorconfig.utils.OptionUtils.ERROR_MES
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.SectionBuilder;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
+import io.mpolivaha.maven.plugin.editorconfig.utils.IntegerUtils;
 import io.mpolivaha.maven.plugin.editorconfig.utils.OptionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ParsingUtils.KeyValue;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -20,22 +22,31 @@ public enum Option {
 
   IDENT_STYLE(
       OptionUtils.INDENT_STYLE,
-      (keyValue, sectionBuilder) -> assign(
-          IndentationStyle.from(keyValue.value()),
-          ERROR_MESSAGE.apply(OptionUtils.INDENT_STYLE, keyValue.value(), IndentationStyle.values()),
-          sectionBuilder::indentationStyle
-      )
+      (keyValue, sectionBuilder) ->
+          assign(
+            IndentationStyle.from(keyValue.value()),
+            ERROR_MESSAGE.apply(OptionUtils.INDENT_STYLE, keyValue.value(), toStringArr(IndentationStyle.values())),
+            sectionBuilder::indentationStyle
+          )
   ),
   IDENT_SIZE(
-      "indent_size",
+      OptionUtils.INDENT_SIZE,
       (keyValue, sectionBuilder) -> {
-        // TODO
+        assign(
+            IntegerUtils.parseIntSafe(keyValue.value()),
+            ERROR_MESSAGE.apply(OptionUtils.INDENT_SIZE, keyValue.value(), new String[]{"1", "2", "3", "4", "5", "..."}),
+            sectionBuilder::indentationSize
+        );
       }
   ),
   TAB_WIDTH(
-      "tab_width",
+      OptionUtils.TAB_WIDTH,
       (keyValue, sectionBuilder) -> {
-        // TODO:
+        assign(
+            IntegerUtils.parseIntSafe(keyValue.value()),
+            ERROR_MESSAGE.apply(OptionUtils.TAB_WIDTH, keyValue.value(), new String[]{"1", "2", "3", "4", "5", "..."}),
+            sectionBuilder::tabWidth
+        );
       }
   ),
   END_OF_LINE(
@@ -43,7 +54,7 @@ public enum Option {
       (keyValue, sectionBuilder) -> {
         assign(
             EndOfLine.from(keyValue.value()),
-            ERROR_MESSAGE.apply(OptionUtils.END_OF_LINE, keyValue.value(), EndOfLine.values()),
+            ERROR_MESSAGE.apply(OptionUtils.END_OF_LINE, keyValue.value(), toStringArr(EndOfLine.values())),
             sectionBuilder::endOfLine
         );
       }
@@ -53,7 +64,7 @@ public enum Option {
       (keyValue, sectionBuilder) -> {
         assign(
             Charset.from(keyValue.value()),
-            ERROR_MESSAGE.apply(OptionUtils.CHARSET, keyValue.value(), Charset.values()),
+            ERROR_MESSAGE.apply(OptionUtils.CHARSET, keyValue.value(), toStringArr(Charset.values())),
             sectionBuilder::charset
         );
       }
@@ -63,7 +74,7 @@ public enum Option {
       (keyValue, sectionBuilder) -> {
         assign(
             TrueFalse.from(keyValue.value()),
-            ERROR_MESSAGE.apply(OptionUtils.TRIM_TRAILING_WHITESPACE, keyValue.value(), TrueFalse.values()),
+            ERROR_MESSAGE.apply(OptionUtils.TRIM_TRAILING_WHITESPACE, keyValue.value(), toStringArr(TrueFalse.values())),
             sectionBuilder::trimTrailingWhitespace
         );
       }
@@ -73,7 +84,7 @@ public enum Option {
       (keyValue, sectionBuilder) -> {
         assign(
             TrueFalse.from(keyValue.value()),
-            ERROR_MESSAGE.apply(OptionUtils.INSERT_FINAL_NEW_LINE, keyValue.value(), TrueFalse.values()),
+            ERROR_MESSAGE.apply(OptionUtils.INSERT_FINAL_NEW_LINE, keyValue.value(), toStringArr(TrueFalse.values())),
             sectionBuilder::insertFinalNewLine
         );
       }
@@ -109,7 +120,7 @@ public enum Option {
     return key;
   }
 
-  private static <T extends Enum<T>> void assign(
+  private static <T> void assign(
       Optional<T> source,
       String errorMessage,
       Consumer<T> assigner
@@ -119,5 +130,9 @@ public enum Option {
     } else {
       assigner.accept(source.get());
     }
+  }
+
+  private static <T extends Enum<T>> String[] toStringArr(T[] values) {
+    return Arrays.stream(values).map(Enum::name).toArray(String[]::new);
   }
 }

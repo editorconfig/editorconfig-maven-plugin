@@ -79,12 +79,16 @@ public class Editorconfig {
 
     private final Charset charset;
 
+    private final Integer indentationSize;
+
+    private final Integer tabWidth;
+
     private final TrueFalse trimTrailingWhitespace;
 
     private final TrueFalse insertFinalNewLine;
 
     public Section(String location, IndentationStyle indentationStyle, GlobExpression globExpression, EndOfLine endOfLine, Charset charset,
-        TrueFalse trimTrailingWhitespace, TrueFalse insertFinalNewLine) {
+        TrueFalse trimTrailingWhitespace, TrueFalse insertFinalNewLine, Integer indentationSize, Integer tabWidth) {
       this.location = location;
       this.indentationStyle = indentationStyle;
       this.globExpression = globExpression;
@@ -92,6 +96,8 @@ public class Editorconfig {
       this.charset = charset;
       this.trimTrailingWhitespace = trimTrailingWhitespace;
       this.insertFinalNewLine = insertFinalNewLine;
+      this.tabWidth = tabWidth;
+      this.indentationSize = indentationSize;
     }
 
     public String getLocation() {
@@ -126,6 +132,14 @@ public class Editorconfig {
       return this.globExpression.accepts(file);
     }
 
+    public Integer getTabWidth() {
+      return tabWidth;
+    }
+
+    public Integer getIndentationSize() {
+      return indentationSize;
+    }
+
     public static SectionBuilder builder() {
       return new Editorconfig().new SectionBuilder();
     }
@@ -144,6 +158,8 @@ public class Editorconfig {
 
     private String location;
     private IndentationStyle indentationStyle;
+    private Integer indentationSize;
+    private Integer tabWidth;
     private GlobExpression globExpression;
     private EndOfLine endOfLine;
     private Charset charset;
@@ -158,6 +174,16 @@ public class Editorconfig {
 
     public SectionBuilder indentationStyle(IndentationStyle indentationStyle) {
       this.indentationStyle = indentationStyle;
+      return this;
+    }
+
+    public SectionBuilder indentationSize(Integer indentationSize) {
+      this.indentationSize = indentationSize;
+      return this;
+    }
+
+    public SectionBuilder tabWidth(Integer tabWidth) {
+      this.tabWidth = tabWidth;
       return this;
     }
 
@@ -203,7 +229,7 @@ public class Editorconfig {
     public Editorconfig build() {
       Editorconfig editorconfig = getEditorconfig();
       editorconfig.addSection(
-          new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine)
+          new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine, indentationSize, tabWidth)
       );
       return editorconfig;
     }

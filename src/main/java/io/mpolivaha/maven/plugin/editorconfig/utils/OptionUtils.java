@@ -7,6 +7,8 @@ import java.util.Arrays;
 public class OptionUtils {
 
   public static final String INDENT_STYLE = "indent_style";
+  public static final String INDENT_SIZE = "indent_size";
+  public static final String TAB_WIDTH = "tab_width";
   public static final String END_OF_LINE = "end_of_line";
   public static final String CHARSET = "charset";
   public static final String TRIM_TRAILING_WHITESPACE = "trim_trailing_whitespace";
@@ -20,7 +22,7 @@ public class OptionUtils {
    * The reader might expect that this error message function should reside in {@link Option}, where the usages of it actually occur.
    * That is a valid assumption, however, the issue is that enum instances cannot reference static elements during their instantiation
    */
-  public static final TripleFunction<String, String, Enum<?>[], String> ERROR_MESSAGE = (option, actualValue, expectedEnums) ->
+  public static final TripleFunction<String, String, String[], String> ERROR_MESSAGE = (option, actualValue, expectedEnums) ->
       "The '%s' : '%s' is not among the set of values allowed by the spec : %s".formatted(option, actualValue, Arrays.toString(expectedEnums));
 
 }
