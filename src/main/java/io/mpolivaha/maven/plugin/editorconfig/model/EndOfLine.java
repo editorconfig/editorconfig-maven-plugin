@@ -35,4 +35,8 @@ public enum EndOfLine {
   public String getEolSymbol() {
     return eolSymbol;
   }
+
+  public int getLengthInBytes() {
+    return eolSymbol.length();
+  }
 }
