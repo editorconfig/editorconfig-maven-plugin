@@ -1,6 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
+import java.util.Arrays;
 
 public class ByteArrayLine {
 
@@ -28,6 +29,10 @@ public class ByteArrayLine {
 
   public boolean isTheLastLine() {
     return this.endOfLine.equals(EndOfLine.EOF);
+  }
+
+  public byte[] getContent() {
+    return Arrays.copyOf(line, getEolStartsIndex() + 1);
   }
 
   public byte at(int i) {

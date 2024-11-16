@@ -30,6 +30,8 @@ public abstract class SpecOptionVerifier<T> {
     return checkInternal(content, getValueFromSection(section));
   }
 
+  protected void onInit() {}
+
   /**
    * Checks, whether the content of the file is compliant with the current setting of the {@link #targetOption}
    *
@@ -39,6 +41,7 @@ public abstract class SpecOptionVerifier<T> {
    */
   protected OptionValidationResult checkInternal(InputStream content, T optionValue) {
     try (var reader = new BufferedInputStream(content)) {
+      onInit();
       int lineNumber = 1;
       ByteArrayLine line;
       OptionValidationResult result = new OptionValidationResult(targetOption, optionValue);
@@ -47,6 +50,7 @@ public abstract class SpecOptionVerifier<T> {
         forEachLine(line, lineNumber, optionValue, result);
         lineNumber++;
       } while (!line.isTheLastLine());
+      onCompletion(result, optionValue);
       return result;
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -54,6 +58,8 @@ public abstract class SpecOptionVerifier<T> {
   }
 
   protected abstract void forEachLine(ByteArrayLine line, int lineNumber, T optionValue, OptionValidationResult result);
+
+  protected void onCompletion(OptionValidationResult result, T optionValue) {}
 
   /**
    * Function that extracts the value of the required type from given {@link Section}
