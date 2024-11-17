@@ -43,4 +43,21 @@ public class ByteArrayLine {
   public int getEolStartsIndex() {
     return eolStartsIndex;
   }
+
+  /**
+   * @return the length of the read line without taking into account the end of line symbol/symbols
+   */
+  public int length() {
+    return getEolStartsIndex();
+  }
+
+  /**
+   * Flattens the line, which means that it replaces all the hard tabs (\t) with
+   * the corresponding amount of the soft tabs
+   *
+   * @param softTabsForOneHard - Amount of soft tabs per one hard tab
+   */
+  public ByteArrayLine flatten(Integer softTabsForOneHard) {
+    // TODO
+  }
 }

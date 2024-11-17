@@ -10,6 +10,7 @@ import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -25,7 +26,7 @@ public class InsertFinalNewLineOptionVerifier extends SpecOptionVerifier<TrueFal
   }
 
   @Override
-  protected void forEachLine(ByteArrayLine line, int lineNumber, TrueFalse optionValue, OptionValidationResult result) {
+  protected void forEachLine(ByteArrayLine line, int lineNumber, TrueFalse optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     if (line.isTheLastLine()) {
       if (Objects.equals(line.getEndOfLine(), EndOfLine.EOF)) {
         result.addErrorMessage("Expected the end_of_line symbol to be present, but file terminates with EOF");

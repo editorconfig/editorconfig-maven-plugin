@@ -10,6 +10,7 @@ import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -29,7 +30,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
   }
 
   @Override
-  protected void forEachLine(ByteArrayLine line, int lineNumber, EndOfLine optionValue, OptionValidationResult result) {
+  protected void forEachLine(ByteArrayLine line, int lineNumber, EndOfLine optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     if (!Objects.equals(optionValue, line.getEndOfLine())) {
       // here, we're potentially checking the last line which might be EOF
       // In this case, we'll 100% will fail the build, and I think it is the

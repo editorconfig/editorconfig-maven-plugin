@@ -6,6 +6,7 @@ import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
+import java.util.Map;
 import java.util.Objects;
 import org.mozilla.universalchardet.UniversalDetector;
 
@@ -23,12 +24,12 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
   }
 
   @Override
-  protected void onInit() {
+  protected void onInit(Section section) {
     universalDetector = new UniversalDetector();
   }
 
   @Override
-  protected void forEachLine(ByteArrayLine line, int lineNumber, Charset optionValue, OptionValidationResult result) {
+  protected void forEachLine(ByteArrayLine line, int lineNumber, Charset optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     if (!universalDetector.isDone()) {
       universalDetector.handleData(line.getContent());
     }

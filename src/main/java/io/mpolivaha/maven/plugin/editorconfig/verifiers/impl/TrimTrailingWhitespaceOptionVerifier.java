@@ -6,6 +6,7 @@ import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.model.TrueFalse;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
+import java.util.Map;
 
 /**
  * {@link SpecOptionVerifier} for trim_trailing_whitespace
@@ -20,7 +21,7 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
   }
 
   @Override
-  protected void forEachLine(ByteArrayLine line, int lineNumber, TrueFalse optionValue, OptionValidationResult result) {
+  protected void forEachLine(ByteArrayLine line, int lineNumber, TrueFalse optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     int lastSignificantByteIndex = line.getEolStartsIndex() - 1;
     if (lastSignificantByteIndex >= 0) {
       byte second = line.at(lastSignificantByteIndex--);
