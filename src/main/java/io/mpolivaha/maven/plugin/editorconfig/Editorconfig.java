@@ -132,8 +132,12 @@ public class Editorconfig {
       return this.globExpression.accepts(file);
     }
 
+    /**
+     * @return the width of the tab
+     * @implSpec for making sense out of why this code is the way it is look<a href="https://spec.editorconfig.org/index.html#supported-pairs">at the spec doc</a>
+     */
     public Integer getTabWidth() {
-      return tabWidth;
+      return tabWidth == null ? indentationSize : tabWidth;
     }
 
     public Integer getIndentationSize() {

@@ -33,11 +33,18 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
       return;
     }
 
-    int previousLength = previous.length();
-    int currentLength = line.length();
+    int previousIndent = previous.getIndentInColumns(section.getTabWidth());
+    int thisIndent = line.getIndentInColumns(section.getTabWidth());
 
-    // TODO:
-    result.addErrorMessage("The indentation level between lines %d and %d differs from the configured level of indentation, which is ");
+    if (previousIndent != thisIndent) {
+      int indentLevel = Math.abs(previousIndent - thisIndent);
+      if (indentLevel != optionValue) {
+        result.addErrorMessage(
+            "The indentation level between lines %d and %d differs from the configured level of indentation. Required: %d, Actual : %d"
+                .formatted(lineNumber - 1, lineNumber, optionValue, indentLevel)
+        );
+      }
+    }
   }
 
   @Override
