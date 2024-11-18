@@ -31,7 +31,7 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
   @Override
   protected void forEachLine(ByteArrayLine line, int lineNumber, Charset optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     if (!universalDetector.isDone()) {
-      universalDetector.handleData(line.getContent());
+      universalDetector.handleData(line.getContentWithEol());
     }
   }
 

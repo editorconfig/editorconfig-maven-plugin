@@ -1,11 +1,12 @@
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
+import static io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle.*;
+
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
-import java.lang.reflect.Array;
+import io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class ByteArrayLine {
 
@@ -36,8 +37,8 @@ public class ByteArrayLine {
     return this.endOfLine.equals(EndOfLine.EOF);
   }
 
-  public byte[] getContent() {
-    return Arrays.copyOf(line, getEolStartsIndex() + 1);
+  public byte[] getContentWithEol() {
+    return Arrays.copyOf(line, getEolStartsIndex() + endOfLine.getLengthInBytes());
   }
 
   public byte at(int i) {
@@ -47,13 +48,6 @@ public class ByteArrayLine {
 
   public int getEolStartsIndex() {
     return eolStartsIndex;
-  }
-
-  /**
-   * @return the length of the read line <strong>WITHOUT taking into account the end of line symbol/symbols</strong>
-   */
-  public int length() {
-    return getEolStartsIndex();
   }
 
   /**
@@ -72,8 +66,8 @@ public class ByteArrayLine {
   public int getIndentInColumns(Integer softTabsForOneHard) {
     ByteArrayLine flatten = flatten(softTabsForOneHard);
     for (int i = 0; i < flatten.lengthWithEoL(); i++) {
-      if (flatten.at(i) != ' ') {
-        return i + 1;
+      if (flatten.at(i) != SPACE.getEncoding()) {
+        return i;
       }
     }
     return flatten.lengthWithEoL();
@@ -85,13 +79,13 @@ public class ByteArrayLine {
    *
    * @param softTabsForOneHard - Amount of soft tabs per one hard tab
    */
-  public ByteArrayLine flatten(Integer softTabsForOneHard) {
+  private ByteArrayLine flatten(Integer softTabsForOneHard) {
     int initialLength = lengthWithEoL();
     var newLine = new ArrayList<Byte>(initialLength);
     int i = 0;
     while (i < initialLength) {
       byte currentByte = at(i);
-      if (currentByte != ' ' && currentByte != '\t') {
+      if (currentByte != SPACE.getEncoding() && currentByte != TAB.getEncoding()) {
         // we met first significant byte, newline, or EOL.
         // Here, the end of line symbol is copied as well since it is included into the lengthWithEoL()
         // TODO: there is no straightforward way of converting the array of bytes into a list
@@ -100,13 +94,14 @@ public class ByteArrayLine {
         }
         break;
       }
-      if (currentByte != '\t') {
+      if (currentByte == TAB.getEncoding()) {
         for (int j = 0; j < softTabsForOneHard; j++) {
-          newLine.add((byte) ' ');
+          newLine.add((byte) SPACE.getEncoding());
         }
       } else {
         newLine.add(currentByte);
       }
+      i++;
     }
     return new ByteArrayLine(toPrimitive(newLine.toArray(new Byte[0])), newLine.size(), endOfLine);
   }
