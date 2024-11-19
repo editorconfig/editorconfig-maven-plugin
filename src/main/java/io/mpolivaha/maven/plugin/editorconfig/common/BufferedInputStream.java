@@ -74,9 +74,9 @@ public class BufferedInputStream extends FilterInputStream {
         }
       }
 
-      if (next == EOF) {
+      if (next == -1) {
         line = ensureLineCapacity(line, index);
-        line[index] = EOF;
+        line[index++] = '\0';
       }
 
       // The absence of the EOL means we've read the file till the end
@@ -90,7 +90,7 @@ public class BufferedInputStream extends FilterInputStream {
   }
 
   private byte[] ensureLineCapacity(byte[] line, int index) {
-    if (line.length >= index) {
+    if (line.length <= index) {
       byte[] dest = new byte[line.length * 2];
       System.arraycopy(line, 0, dest, 0, line.length);
       return dest;
