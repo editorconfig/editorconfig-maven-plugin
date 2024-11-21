@@ -4,7 +4,6 @@ import static io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle.*;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
-import io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,6 +30,10 @@ public class ByteArrayLine {
 
   public EndOfLine getEndOfLine() {
     return endOfLine;
+  }
+
+  public boolean isLastEmptyEOFLine() {
+    return isTheLastLine() && getContentWithEol().length == 1;
   }
 
   public boolean isTheLastLine() {
