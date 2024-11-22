@@ -10,7 +10,7 @@ public enum Charset {
   UTF_8(StandardCharsets.UTF_8, "utf-8", "utf-8-bom"),
   UTF_16LE(StandardCharsets.UTF_16LE, "utf-16le"),
   UTF_16BE(StandardCharsets.UTF_16BE, "utf-16be"),
-  LATIN(StandardCharsets.ISO_8859_1, "latin1");
+  LATIN1(StandardCharsets.ISO_8859_1, "latin1");
 
   private final Set<String> aliases;
   private final java.nio.charset.Charset javaCharset;

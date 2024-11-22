@@ -2,12 +2,14 @@ package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
+import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
 import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
 import java.util.Map;
 import java.util.Objects;
+import org.apache.maven.plugin.logging.Log;
 import org.mozilla.universalchardet.UniversalDetector;
 
 /**
@@ -43,7 +45,7 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
         result.addErrorMessage("Expected the file encoding : %s, but was : %s".formatted(targetOption.name(), charset.name()));
       }
     } else {
-      throw new IllegalStateException("There is not enough data to determine the charset of the input file");
+      PluginConfiguration.getInstance().<Log>getLog().warn("There is not enough data to determine the charset of the input file!");
     }
   }
 
