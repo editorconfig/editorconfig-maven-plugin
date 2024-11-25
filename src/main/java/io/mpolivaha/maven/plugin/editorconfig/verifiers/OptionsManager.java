@@ -1,6 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.common.CachingInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,7 +28,7 @@ public class OptionsManager {
   public CompoundOptionValidationResult check(Path file, Section section) throws IOException {
     var compoundResult = new CompoundOptionValidationResult(file);
     for (SpecOptionVerifier specOptionVerifier : specOptionVerifiers) {
-      OptionValidationResult check = specOptionVerifier.check(Files.newInputStream(file), section);
+      OptionValidationResult check = specOptionVerifier.check(new CachingInputStream(file.toFile()), section);
       compoundResult.add(check);
     }
     return compoundResult;

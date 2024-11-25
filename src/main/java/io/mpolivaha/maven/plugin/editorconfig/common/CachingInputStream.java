@@ -1,6 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,8 +27,8 @@ public class CachingInputStream extends FileInputStream {
 
   private int position;
 
-  public CachingInputStream(String name) throws FileNotFoundException {
-    super(name);
+  public CachingInputStream(File file) throws FileNotFoundException {
+    super(file);
     this.upstreamExhausted = false;
     this.position = -1;
     this.buffer = new ByteArrayOutputStream(getBufferSize());
