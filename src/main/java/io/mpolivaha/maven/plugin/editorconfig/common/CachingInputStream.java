@@ -184,6 +184,25 @@ public class CachingInputStream extends FileInputStream {
     bufferAsByteArray = buffer.toByteArray();
   }
 
+  @Override
+  public synchronized void mark(int readlimit) {
+    // No-Op
+    // WARNING! This violates the contract of the mark/reset API, but this classs is considered to be internal
+  }
+
+  @Override
+  public void reset() throws IOException {
+    if (!upstreamExhausted) {
+      throw new IllegalArgumentException("Cannot call reset() on CachingInputStream in case the upstream is not exhausted");
+    }
+    position = 0;
+  }
+
+  @Override
+  public boolean markSupported() {
+    return true;
+  }
+
   public int getPosition() {
     return position;
   }
