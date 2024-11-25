@@ -27,10 +27,14 @@ public class OptionsManager {
   @SuppressWarnings("rawtypes")
   public CompoundOptionValidationResult check(Path file, Section section) throws IOException {
     var compoundResult = new CompoundOptionValidationResult(file);
+    CachingInputStream cachingInputStream = new CachingInputStream(file.toFile());
+
     for (SpecOptionVerifier specOptionVerifier : specOptionVerifiers) {
-      OptionValidationResult check = specOptionVerifier.check(new CachingInputStream(file.toFile()), section);
+      OptionValidationResult check = specOptionVerifier.check(cachingInputStream, section);
       compoundResult.add(check);
+      cachingInputStream.reset();
     }
+
     return compoundResult;
   }
 }
