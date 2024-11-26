@@ -12,6 +12,8 @@ import io.mpolivaha.maven.plugin.editorconfig.utils.ParsingUtils.KeyValue;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -35,8 +37,7 @@ public class EditorconfigParser {
           Arrays.toString(Option.values())
       );
 
-  public Editorconfig parse(String filePath) {
-    Path path = Paths.get(filePath);
+  public Editorconfig parse(Path path) {
     try (var reader = new BufferedReader(new FileReader(path.toFile()))) {
       return parseInternally(reader, path);
     } catch (IOException e) {

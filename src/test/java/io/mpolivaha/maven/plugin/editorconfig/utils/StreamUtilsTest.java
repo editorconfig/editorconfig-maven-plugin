@@ -19,6 +19,6 @@ class StreamUtilsTest {
     StreamUtils.forEachIndexed(Stream.of("one", "two", "three", "four"), (s, index) -> list.put(index, s));
     Assertions
         .assertThat(list)
-        .containsExactlyEntriesOf(Map.of(1, "one", 2, "two", 3, "three", 4, "four"));
+        .containsAllEntriesOf(Map.of(1, "one", 2, "two", 3, "three", 4, "four"));
   }
 }

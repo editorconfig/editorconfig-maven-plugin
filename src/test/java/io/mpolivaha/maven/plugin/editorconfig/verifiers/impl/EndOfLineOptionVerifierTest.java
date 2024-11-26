@@ -20,8 +20,8 @@ class EndOfLineOptionVerifierTest {
   }
 
   @ParameterizedTest
-  @MethodSource(value = "endOfLineArguments")
-  void test_all_cases(String sourceCodeFile, EndOfLine endOfLine, boolean noErrors) {
+  @MethodSource(value = "arguments")
+  void testEndOfLineOptionVerifier(String sourceCodeFile, EndOfLine endOfLine, boolean noErrors) {
 
     // when.
     OptionValidationResult check = subject.check(
@@ -35,7 +35,7 @@ class EndOfLineOptionVerifierTest {
     Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
   }
 
-  static Stream<Arguments> endOfLineArguments() {
+  static Stream<Arguments> arguments() {
     return Stream.of(
         Arguments.of("sources/end_of_line/TestJavaClass_CR.java", EndOfLine.LINE_FEED, false),
         Arguments.of("sources/end_of_line/TestJavaClass_CR.java", EndOfLine.CARRIAGE_RERUN, true),

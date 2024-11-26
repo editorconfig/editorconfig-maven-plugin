@@ -7,6 +7,7 @@ import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle;
 import io.mpolivaha.maven.plugin.editorconfig.model.TrueFalse;
+import java.nio.file.Paths;
 import java.util.Map;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.assertj.core.api.Assertions;
@@ -33,7 +34,8 @@ class EditorconfigParserTest {
     EditorconfigParser editorconfigParser = new EditorconfigParser();
 
     // When.
-    Editorconfig result = editorconfigParser.parse("test-files/.root-editorconfig");
+    String path = ClassLoader.getSystemClassLoader().getResource("test-files/.root-editorconfig").getPath();
+    Editorconfig result = editorconfigParser.parse(Paths.get(path));
 
     // Then.
     Assertions.assertThat(result.isRoot()).isTrue();
@@ -65,7 +67,8 @@ class EditorconfigParserTest {
     EditorconfigParser editorconfigParser = new EditorconfigParser();
 
     // When.
-    Editorconfig result = editorconfigParser.parse("test-files/.root-editorconfig");
+    String path = ClassLoader.getSystemClassLoader().getResource("test-files/.root-editorconfig").getPath();
+    Editorconfig result = editorconfigParser.parse(Paths.get(path));
 
     // Then.
     Assertions.assertThat(result.isRoot()).isTrue();
@@ -97,7 +100,8 @@ class EditorconfigParserTest {
     EditorconfigParser editorconfigParser = new EditorconfigParser();
 
     // When.
-    Editorconfig result = editorconfigParser.parse("test-files/.invalid-editorconfig");
+    String path = ClassLoader.getSystemClassLoader().getResource("test-files/.invalid-editorconfig").getPath();
+    Editorconfig result = editorconfigParser.parse(Paths.get(path));
 
     // Then.
     Assertions.assertThat(result.isRoot()).isTrue();

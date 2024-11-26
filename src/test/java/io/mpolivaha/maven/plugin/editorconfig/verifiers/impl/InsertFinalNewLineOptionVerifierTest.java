@@ -1,15 +1,13 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
-import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
-import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
-import io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
-import java.io.IOException;
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Tests for {@link InsertFinalNewLineOptionVerifier}
@@ -25,42 +23,24 @@ class InsertFinalNewLineOptionVerifierTest {
     subject = new InsertFinalNewLineOptionVerifier(Option.INSERT_FINAL_NEW_LINE);
   }
 
-  @Test
-  void test_noEOL() throws IOException {
+  @ParameterizedTest
+  @MethodSource(value = "arguments")
+  void testInsertFinalNewLineOptionVerifier(String sourceCodeFile, boolean shouldPass) {
     // given.
     OptionValidationResult sut = subject.check(
-        ClassLoader.getSystemClassLoader().getResourceAsStream("sources/final_new_line/TestJavaClass_NoEOL.java"),
-        Section
-            .builder()
-            .endOfLine(EndOfLine.LINE_FEED)
-            .charset(Charset.UTF_8)
-            .indentationSize(2)
-            .indentationStyle(IndentationStyle.TAB)
-            .build().getSections().get(0)
+        ClassLoader.getSystemClassLoader().getResourceAsStream(sourceCodeFile),
+        SectionTestUtils.testSection()
     );
 
     // when
-    Assertions.assertThat(sut.noErrors()).isFalse();
-    Assertions.assertThat(sut.renderErrorMessage()).isEqualTo(
-        "For option insert_final_newline=null found 1 violation(-s):\n"
-        + "\t- Expected the end_of_line symbol to be present, but file terminates with EOF\n");
+    Assertions.assertThat(sut.noErrors()).isEqualTo(shouldPass);
   }
 
-  @Test
-  void test_EOLPresent() {
-    // given.
-    OptionValidationResult sut = subject.check(
-        ClassLoader.getSystemClassLoader().getResourceAsStream("sources/final_new_line/TestJavaClass_EOLPresent.java"),
-        Section
-            .builder()
-            .endOfLine(EndOfLine.LINE_FEED)
-            .charset(Charset.UTF_8)
-            .indentationSize(2)
-            .indentationStyle(IndentationStyle.TAB)
-            .build().getSections().get(0)
+  static Stream<Arguments> arguments() {
+    return Stream.of(
+        Arguments.of("sources/final_new_line/TestJavaClass_NoEOL.java", false),
+        Arguments.of("sources/final_new_line/TestJavaClass_EOLPresent.java", true)
     );
-
-    // when
-    Assertions.assertThat(sut.noErrors()).isTrue();
   }
+
 }

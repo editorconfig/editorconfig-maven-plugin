@@ -21,7 +21,7 @@ class CharsetOptionVerifierTest {
 
   @Disabled
   @ParameterizedTest
-  @MethodSource(value = {"charsetOptionVerifierSource"})
+  @MethodSource(value = {"arguments"})
   void testCharsetOptionVerifier(String sourceCodeFile, Charset charset, boolean noErrors) {
     OptionValidationResult check = subject.check(
         ClassLoader
@@ -33,7 +33,7 @@ class CharsetOptionVerifierTest {
     Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
   }
 
-  static Stream<Arguments> charsetOptionVerifierSource() {
+  static Stream<Arguments> arguments() {
     return Stream.of(
         Arguments.of("sources/charset/TestJavaClass_LATIN1.java", Charset.LATIN1, true),
         Arguments.of("sources/charset/TestJavaClass_LATIN1.java", Charset.UTF_8, false),
