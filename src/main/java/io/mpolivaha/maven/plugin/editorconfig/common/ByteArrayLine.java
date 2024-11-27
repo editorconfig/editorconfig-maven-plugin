@@ -3,6 +3,7 @@ package io.mpolivaha.maven.plugin.editorconfig.common;
 import static io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle.*;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,10 @@ public class ByteArrayLine {
    * @param endOfLine the end of line determined by the parser
    */
   public ByteArrayLine(byte[] line, int eolStartsIndex, EndOfLine endOfLine) {
-    // TODO: add assertions for parameters not being null
+    Assert.notNull(line, "The line cannot be null");
+    Assert.notNull(eolStartsIndex, "The line cannot be null");
+    Assert.notNull(endOfLine, "The line cannot be null");
+
     this.line = line;
     this.eolStartsIndex = eolStartsIndex;
     this.endOfLine = endOfLine;
@@ -45,7 +49,7 @@ public class ByteArrayLine {
   }
 
   public byte at(int i) {
-    // TODO: assert the i borders
+    Assert.state(() -> i >= 0 && i < lengthWithEoL(), "Incorrect index is provided for ByteArrayLine");
     return line[i];
   }
 

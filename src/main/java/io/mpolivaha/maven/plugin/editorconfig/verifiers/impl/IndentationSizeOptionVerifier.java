@@ -1,6 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
 import io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
@@ -33,7 +34,8 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
 
   @Override
   protected void forEachLine(ByteArrayLine line, int lineNumber, Integer optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
-    // TODO: assert section is not null
+    Assert.notNull(section, "The section cannot be null at this point");
+
     ByteArrayLine previous;
     if ((previous = (ByteArrayLine) executionContext.get(PREVIOUS_LINE_KEY)) == null) {
       executionContext.put(PREVIOUS_LINE_KEY, line);
