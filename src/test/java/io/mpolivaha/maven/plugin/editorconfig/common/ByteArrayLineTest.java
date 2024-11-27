@@ -68,6 +68,34 @@ class ByteArrayLineTest {
   }
 
   @Test
+  void test_getIndentInColumns_emptyLine() {
+
+    // when.
+    ByteArrayLine sut = new ByteArrayLine(
+        new byte[]{'\n'},
+        0,
+        EndOfLine.LINE_FEED
+    );
+
+    // then.
+    Assertions.assertThat(sut.getIndentInColumns(4)).isEqualTo(0);
+  }
+
+  @Test
+  void test_getIndentInColumns_spaceThenEndOfLine() {
+
+    // when.
+    ByteArrayLine sut = new ByteArrayLine(
+        new byte[]{' ', ' ', '\n'},
+        2,
+        EndOfLine.LINE_FEED
+    );
+
+    // then.
+    Assertions.assertThat(sut.getIndentInColumns(4)).isEqualTo(2);
+  }
+
+  @Test
   void test_getIndentInColumns_indentedOnlyWithSpaced() {
 
     // when.
