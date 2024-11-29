@@ -1,8 +1,12 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
+import io.mpolivaha.maven.plugin.editorconfig.common.CachingInputStream;
 import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -19,14 +23,15 @@ class CharsetOptionVerifierTest {
 
   private final CharsetOptionVerifier subject = new CharsetOptionVerifier(Option.CHARSET);
 
-  @Disabled
   @ParameterizedTest
   @MethodSource(value = {"arguments"})
-  void testCharsetOptionVerifier(String sourceCodeFile, Charset charset, boolean noErrors) {
+  void testCharsetOptionVerifier(String sourceCodeFile, Charset charset, boolean noErrors) throws Exception {
     OptionValidationResult check = subject.check(
-        ClassLoader
-            .getSystemClassLoader()
-            .getResourceAsStream(sourceCodeFile),
+        new CachingInputStream(
+            Paths.get(ClassLoader
+                .getSystemClassLoader()
+                .getResource(sourceCodeFile).toURI()).toFile()
+        ),
         SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.charset(charset))
     );
 

@@ -9,11 +9,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-// TODO fix these test. It is always passing
 @Disabled
 class IndentationSizeOptionVerifierTest {
 
-  private IndentationSizeOptionVerifier subject = new IndentationSizeOptionVerifier(Option.IDENT_STYLE);
+  private final IndentationSizeOptionVerifier subject = new IndentationSizeOptionVerifier(Option.IDENT_STYLE);
 
   @ParameterizedTest
   @MethodSource(value = "source")
@@ -28,7 +27,10 @@ class IndentationSizeOptionVerifierTest {
 
   static Stream<Arguments> source() {
     return Stream.of(
-        Arguments.of("sources/indentation_size/TestJavaClass_IndentationTwo.java", 2, 2, true)
+        Arguments.of("sources/indentation_size/TestJavaClass_IndentationTwo.java", 2, 2, true),
+        Arguments.of("sources/indentation_size/TestJavaClass_IndentationFive.java", 2, 4, false),
+        Arguments.of("sources/indentation_size/TestJavaClass_IndentationFive.java", 2, 5, true),
+        Arguments.of("sources/indentation_size/TestJavaClass_IndentationFive.java", 3, 5, false)
     );
   }
 }

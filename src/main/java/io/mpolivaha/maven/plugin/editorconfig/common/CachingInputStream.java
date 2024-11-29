@@ -192,7 +192,7 @@ public class CachingInputStream extends FileInputStream {
   }
 
   @Override
-  public void reset() throws IOException {
+  public void reset() {
     if (!upstreamExhausted) {
       throw new IllegalArgumentException("Cannot call reset() on CachingInputStream in case the upstream is not exhausted");
     }

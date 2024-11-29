@@ -42,6 +42,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
       return;
     }
 
+    // TODO: Here, we reclaculate the indent of previous line, which can in fact be avoided
     int previousIndent = previous.getIndentInColumns(section.getTabWidth());
     int thisIndent = line.getIndentInColumns(section.getTabWidth());
 
@@ -54,6 +55,8 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
         );
       }
     }
+
+    executionContext.put(PREVIOUS_LINE_KEY, line);
   }
 
   @Override

@@ -29,7 +29,11 @@ public abstract class SpecOptionVerifier<T> {
   }
 
   public OptionValidationResult check(InputStream content, Section section) {
-    return checkInternal(content, section);
+    return checkInternal(content, section, new HashMap<>());
+  }
+
+  public OptionValidationResult check(InputStream content, Section section, Map<String, Object> executionContext) {
+    return checkInternal(content, section, executionContext);
   }
 
   protected void onInit(Section section) {}
@@ -42,9 +46,8 @@ public abstract class SpecOptionVerifier<T> {
    *
    * @return OptionViolations wrapped
    */
-  protected OptionValidationResult checkInternal(InputStream content, Section section) {
+  protected OptionValidationResult checkInternal(InputStream content, Section section, Map<String, Object> executionContext) {
     T optionValue = getValueFromSection(section);
-    Map<String, Object> executionContext = new HashMap<>();
 
     try (var reader = new BufferedInputStream(content)) {
       onInit(section);

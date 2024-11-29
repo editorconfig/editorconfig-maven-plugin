@@ -1,6 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.utils;
 
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
+import io.mpolivaha.maven.plugin.editorconfig.common.ThrowingRunnable;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration.Param;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -23,6 +24,14 @@ public class ExecutionUtils {
       Assert.sneakyThrows(new MojoExecutionException(errorMessage));
     } else {
       PluginConfiguration.getInstance().<Log>getLog().warn(errorMessage);
+    }
+  }
+
+  public static <T, E extends Throwable> void executeExceptionally(ThrowingRunnable<T, E> throwingRunnable) {
+    try {
+      throwingRunnable.run();
+    } catch (Throwable e) {
+      Assert.sneakyThrows(e);
     }
   }
 }
