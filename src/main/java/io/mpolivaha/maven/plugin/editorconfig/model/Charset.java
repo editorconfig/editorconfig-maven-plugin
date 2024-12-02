@@ -24,6 +24,15 @@ public enum Charset {
     return javaCharset;
   }
 
+  public static Optional<Charset> from(java.nio.charset.Charset charset) {
+    for (Charset value : values()) {
+      if (value.javaCharset.equals(charset)) {
+        return Optional.of(value);
+      }
+    }
+    return Optional.empty();
+  }
+
   public static Optional<Charset> from(String charset) {
     for (Charset value : values()) {
       if (value.aliases.contains(charset.toLowerCase())) {

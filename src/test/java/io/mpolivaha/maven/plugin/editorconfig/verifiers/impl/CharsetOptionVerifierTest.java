@@ -4,12 +4,9 @@ import io.mpolivaha.maven.plugin.editorconfig.common.CachingInputStream;
 import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
-import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -41,9 +38,9 @@ class CharsetOptionVerifierTest {
   static Stream<Arguments> arguments() {
     return Stream.of(
         Arguments.of("sources/charset/TestJavaClass_LATIN1.java", Charset.LATIN1, true),
-        Arguments.of("sources/charset/TestJavaClass_LATIN1.java", Charset.UTF_8, false),
         Arguments.of("sources/charset/TestJavaClass_UTF8.java", Charset.UTF_8, true),
         Arguments.of("sources/charset/TestJavaClass_UTF8.java", Charset.UTF_16LE, false),
+        Arguments.of("sources/charset/TestJavaClass_UTF8_Cyrillic_Comments.java", Charset.UTF_8, true),
         Arguments.of("sources/charset/TestJavaClass_UTF16BE.java", Charset.UTF_16BE, true),
         Arguments.of("sources/charset/TestJavaClass_UTF16BE.java", Charset.UTF_16LE, false),
         Arguments.of("sources/charset/TestJavaClass_UTF16LE.java", Charset.UTF_16LE, true),

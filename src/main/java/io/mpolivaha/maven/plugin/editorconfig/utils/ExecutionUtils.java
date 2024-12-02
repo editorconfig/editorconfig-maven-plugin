@@ -2,6 +2,7 @@ package io.mpolivaha.maven.plugin.editorconfig.utils;
 
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ThrowingRunnable;
+import io.mpolivaha.maven.plugin.editorconfig.common.ThrowingSupplier;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration.Param;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,6 +33,15 @@ public class ExecutionUtils {
       throwingRunnable.run();
     } catch (Throwable e) {
       Assert.sneakyThrows(e);
+    }
+  }
+
+  public static <T, E extends Throwable> T mapExceptionally(ThrowingSupplier<T, E> throwingRunnable) {
+    try {
+      return throwingRunnable.get();
+    } catch (Throwable e) {
+      Assert.sneakyThrows(e);
+      return null; // unreachable statement
     }
   }
 }
