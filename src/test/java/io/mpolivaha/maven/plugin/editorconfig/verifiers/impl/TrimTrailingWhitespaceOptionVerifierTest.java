@@ -44,7 +44,10 @@ class TrimTrailingWhitespaceOptionVerifierTest {
   static Stream<Arguments> arguments() {
     return Stream.of(
         Arguments.of("sources/trim_trailing_whitespace/utf-8/TestJavaClass_UTF_8_No_Trailing_Whitespace.java", true),
-        Arguments.of("sources/trim_trailing_whitespace/utf-8/TestJavaClass_UTF_8_Some_Trailing_Whitespace.java", false)
+        Arguments.of("sources/trim_trailing_whitespace/utf-8/TestJavaClass_UTF_8_Some_Trailing_Whitespace.java", false),
+        Arguments.of("sources/trim_trailing_whitespace/utf-16be/TestJavaClass_UTF16BE_No_Trailing_Whitespace.java", true),
+        Arguments.of("sources/trim_trailing_whitespace/utf-16le/TestJavaClass_UTF16LE_No_Trailing_Whitespace.java", true),
+        Arguments.of("sources/trim_trailing_whitespace/utf-16le/TestJavaClass_UTF16LE_Some_Trailing_Whitespace.java", false)
     );
   }
 }

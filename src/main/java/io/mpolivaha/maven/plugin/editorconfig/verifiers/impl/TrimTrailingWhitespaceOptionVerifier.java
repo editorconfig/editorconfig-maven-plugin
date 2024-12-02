@@ -31,16 +31,6 @@ import org.apache.maven.plugin.logging.Log;
  */
 public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<TrueFalse> {
 
-  private static final Set<Character> OTHER_POSSIBLE_CHARACTERS;
-
-  static {
-    OTHER_POSSIBLE_CHARACTERS = new HashSet<>();
-    OTHER_POSSIBLE_CHARACTERS.addAll(IntStream.range('!', '/').mapToObj(value -> (char) value).collect(Collectors.toSet()));
-    OTHER_POSSIBLE_CHARACTERS.addAll(IntStream.range(':', '@').mapToObj(value -> (char) value).collect(Collectors.toSet()));
-    OTHER_POSSIBLE_CHARACTERS.addAll(IntStream.range('[', '`').mapToObj(value -> (char) value).collect(Collectors.toSet()));
-    OTHER_POSSIBLE_CHARACTERS.addAll(IntStream.range('{', '~').mapToObj(value -> (char) value).collect(Collectors.toSet()));
-  }
-
   public TrimTrailingWhitespaceOptionVerifier(Option targetOption) {
     super(targetOption);
   }
