@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class InsertFinalNewLineOptionVerifier extends SpecOptionVerifier<TrueFalse>{
 
-  protected InsertFinalNewLineOptionVerifier(Option targetOption) {
+  public InsertFinalNewLineOptionVerifier(Option targetOption) {
     super(targetOption);
   }
 

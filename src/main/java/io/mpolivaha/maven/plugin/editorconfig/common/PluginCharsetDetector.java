@@ -29,7 +29,7 @@ import org.mozilla.universalchardet.UniversalDetector.InputState;
 public class PluginCharsetDetector {
 
   private final UniversalDetector universalDetector;
-  private static final List<Charset> US_ASCII_COMPATIBLE_CHARSETS = List.of(Charset.UTF_8, Charset.LATIN1);
+  public static final List<Charset> US_ASCII_COMPATIBLE_CHARSETS = List.of(Charset.UTF_8, Charset.LATIN1);
 
   public PluginCharsetDetector() {
     this.universalDetector = new UniversalDetector();

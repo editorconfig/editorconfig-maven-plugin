@@ -3,6 +3,7 @@ package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.common.BufferedInputStream;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
+import io.mpolivaha.maven.plugin.editorconfig.common.Ordered;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.util.Map;
  *           For instance, in case of {@link Option#END_OF_LINE}, the {@code T} will be {@link EndOfLine}
  * @author Mikhail Polivakha
  */
-public abstract class SpecOptionVerifier<T> {
+public abstract class SpecOptionVerifier<T> implements Ordered {
 
   /**
    * The option that this {@link SpecOptionVerifier verifier} checks
@@ -76,4 +77,9 @@ public abstract class SpecOptionVerifier<T> {
    * Function that extracts the value of the required type from given {@link Section}
    */
   public abstract T getValueFromSection(Section section);
+
+  @Override
+  public int getOrder() {
+    return NORMAL;
+  }
 }

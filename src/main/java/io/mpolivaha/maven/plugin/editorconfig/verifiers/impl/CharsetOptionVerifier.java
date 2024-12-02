@@ -1,5 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
+import static io.mpolivaha.maven.plugin.editorconfig.verifiers.context.ContextKeys.POSSIBLE_CHARSETS;
+
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
@@ -28,7 +30,7 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
 
   private final PluginCharsetDetector pluginCharsetDetector;
 
-  protected CharsetOptionVerifier(Option targetOption) {
+  public CharsetOptionVerifier(Option targetOption) {
     super(targetOption);
     this.pluginCharsetDetector = new PluginCharsetDetector();
   }
@@ -40,6 +42,10 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
 
     byte[] contentAsBytes = ExecutionUtils.mapExceptionally(content::readAllBytes);
     List<Charset> detectedCharsets = pluginCharsetDetector.detect(contentAsBytes);
+
+    if (!detectedCharsets.isEmpty()) {
+      executionContext.put(POSSIBLE_CHARSETS, detectedCharsets);
+    }
 
     if (detectedCharsets.stream().noneMatch(charset -> charset.equals(expectedCharset))) {
       result.addErrorMessage("Expected the file encoding : %s, but possible charsets are : %s".formatted(targetOption.name(), detectedCharsets));
@@ -53,5 +59,10 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
   @Override
   public Charset getValueFromSection(Section section) {
     return section.getCharset();
+  }
+
+  @Override
+  public int getOrder() {
+    return EARLIEST;
   }
 }

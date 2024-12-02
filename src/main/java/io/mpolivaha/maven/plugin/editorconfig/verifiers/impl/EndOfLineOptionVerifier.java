@@ -22,7 +22,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
   private static final TripleFunction<Integer, String, String, String> ERROR_MESSAGE_PRODUCER = (lienNum, expected, actual) ->
       "In line %d expected %s, but was %s".formatted(lienNum, expected, actual);
 
-  protected EndOfLineOptionVerifier(Option targetOption) {
+  public EndOfLineOptionVerifier(Option targetOption) {
     super(targetOption);
   }
 
