@@ -6,6 +6,7 @@ import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.CharsetOptionVerifier;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.EndOfLineOptionVerifier;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.IndentationSizeOptionVerifier;
+import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.IndentationStyleOptionVerifier;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.InsertFinalNewLineOptionVerifier;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.TrimTrailingWhitespaceOptionVerifier;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class OptionsManager {
           new EndOfLineOptionVerifier(),
           new IndentationSizeOptionVerifier(),
           new InsertFinalNewLineOptionVerifier(),
+          new IndentationStyleOptionVerifier(),
           new TrimTrailingWhitespaceOptionVerifier()
       )
   );

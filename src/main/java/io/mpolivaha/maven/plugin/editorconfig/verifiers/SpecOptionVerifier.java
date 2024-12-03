@@ -25,7 +25,7 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
    */
   protected final Option targetOption;
 
-  protected SpecOptionVerifier(Option targetOption) {
+  public SpecOptionVerifier(Option targetOption) {
     this.targetOption = targetOption;
   }
 
