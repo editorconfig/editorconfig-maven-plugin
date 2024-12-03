@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Disabled
 class IndentationSizeOptionVerifierTest {
 
-  private final IndentationSizeOptionVerifier subject = new IndentationSizeOptionVerifier(Option.IDENT_STYLE);
+  private final IndentationSizeOptionVerifier subject = new IndentationSizeOptionVerifier();
 
   @ParameterizedTest
   @MethodSource(value = "source")

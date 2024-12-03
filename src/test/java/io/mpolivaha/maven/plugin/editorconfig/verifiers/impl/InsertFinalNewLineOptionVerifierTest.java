@@ -20,7 +20,7 @@ class InsertFinalNewLineOptionVerifierTest {
 
   @BeforeEach
   void setUp() {
-    subject = new InsertFinalNewLineOptionVerifier(Option.INSERT_FINAL_NEW_LINE);
+    subject = new InsertFinalNewLineOptionVerifier();
   }
 
   @ParameterizedTest

@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class CharsetOptionVerifierTest {
 
-  private final CharsetOptionVerifier subject = new CharsetOptionVerifier(Option.CHARSET);
+  private final CharsetOptionVerifier subject = new CharsetOptionVerifier();
 
   @ParameterizedTest
   @MethodSource(value = {"arguments"})

@@ -17,13 +17,11 @@ import java.util.Objects;
  */
 public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
 
-  // TODO: this might be a good idea to introduce the common abstraction over here and inherit error message
-  // that is below from it, so the message will be shared across SpecOptionVerifier
   private static final TripleFunction<Integer, String, String, String> ERROR_MESSAGE_PRODUCER = (lienNum, expected, actual) ->
       "In line %d expected %s, but was %s".formatted(lienNum, expected, actual);
 
-  public EndOfLineOptionVerifier(Option targetOption) {
-    super(targetOption);
+  public EndOfLineOptionVerifier() {
+    super(Option.END_OF_LINE);
   }
 
   @Override

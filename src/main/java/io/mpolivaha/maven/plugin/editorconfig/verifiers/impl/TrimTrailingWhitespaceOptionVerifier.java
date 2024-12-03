@@ -15,12 +15,8 @@ import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.apache.maven.plugin.logging.Log;
 
 /**
@@ -31,8 +27,8 @@ import org.apache.maven.plugin.logging.Log;
  */
 public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<TrueFalse> {
 
-  public TrimTrailingWhitespaceOptionVerifier(Option targetOption) {
-    super(targetOption);
+  public TrimTrailingWhitespaceOptionVerifier() {
+    super(Option.TRIM_TRAILING_WHITESPACE);
   }
 
   @Override

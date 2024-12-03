@@ -30,8 +30,8 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
 
   private final PluginCharsetDetector pluginCharsetDetector;
 
-  public CharsetOptionVerifier(Option targetOption) {
-    super(targetOption);
+  public CharsetOptionVerifier() {
+    super(Option.CHARSET);
     this.pluginCharsetDetector = new PluginCharsetDetector();
   }
 

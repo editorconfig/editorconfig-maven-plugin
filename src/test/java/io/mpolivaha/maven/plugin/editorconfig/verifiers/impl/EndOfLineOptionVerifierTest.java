@@ -16,7 +16,7 @@ class EndOfLineOptionVerifierTest {
 
   @BeforeEach
   void setUp() {
-    subject = new EndOfLineOptionVerifier(Option.END_OF_LINE);
+    subject = new EndOfLineOptionVerifier();
   }
 
   @ParameterizedTest

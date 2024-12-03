@@ -24,7 +24,7 @@ class TrimTrailingWhitespaceOptionVerifierTest {
 
   @BeforeEach
   void setUp() {
-    subject = new TrimTrailingWhitespaceOptionVerifier(Option.TRIM_TRAILING_WHITESPACE);
+    subject = new TrimTrailingWhitespaceOptionVerifier();
   }
 
   @ParameterizedTest

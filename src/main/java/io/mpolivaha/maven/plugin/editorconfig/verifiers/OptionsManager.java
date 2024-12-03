@@ -18,11 +18,11 @@ public class OptionsManager {
 
   private static final OptionsManager INSTANCE = new OptionsManager(
       List.of(
-          new CharsetOptionVerifier(Option.CHARSET),
-          new EndOfLineOptionVerifier(Option.END_OF_LINE),
-          new IndentationSizeOptionVerifier(Option.IDENT_SIZE),
-          new InsertFinalNewLineOptionVerifier(Option.INSERT_FINAL_NEW_LINE),
-          new TrimTrailingWhitespaceOptionVerifier(Option.TRIM_TRAILING_WHITESPACE)
+          new CharsetOptionVerifier(),
+          new EndOfLineOptionVerifier(),
+          new IndentationSizeOptionVerifier(),
+          new InsertFinalNewLineOptionVerifier(),
+          new TrimTrailingWhitespaceOptionVerifier()
       )
   );
 

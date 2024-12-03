@@ -22,8 +22,8 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
 
   private static final String PREVIOUS_LINE_KEY = "PREVIOUS_LINE_KEY";
 
-  public IndentationSizeOptionVerifier(Option targetOption) {
-    super(targetOption);
+  public IndentationSizeOptionVerifier() {
+    super(Option.IDENT_SIZE);
   }
 
   @Override
