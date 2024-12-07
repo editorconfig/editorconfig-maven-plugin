@@ -1,7 +1,6 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
-import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;

@@ -28,6 +28,10 @@ public enum EndOfLine {
     return Optional.empty();
   }
 
+  public String getPrintableSpecMarker() {
+    return this.compareTo(EndOfLine.EOF) != 0 ? specMarker : "\\0 (END_OF_FILE)";
+  }
+
   public boolean isSingleCharacter() {
     return !this.equals(CARRIAGE_RERUN_LINE_FEED);
   }

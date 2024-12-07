@@ -3,6 +3,7 @@ package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
+import io.mpolivaha.maven.plugin.editorconfig.common.IndentationBlock;
 import io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.model.TrueFalse;
@@ -22,6 +23,11 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
 
   private static final String PREVIOUS_LINE_KEY = "PREVIOUS_LINE_KEY";
 
+  /**
+   * The indentation block that is applicable for the given line
+   */
+  private static final String INDENTATION_BLOCK = "INDENTATION_BLOCK";
+
   public IndentationSizeOptionVerifier() {
     super(Option.IDENT_SIZE);
   }
@@ -34,28 +40,12 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
   @Override
   protected void forEachLine(ByteArrayLine line, int lineNumber, Integer optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     Assert.notNull(section, "The section cannot be null at this point");
+    var indentationBlock = (IndentationBlock) executionContext.getOrDefault(INDENTATION_BLOCK, IndentationBlock.root());
 
-    ByteArrayLine previous;
-    if ((previous = (ByteArrayLine) executionContext.get(PREVIOUS_LINE_KEY)) == null) {
-      executionContext.put(PREVIOUS_LINE_KEY, line);
-      return;
-    }
-
-    // TODO: Here, we reclaculate the indent of previous line, which can in fact be avoided
-    int previousIndent = previous.getIndentInColumns(section.getTabWidth());
-    int thisIndent = line.getIndentInColumns(section.getTabWidth());
-
-    if (previousIndent != thisIndent) {
-      int indentLevel = Math.abs(previousIndent - thisIndent);
-      if (indentLevel != optionValue) {
-        result.addErrorMessage(
-            "The indentation level between lines %d and %d differs from the configured level of indentation. Required: %d, Actual : %d"
-                .formatted(lineNumber - 1, lineNumber, optionValue, indentLevel)
-        );
-      }
-    }
-
-    executionContext.put(PREVIOUS_LINE_KEY, line);
+    executionContext.put(
+        PREVIOUS_LINE_KEY,
+        line.startsNewCodeBlock() ? indentationBlock.next(optionValue) : indentationBlock
+    );
   }
 
   @Override

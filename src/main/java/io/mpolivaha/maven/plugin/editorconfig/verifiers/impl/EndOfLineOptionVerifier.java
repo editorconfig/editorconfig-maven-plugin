@@ -31,7 +31,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
         // here, we're potentially checking the last line which might be EOF
         // In this case, we'll 100% will fail the build, and I think it is the
         // right way to do this since the last line of the file is still a POSIX line
-        result.addErrorMessage(ERROR_MESSAGE_PRODUCER.apply(lineNumber, optionValue.getEolSymbol(), line.getEndOfLine().getEolSymbol()));
+        result.addErrorMessage(ERROR_MESSAGE_PRODUCER.apply(lineNumber, optionValue.getPrintableSpecMarker(), line.getEndOfLine().getPrintableSpecMarker()));
       }
     }
   }

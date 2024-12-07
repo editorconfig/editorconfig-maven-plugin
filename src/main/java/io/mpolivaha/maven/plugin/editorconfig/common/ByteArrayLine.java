@@ -7,8 +7,15 @@ import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 
 public class ByteArrayLine {
+
+  private static final Set<Byte> NEW_CODE_BLOCK_START = Set.of(
+      (byte) '{', // code block
+      (byte) '(', // function definition, function call etc
+      (byte) '[' // array declaration
+  );
 
   private final byte[] line;
   private final int eolStartsIndex;
@@ -78,6 +85,26 @@ public class ByteArrayLine {
       }
     }
     return flatten.lengthWithEoL();
+  }
+
+  public boolean startsNewCodeBlock() {
+    byte[] contentWithEol = getContentWithEol();
+
+    Byte previous = null;
+
+    for (int i = contentWithEol.length - 2; i >= 0; i--) {
+      byte current = contentWithEol[i];
+      if (NEW_CODE_BLOCK_START.contains(current)) {
+        return true;
+      } else if (current == '>' && previous != null && previous == '-') {
+        return true;
+      } else if (current != ' ' && current != '\t') {
+        return false;
+      }
+      previous = current;
+    }
+
+    return false;
   }
 
   /**

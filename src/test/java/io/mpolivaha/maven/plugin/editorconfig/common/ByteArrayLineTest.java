@@ -1,8 +1,13 @@
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Unit tests for {@link ByteArrayLine}
@@ -135,5 +140,35 @@ class ByteArrayLineTest {
 
     // then.
     Assertions.assertThat(sut.getIndentInColumns(2)).isEqualTo(6);
+  }
+
+  @ParameterizedTest
+  @MethodSource("test_startsNewCodeBlock_args")
+  void test_startsNewCodeBlock(String string, boolean expectedStartsNewCodeBlock) {
+
+    // when.
+    boolean startsNewCodeBlock = new ByteArrayLine(
+        string.getBytes(StandardCharsets.US_ASCII),
+        string.length() - 1,
+        EndOfLine.LINE_FEED
+    ).startsNewCodeBlock();
+
+    // then.
+    Assertions.assertThat(startsNewCodeBlock).isEqualTo(expectedStartsNewCodeBlock);
+  }
+
+
+  static Stream<Arguments> test_startsNewCodeBlock_args() {
+    return Stream.of(
+      Arguments.of("package com.example;", false),
+      Arguments.of("public static void main() {\n", true),
+      Arguments.of("public static void main() { \n", true),
+      Arguments.of("((CastToSomething) other).invoke (\n", true),
+      Arguments.of("if (something()) \n", false),
+      Arguments.of("[\n", true),
+      Arguments.of("[1, 2, 3].length", false),
+      Arguments.of("if (something()) \n", false),
+      Arguments.of("if (something()) {\n", true)
+    );
   }
 }
