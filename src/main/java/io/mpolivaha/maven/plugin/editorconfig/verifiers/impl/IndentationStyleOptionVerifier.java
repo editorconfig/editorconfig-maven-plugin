@@ -80,6 +80,6 @@ public class IndentationStyleOptionVerifier extends SpecOptionVerifier<Indentati
 
   @Override
   public IndentationStyle getValueFromSection(Section section) {
-    return null;
+    return section.getIndentationStyle();
   }
 }

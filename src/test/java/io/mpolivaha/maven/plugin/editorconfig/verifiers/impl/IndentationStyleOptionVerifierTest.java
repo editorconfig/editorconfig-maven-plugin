@@ -11,20 +11,30 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Tests for {@link IndentationStyleOptionVerifier}
+ *
+ * @author Mikhail Polivakha
+ */
 class IndentationStyleOptionVerifierTest {
 
   private final IndentationStyleOptionVerifier subject = new IndentationStyleOptionVerifier();
 
   @ParameterizedTest
   @MethodSource(value = {"arguments"})
-  void testCharsetOptionVerifier(String sourceCodeFile, IndentationStyle indentationStyle, boolean noErrors) throws Exception {
+  void testIndentationStyleOptionVerifier(
+      String sourceCodeFile,
+      IndentationStyle indentationStyle,
+      Integer tabWidth,
+      boolean noErrors
+  ) throws Exception {
     OptionValidationResult check = subject.check(
         new CachingInputStream(
             Paths.get(ClassLoader
                 .getSystemClassLoader()
                 .getResource(sourceCodeFile).toURI()).toFile()
         ),
-        SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.indentationStyle(indentationStyle))
+        SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.tabWidth(tabWidth).indentationStyle(indentationStyle))
     );
 
     Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
@@ -32,7 +42,13 @@ class IndentationStyleOptionVerifierTest {
 
   static Stream<Arguments> arguments() {
     return Stream.of(
-        Arguments.of("sources/charset/TestJavaClass_LATIN1.java", IndentationStyle.TAB, true)
+        Arguments.of("sources/indentation_style/TestJavaClass_TabsOnly.java", IndentationStyle.TAB, 2, true),
+        Arguments.of("sources/indentation_style/TestJavaClass_TabsOnly.java", IndentationStyle.SPACE, 2, false),
+        Arguments.of("sources/indentation_style/TestJavaClass_SpacesOnly.java", IndentationStyle.TAB, 2, false),
+        Arguments.of("sources/indentation_style/TestJavaClass_SpacesOnly.java", IndentationStyle.SPACE, 2, true),
+        Arguments.of("sources/indentation_style/TestJavaClass_SpacesMixedWithTabs.java", IndentationStyle.SPACE, 2, false),
+        Arguments.of("sources/indentation_style/TestJavaClass_SpacesMixedWithTabs.java", IndentationStyle.TAB, 2, false),
+        Arguments.of("sources/indentation_style/TestJavaClass_SpacesMixedWithTabs.java", IndentationStyle.TAB, 8, true)
     );
   }
 }
