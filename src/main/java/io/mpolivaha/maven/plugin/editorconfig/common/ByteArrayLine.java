@@ -47,6 +47,10 @@ public class ByteArrayLine {
     return isTheLastLine() && getContentWithEol().length == 1;
   }
 
+  public boolean isEmpty() {
+    return isLastEmptyEOFLine() || (lengthWithEoL() - endOfLine.getLengthInBytes() == 0);
+  }
+
   public boolean isTheLastLine() {
     return this.endOfLine.equals(EndOfLine.EOF);
   }
@@ -90,18 +94,13 @@ public class ByteArrayLine {
   public boolean startsNewCodeBlock() {
     byte[] contentWithEol = getContentWithEol();
 
-    Byte previous = null;
-
     for (int i = contentWithEol.length - 2; i >= 0; i--) {
       byte current = contentWithEol[i];
       if (NEW_CODE_BLOCK_START.contains(current)) {
         return true;
-      } else if (current == '>' && previous != null && previous == '-') {
-        return true;
       } else if (current != ' ' && current != '\t') {
         return false;
       }
-      previous = current;
     }
 
     return false;

@@ -157,10 +157,35 @@ class ByteArrayLineTest {
     Assertions.assertThat(startsNewCodeBlock).isEqualTo(expectedStartsNewCodeBlock);
   }
 
+  @ParameterizedTest
+  @MethodSource("test_isEmpty")
+  void test_isEmpty(String string, EndOfLine endOfLine, boolean expectedIsEmpty) {
+
+    // when.
+    boolean actualIsEmpty = new ByteArrayLine(
+        string.getBytes(StandardCharsets.US_ASCII),
+        string.length() - endOfLine.getLengthInBytes(),
+        endOfLine
+    ).isEmpty();
+
+    // then.
+    Assertions.assertThat(actualIsEmpty).isEqualTo(expectedIsEmpty);
+  }
+
+  static Stream<Arguments> test_isEmpty() {
+    return Stream.of(
+        Arguments.of("\n", EndOfLine.LINE_FEED, true),
+        Arguments.of("\r", EndOfLine.CARRIAGE_RERUN, true),
+        Arguments.of("\r\n", EndOfLine.CARRIAGE_RERUN_LINE_FEED, true),
+        Arguments.of("public static void main() {\n", EndOfLine.LINE_FEED, false),
+        Arguments.of("\0", EndOfLine.EOF, true),
+        Arguments.of("  \0", EndOfLine.EOF, false)
+    );
+  }
 
   static Stream<Arguments> test_startsNewCodeBlock_args() {
     return Stream.of(
-      Arguments.of("package com.example;", false),
+      Arguments.of("package com.example;\n", false),
       Arguments.of("public static void main() {\n", true),
       Arguments.of("public static void main() { \n", true),
       Arguments.of("((CastToSomething) other).invoke (\n", true),

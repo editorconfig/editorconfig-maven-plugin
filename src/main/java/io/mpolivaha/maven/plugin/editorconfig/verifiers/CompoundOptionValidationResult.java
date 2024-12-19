@@ -3,6 +3,7 @@ package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Wrapper over the group of {@link OptionValidationResult option validation results}.
@@ -24,10 +25,20 @@ public class CompoundOptionValidationResult {
     this.validationResults.add(result);
   }
 
+  public boolean isValid() {
+    return validationResults.stream().allMatch(OptionValidationResult::noErrors);
+  }
+
+  public void ifNotValid(Consumer<CompoundOptionValidationResult> action) {
+    if (!isValid()) {
+      action.accept(this);
+    }
+  }
+
   @Override
   public String toString() {
     var toString = new StringBuilder(
-        "In the target file : '%s' in total encountered %d violations: \n"
+        "In the file : '%s' in total encountered %d violations: \n"
             .formatted(targetFile.toFile().getAbsolutePath(), validationResults.stream().mapToInt(OptionValidationResult::violationsCount).sum())
     );
     validationResults.forEach(result -> toString.append(result.renderErrorMessage()));

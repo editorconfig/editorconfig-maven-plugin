@@ -40,12 +40,24 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
   @Override
   protected void forEachLine(ByteArrayLine line, int lineNumber, Integer optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     Assert.notNull(section, "The section cannot be null at this point");
-    var indentationBlock = (IndentationBlock) executionContext.getOrDefault(INDENTATION_BLOCK, IndentationBlock.root());
+    var currentIndentationBlock = (IndentationBlock) executionContext.getOrDefault(INDENTATION_BLOCK, IndentationBlock.root());
+
+    if (line.isEmpty()) {
+
+    }
 
     executionContext.put(
         PREVIOUS_LINE_KEY,
-        line.startsNewCodeBlock() ? indentationBlock.next(optionValue) : indentationBlock
+        discoverIndentationBlock(line, optionValue, currentIndentationBlock)
     );
+  }
+
+  private static IndentationBlock discoverIndentationBlock(ByteArrayLine line, Integer optionValue, IndentationBlock indentationBlock) {
+    if (line.startsNewCodeBlock())  {
+      return indentationBlock.next(optionValue);
+    } else {
+      return indentationBlock;
+    }
   }
 
   @Override

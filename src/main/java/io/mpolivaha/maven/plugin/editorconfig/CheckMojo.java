@@ -2,6 +2,7 @@ package io.mpolivaha.maven.plugin.editorconfig;
 
 import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
+import io.mpolivaha.maven.plugin.editorconfig.verifiers.CompoundOptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionsManager;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration.Param;
@@ -10,10 +11,13 @@ import io.mpolivaha.maven.plugin.editorconfig.parser.EditorconfigParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -31,6 +35,8 @@ public class CheckMojo extends AbstractMojo {
   @Parameter(property = "project", readonly = true)
   private MavenProject project;
 
+  private final Set<CompoundOptionValidationResult> generationErrors = new HashSet<>();
+
   public void execute() throws MojoExecutionException, MojoFailureException {
     PluginConfiguration.buildInstance(
         Map.of(
@@ -38,6 +44,8 @@ public class CheckMojo extends AbstractMojo {
             Param.LOG, getLog()
         )
     );
+
+    generationErrors.clear();
 
     if (editorConfigLocation != null && !editorConfigLocation.isEmpty()) {
       try {
@@ -50,6 +58,14 @@ public class CheckMojo extends AbstractMojo {
                   .findTargetSection(recursivelyFoundFile)
                   .ifPresent(section -> delegateToOptionsManager(recursivelyFoundFile, section));
             });
+
+        String summary = new PluginExecutionSummary(generationErrors).renderSummary();
+
+        if (!generationErrors.isEmpty()) {
+          throw new MojoFailureException(summary);
+        } else {
+          PluginConfiguration.getInstance().<Log>getLog().info(summary);
+        }
       } catch (IOException e) {
         Assert.sneakyThrows(e);
       }
@@ -65,9 +81,9 @@ public class CheckMojo extends AbstractMojo {
             () -> new MojoExecutionException("The specified .editorconfig file was not found : '%s'".formatted(editorConfigLocation)));
   }
 
-  private static void delegateToOptionsManager(Path file, Section section) {
+  private void delegateToOptionsManager(Path file, Section section) {
     try {
-      OptionsManager.getInstance().check(file, section);
+      OptionsManager.getInstance().check(file, section).ifNotValid(generationErrors::add);
     } catch (Throwable e) {
       Assert.sneakyThrows(e);
     }
