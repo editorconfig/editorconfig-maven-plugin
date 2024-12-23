@@ -20,8 +20,38 @@ class GlobExpressionParserTest {
 
   static Stream<Arguments> testAcceptsSource() {
     return Stream.of(
-      starCases()
+        starCases(),
+        doubleStarCases()
     ).flatMap(Function.identity());
+  }
+
+  static Stream<Arguments> doubleStarCases() {
+    return Stream.of(
+        Arguments.of(
+            Path.of("/some/dir/on/disk/Some.java"),
+            Path.of("/some/dir/on/.editorconfig"),
+            "**/*",
+            true
+        ),
+        Arguments.of(
+            Path.of("/some/dir/on/Some.java"),
+            Path.of("/some/dir/on/.editorconfig"),
+            "**/*",
+            false
+        ),
+        Arguments.of(
+            Path.of("/some/dir/on/disk/nested/deep/Some.js"),
+            Path.of("/some/dir/on/.editorconfig"),
+            "**/*",
+            true
+        ),
+        Arguments.of(
+            Path.of("/some/dir/wrong_dir/file"),
+            Path.of("/some/dir/on/.editorconfig"),
+            "**/*",
+            false
+        )
+    );
   }
 
   static Stream<Arguments> starCases() {
