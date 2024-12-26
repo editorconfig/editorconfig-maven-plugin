@@ -8,6 +8,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+/**
+ * Unit tests for {@link GlobExpressionParser}
+ *
+ * @author Mikhail Polivakha
+ */
 class GlobExpressionParserTest {
 
   @ParameterizedTest
@@ -21,11 +26,35 @@ class GlobExpressionParserTest {
   static Stream<Arguments> testAcceptsSource() {
     return Stream.of(
         starCases(),
-        doubleStarCases()
+        doubleStar(),
+        sourceFiles()
     ).flatMap(Function.identity());
   }
 
-  static Stream<Arguments> doubleStarCases() {
+  static Stream<Arguments> sourceFiles() {
+    return Stream.of(
+        Arguments.of(
+            Path.of("/first/second/third/fourth/Some.java"),
+            Path.of("/first/second/third/.editorconfig"),
+            "*.{java,kt}",
+            true
+        ),
+        Arguments.of(
+            Path.of("/first/second/third/fourth/Some.kt"),
+            Path.of("/first/second/third/.editorconfig"),
+            "*.{java,kt}",
+            true
+        ),
+        Arguments.of(
+            Path.of("/first/second/third/fourth/Some.js"),
+            Path.of("/first/second/third/.editorconfig"),
+            "*.{java,kt}",
+            false
+        )
+    );
+  }
+
+  static Stream<Arguments> doubleStar() {
     return Stream.of(
         Arguments.of(
             Path.of("/some/dir/on/disk/Some.java"),
@@ -60,7 +89,7 @@ class GlobExpressionParserTest {
             Path.of("/some/dir/on/disk/Some.java"),
             Path.of("/some/dir/on/.editorconfig"),
             "*",
-            false
+            true
         ),
 
         Arguments.of(
@@ -80,7 +109,7 @@ class GlobExpressionParserTest {
         Arguments.of(
             Path.of("/some/dir/on/Some.java"),
             Path.of("/some/dir/on/.editorconfig"),
-            "*.java",
+            "*",
             true
         )
     );

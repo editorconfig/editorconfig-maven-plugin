@@ -1,9 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig;
 
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.CompoundOptionValidationResult;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Printable plugin execution summary. Contains possible validation errors on all discovered files.

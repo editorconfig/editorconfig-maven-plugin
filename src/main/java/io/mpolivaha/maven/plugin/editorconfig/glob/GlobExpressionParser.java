@@ -34,11 +34,16 @@ public class GlobExpressionParser {
   public boolean accepts(Path path, String globExpression) {
     String absolutePath = path.normalize().toFile().getAbsolutePath();
 
-    if (absolutePath.startsWith(editorConfigDirectory)) {
-      Path truncated = Paths.get(absolutePath.substring(editorConfigDirectory.length() + 1));
-      return acceptsInternal(truncated, globExpression);
+    if (!globExpression.contains("/")) {
+      Path fileName = path.getFileName();
+      return acceptsInternal(fileName, globExpression);
     } else {
-      return false;
+      if (absolutePath.startsWith(editorConfigDirectory)) {
+        Path truncated = Paths.get(absolutePath.substring(editorConfigDirectory.length() + 1));
+        return acceptsInternal(truncated, globExpression);
+      } else {
+        return false;
+      }
     }
   }
 
