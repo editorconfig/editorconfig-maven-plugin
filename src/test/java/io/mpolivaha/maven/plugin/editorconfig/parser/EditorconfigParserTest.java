@@ -48,6 +48,7 @@ class EditorconfigParserTest {
       Assertions.assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
       Assertions.assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.TRUE);
       Assertions.assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.FALSE);
+      Assertions.assertThat(section.getIndentationSize()).isEqualTo(2);
     });
 
     Assertions.assertThat(result.getSections().get(1)).satisfies(section -> {
@@ -57,6 +58,7 @@ class EditorconfigParserTest {
       Assertions.assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
       Assertions.assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
       Assertions.assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
+      Assertions.assertThat(section.getIndentationSize()).isNull();
     });
   }
 

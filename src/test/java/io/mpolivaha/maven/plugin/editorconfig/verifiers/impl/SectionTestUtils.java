@@ -21,6 +21,6 @@ public class SectionTestUtils {
         .indentationSize(2)
         .indentationStyle(IndentationStyle.TAB);
     modifier.accept(sectionBuilder);
-    return sectionBuilder.build().getSections().get(0);
+    return sectionBuilder.completeSection().getSections().get(0);
   }
 }

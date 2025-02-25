@@ -12,10 +12,7 @@ import io.mpolivaha.maven.plugin.editorconfig.utils.ParsingUtils.KeyValue;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -68,7 +65,7 @@ public class EditorconfigParser {
     Editorconfig result;
 
     if (context.getSectionBuilder().getGlobExpression() != null) {
-      result = context.getSectionBuilder().build();
+      result = context.getSectionBuilder().completeSection();
     } else {
       result = context.getSectionBuilder().getEditorconfig();
     }
@@ -93,7 +90,8 @@ public class EditorconfigParser {
 
     if (ParsingUtils.isSection(line)) {
       if (context.getSectionBuilder().getGlobExpression() != null) {
-        context.getSectionBuilder().build();
+        // this means that the previous section ended
+        context.getSectionBuilder().completeSection();
       }
       context.getSectionBuilder().globExpression(GlobExpression.from(line.trim()));
     } else {

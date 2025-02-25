@@ -13,7 +13,7 @@ public class ParsingUtils {
   public static boolean isComment(String line) {
     Assert.notNull(line, "Line cannot be null");
 
-    return line.trim().startsWith("#");
+    return line.charAt(0) == '#' || line.charAt(0) == ';';
   }
 
   public static boolean isSection(String line) {

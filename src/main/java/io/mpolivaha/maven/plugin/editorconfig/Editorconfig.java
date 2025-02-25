@@ -230,7 +230,7 @@ public class Editorconfig {
     /**
      * Build section withing {@link Editorconfig editorconfig}, that is the enclosing for this {@link SectionBuilder builder}.
      */
-    public Editorconfig build() {
+    public Editorconfig completeSection() {
       Editorconfig editorconfig = getEditorconfig();
       editorconfig.addSection(
           new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine, indentationSize, tabWidth)
@@ -238,7 +238,6 @@ public class Editorconfig {
       return editorconfig;
     }
   }
-
 
   /**
    * Glob expression of the particular {@link Section}
