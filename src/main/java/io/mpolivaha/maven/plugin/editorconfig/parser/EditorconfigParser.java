@@ -1,8 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.parser;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig;
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.GlobExpression;
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.model.Editorconfig;
+import io.mpolivaha.maven.plugin.editorconfig.model.GlobExpression;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.TripleFunction;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
@@ -53,7 +52,7 @@ public class EditorconfigParser {
         break;
       }
       if (context == null) {
-        context = new ParingContext(line, Section.builder());
+        context = new ParingContext(line);
       } else {
         context.newline(line);
       }
@@ -89,11 +88,7 @@ public class EditorconfigParser {
     String line = context.getLine();
 
     if (ParsingUtils.isSection(line)) {
-      if (context.getSectionBuilder().getGlobExpression() != null) {
-        // this means that the previous section ended
-        context.getSectionBuilder().completeSection();
-      }
-      context.getSectionBuilder().globExpression(GlobExpression.from(line.trim()));
+      context.startNewSection(GlobExpression.from(line.trim()));
     } else {
       final var holder = new LineNumberAndLine(line, context.getLineNumber()); // see javadoc on holder class
       Optional<KeyValue> optKeyValue = ParsingUtils.parseKeyValue(line);

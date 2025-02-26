@@ -2,7 +2,7 @@ package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
 import static io.mpolivaha.maven.plugin.editorconfig.verifiers.context.ContextKeys.POSSIBLE_CHARSETS;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
 import io.mpolivaha.maven.plugin.editorconfig.common.PluginCharsetDetector;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;

@@ -2,11 +2,9 @@ package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
 import static io.mpolivaha.maven.plugin.editorconfig.verifiers.context.ContextKeys.POSSIBLE_CHARSETS;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
-import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
 import io.mpolivaha.maven.plugin.editorconfig.common.PluginCharsetDetector;
-import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
 import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
@@ -15,11 +13,6 @@ import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import org.apache.maven.plugin.logging.Log;
-import org.mozilla.universalchardet.CharsetListener;
-import org.mozilla.universalchardet.UniversalDetector;
-import org.mozilla.universalchardet.prober.UTF8Prober;
 
 /**
  * {@link SpecOptionVerifier} for the {@link Charset}

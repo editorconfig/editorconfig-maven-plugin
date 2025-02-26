@@ -1,8 +1,7 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.common.CachingInputStream;
-import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.CharsetOptionVerifier;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.EndOfLineOptionVerifier;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.impl.IndentationSizeOptionVerifier;

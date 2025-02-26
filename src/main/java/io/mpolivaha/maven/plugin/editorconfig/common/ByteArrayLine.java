@@ -2,7 +2,7 @@ package io.mpolivaha.maven.plugin.editorconfig.common;
 
 import static io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle.*;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import java.util.ArrayList;

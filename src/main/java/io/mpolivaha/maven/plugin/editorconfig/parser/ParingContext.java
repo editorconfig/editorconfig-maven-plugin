@@ -1,6 +1,10 @@
 package io.mpolivaha.maven.plugin.editorconfig.parser;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.SectionBuilder;
+import org.jspecify.annotations.Nullable;
+
+import io.mpolivaha.maven.plugin.editorconfig.model.Editorconfig;
+import io.mpolivaha.maven.plugin.editorconfig.model.Editorconfig.SectionBuilder;
+import io.mpolivaha.maven.plugin.editorconfig.model.GlobExpression;
 
 /**
  * This class represents the context of the parser. It is supposed to hold all the relevant
@@ -27,18 +31,30 @@ public class ParingContext {
   /**
    * The current section builder that we're assembling
    */
-  private SectionBuilder sectionBuilder;
+  private @Nullable SectionBuilder sectionBuilder;
 
-  public ParingContext(String line, SectionBuilder sectionBuilder) {
+  public ParingContext(String line) {
     this.line = line;
     this.lineNumber = 0;
-    this.sectionBuilder = sectionBuilder;
+    this.sectionBuilder = null;
   }
 
   public ParingContext newline(String line) {
     this.lineNumber++;
     this.line = line;
     return this;
+  }
+
+  // TODO tests
+  public void startNewSection(GlobExpression expression) {
+      Editorconfig editorconfig;
+      if (sectionBuilder != null) {
+          sectionBuilder.completeSection();
+          editorconfig = sectionBuilder.getEditorconfig();
+      } else {
+          editorconfig = new Editorconfig();
+      }
+      sectionBuilder = editorconfig.new SectionBuilder(expression);
   }
 
   public String getLine() {

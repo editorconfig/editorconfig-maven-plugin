@@ -1,10 +1,9 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
 import io.mpolivaha.maven.plugin.editorconfig.common.IndentationBlock;
-import io.mpolivaha.maven.plugin.editorconfig.model.IndentationStyle;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
 import io.mpolivaha.maven.plugin.editorconfig.model.TrueFalse;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;

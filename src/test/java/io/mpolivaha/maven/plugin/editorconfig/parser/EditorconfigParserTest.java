@@ -1,6 +1,6 @@
 package io.mpolivaha.maven.plugin.editorconfig.parser;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig;
+import io.mpolivaha.maven.plugin.editorconfig.model.Editorconfig;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration.Param;
 import io.mpolivaha.maven.plugin.editorconfig.model.Charset;

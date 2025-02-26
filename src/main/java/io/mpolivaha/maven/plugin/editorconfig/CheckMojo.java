@@ -1,7 +1,8 @@
 package io.mpolivaha.maven.plugin.editorconfig;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
 import io.mpolivaha.maven.plugin.editorconfig.assertions.Assert;
+import io.mpolivaha.maven.plugin.editorconfig.model.Editorconfig;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.CompoundOptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionsManager;
 import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
@@ -9,7 +10,6 @@ import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration.Param;
 import io.mpolivaha.maven.plugin.editorconfig.file.FileWalker;
 import io.mpolivaha.maven.plugin.editorconfig.parser.EditorconfigParser;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Map;

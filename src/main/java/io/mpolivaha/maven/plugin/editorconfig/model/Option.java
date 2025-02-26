@@ -2,8 +2,7 @@ package io.mpolivaha.maven.plugin.editorconfig.model;
 
 import static io.mpolivaha.maven.plugin.editorconfig.utils.OptionUtils.ERROR_MESSAGE;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.SectionBuilder;
+import io.mpolivaha.maven.plugin.editorconfig.model.Editorconfig.SectionBuilder;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.utils.IntegerUtils;
 import io.mpolivaha.maven.plugin.editorconfig.utils.OptionUtils;

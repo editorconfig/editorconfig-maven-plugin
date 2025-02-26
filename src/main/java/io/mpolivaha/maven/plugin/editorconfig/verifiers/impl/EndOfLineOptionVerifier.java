@@ -1,6 +1,6 @@
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
-import io.mpolivaha.maven.plugin.editorconfig.Editorconfig.Section;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
 import io.mpolivaha.maven.plugin.editorconfig.common.TripleFunction;
 import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
