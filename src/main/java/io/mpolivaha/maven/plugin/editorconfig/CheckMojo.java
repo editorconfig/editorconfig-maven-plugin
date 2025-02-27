@@ -29,8 +29,8 @@ public class CheckMojo extends AbstractMojo {
   @Parameter(name = "strictMode", defaultValue = "true", required = true)
   private boolean strictMode;
 
-  @Parameter(name = "editorconfig")
-  private String editorConfigLocation;
+  @Parameter(name = "rootEditorConfigFileLocation")
+  private String rootEditorConfigFileLocation;
 
   @Parameter(property = "project", readonly = true)
   private MavenProject project;
@@ -47,7 +47,7 @@ public class CheckMojo extends AbstractMojo {
 
     generationErrors.clear();
 
-    if (editorConfigLocation != null && !editorConfigLocation.isEmpty()) {
+    if (rootEditorConfigFileLocation != null && !rootEditorConfigFileLocation.isEmpty()) {
       try {
         var rootEditorConfigIs = getEditorConfigInputStream();
         Editorconfig editorconfig = new EditorconfigParser().parse(rootEditorConfigIs);
@@ -69,16 +69,14 @@ public class CheckMojo extends AbstractMojo {
       } catch (IOException e) {
         Assert.sneakyThrows(e);
       }
-    } else {
-      // TODO: implement file tree search
     }
   }
 
   private Path getEditorConfigInputStream() throws MojoExecutionException {
     return new RootEditorConfigFileResolver()
-        .findRootEditorConfig(project, editorConfigLocation)
+        .findRootEditorConfig(project, rootEditorConfigFileLocation)
         .orElseThrow(
-            () -> new MojoExecutionException("The specified .editorconfig file was not found : '%s'".formatted(editorConfigLocation)));
+            () -> new MojoExecutionException("The specified .editorconfig file was not found : '%s'".formatted(rootEditorConfigFileLocation)));
   }
 
   private void delegateToOptionsManager(Path file, Section section) {

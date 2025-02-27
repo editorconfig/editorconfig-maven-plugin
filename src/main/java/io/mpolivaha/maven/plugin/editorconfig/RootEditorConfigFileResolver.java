@@ -16,6 +16,7 @@ public class RootEditorConfigFileResolver {
    *
    * @param editorconfig - user specified .editorconfig location
    * @return Optional Path of editorconfig root file. {@link Optional#empty() empty optional} in case file is not found
+   * TODO: implement
    */
   public Optional<Path> findRootEditorConfig(MavenProject mavenProject, String editorconfig) {
     throw new UnsupportedOperationException();
