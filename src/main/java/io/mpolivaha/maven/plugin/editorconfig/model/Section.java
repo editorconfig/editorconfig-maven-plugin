@@ -1,6 +1,9 @@
 package io.mpolivaha.maven.plugin.editorconfig.model;
 
 import java.nio.file.Path;
+import java.util.function.Supplier;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * Corresponds to a particular section of the .editorconfig file
@@ -8,11 +11,6 @@ import java.nio.file.Path;
  * @author Mikhail Polivakha
  */
 public class Section {
-
-    /**
-     * Location of .editorconfig file relative to the classpath root
-     */
-    private final String location;
 
     private final IndentationStyle indentationStyle;
 
@@ -30,9 +28,8 @@ public class Section {
 
     private final TrueFalse insertFinalNewLine;
 
-    public Section(String location, IndentationStyle indentationStyle, GlobExpression globExpression, EndOfLine endOfLine, Charset charset, TrueFalse trimTrailingWhitespace, TrueFalse insertFinalNewLine, Integer indentationSize,
+    public Section(IndentationStyle indentationStyle, GlobExpression globExpression, EndOfLine endOfLine, Charset charset, TrueFalse trimTrailingWhitespace, TrueFalse insertFinalNewLine, Integer indentationSize,
       Integer tabWidth) {
-        this.location = location;
         this.indentationStyle = indentationStyle;
         this.globExpression = globExpression;
         this.endOfLine = endOfLine;
@@ -41,10 +38,6 @@ public class Section {
         this.insertFinalNewLine = insertFinalNewLine;
         this.tabWidth = tabWidth;
         this.indentationSize = indentationSize;
-    }
-
-    public String getLocation() {
-        return location;
     }
 
     public IndentationStyle getIndentationStyle() {
@@ -76,6 +69,25 @@ public class Section {
     }
 
     /**
+     * Creates a merged {@link Section} from this one and the passed. {@link Option Options} in
+     * the past {@link Section} take precedence over this one.
+     * <p>
+     * TODO: can we do it better? Code generation like mapstruct can help, theoretically.
+     */
+    public Section mergeWith(@NonNull Section that) {
+        return new Section(
+          orElseGet(that.indentationStyle, this.indentationStyle),
+          orElseGet(that.globExpression, this.globExpression),
+          orElseGet(that.endOfLine, this.endOfLine),
+          orElseGet(that.charset, this.charset),
+          orElseGet(that.trimTrailingWhitespace, this.trimTrailingWhitespace),
+          orElseGet(that.insertFinalNewLine, this.insertFinalNewLine),
+          orElseGet(that.indentationSize, this.indentationSize),
+          orElseGet(that.tabWidth, this.tabWidth)
+        );
+    }
+
+    /**
      * @return the width of the tab
      * @implSpec for making sense out of why this code is the way it is look<a href="https://spec.editorconfig.org/index.html#supported-pairs">at the spec doc</a>
      */
@@ -85,5 +97,9 @@ public class Section {
 
     public Integer getIndentationSize() {
         return indentationSize;
+    }
+
+    private <T> T orElseGet(T first, T second) {
+        return first == null ? first : second;
     }
 }

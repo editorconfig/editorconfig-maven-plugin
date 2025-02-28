@@ -63,7 +63,6 @@ public class Editorconfig {
    */
   public class SectionBuilder {
 
-    private String location;
     private IndentationStyle indentationStyle;
     private Integer indentationSize;
     private Integer tabWidth;
@@ -77,12 +76,6 @@ public class Editorconfig {
     public SectionBuilder(GlobExpression globExpression) {
         this.globExpression = globExpression;
     }
-
-    public SectionBuilder location(String location) {
-      this.location = location;
-      return this;
-    }
-
     public SectionBuilder indentationStyle(IndentationStyle indentationStyle) {
       this.indentationStyle = indentationStyle;
       return this;
@@ -135,7 +128,7 @@ public class Editorconfig {
     public Editorconfig completeSection() {
       Editorconfig editorconfig = getEditorconfig();
       editorconfig.addSection(
-          new Section(location, indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine, indentationSize, tabWidth)
+          new Section(indentationStyle, globExpression, endOfLine, charset, trimTrailingWhitespace, insertFinalNewLine, indentationSize, tabWidth)
       );
       return editorconfig;
     }
