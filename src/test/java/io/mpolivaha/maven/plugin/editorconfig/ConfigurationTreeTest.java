@@ -19,7 +19,8 @@ class ConfigurationTreeTest {
     @Test
     void testConfigurationTree_noAppropriateSectionAnywhereInTheTree() {
         // given.
-        subject = new ConfigurationTree(build());
+        ConfigurationTree.build(build());
+        subject = ConfigurationTree.getInstance();
 
         // when.
         Optional<Section> mergedSection = subject.findMerged(Paths.get("/first/second/third/forth/fifth.js"));
@@ -31,7 +32,8 @@ class ConfigurationTreeTest {
     @Test
     void testConfigurationTree_configGotMerged() {
         // given.
-        subject = new ConfigurationTree(build());
+        ConfigurationTree.build(build());
+        subject = ConfigurationTree.getInstance();
 
         // when.
         Optional<Section> mergedSection = subject.findMerged(Paths.get("/first/second/third/forth/fifth.js"));

@@ -17,6 +17,8 @@ import io.mpolivaha.maven.plugin.editorconfig.model.Section;
  * Represents a tree data structure where nodes hold objects of {@link Editorconfig} type.
  * <p>
  * Such a structure is required in order to satisfy the following specification requirement //TODO add link
+ * Typically, we need only a single instance of the {@link ConfigurationTree}, since the tree of
+ * .editorconfig file hierarchy is static during processing.
  *
  * @author Mikhail Polivakha
  */
@@ -24,7 +26,9 @@ public class ConfigurationTree {
 
     private final TreeNode root;
 
-    public ConfigurationTree(TreeNode root) {
+    private volatile static ConfigurationTree INSTANCE;
+
+    private ConfigurationTree(TreeNode root) {
         Assert.notNull(root, "The root must not be empty");
         Assert.notNull(root.value, "The editorconfig struct must not be empty");
         Assert.state(root.value::isRoot, "The passed TreeNode must represent the root Editorconfig file");
@@ -32,11 +36,21 @@ public class ConfigurationTree {
         this.root = root;
     }
 
+    public static ConfigurationTree getInstance() {
+        return INSTANCE;
+    }
+
+    public static synchronized void build(TreeNode treeNode) {
+        if (INSTANCE == null) {
+            INSTANCE = new ConfigurationTree(treeNode);
+        }
+    }
+
     /**
      * Assembles the merged {@link Section} resulting from traversing the {@link Editorconfig} file tree.
      *
      * @param file source code file to assemble merged {@link Section} for.
-     * @return merged {@link Section}.
+     * @return merged {@link Section}. {@link Optional#empty()} if no appropriate {@link Section} was found for give file.
      */
     public Optional<Section> findMerged(Path file) {
         Queue<TreeNode> buffer = new LinkedList<>();
@@ -46,13 +60,13 @@ public class ConfigurationTree {
     }
 
     /**
-     * We have to employee BFS tre traversal algorithm here instead of DFS. Theoretically, DFS
+     * We have to employee BFS tree traversal algorithm here instead of DFS. Theoretically, DFS
      * would also work here, but with BFS the layers traversal is just more clear.
      * <p>
-     * The core assumption of this method is that the latter {@link TreeNode elements of the queue} will have
+     * The core assumption of this method is that the latter {@link TreeNode elements of the queue} have higher
      * precedence when containing appropriate section for given source code file. Therefore, just by iterating
      * over the queue and {@link Queue#poll() polling} elements from it, we can satisfy the order of precedence
-     * defined in specification
+     * defined in specification. // TODO add a link to a specification section
      */
     private Optional<Section> bfs(Queue<TreeNode> buffer, Path file, @Nullable Section mergingAccumulator) {
         if (buffer.isEmpty()) {
@@ -62,17 +76,20 @@ public class ConfigurationTree {
         TreeNode treeNode = buffer.poll();
         Editorconfig editorconfig = treeNode.value;
 
-        Optional<Section> merged = editorconfig.findTargetSection(file).map(prioritizedSection -> {
+        Section merged = editorconfig
+          .findTargetSection(file)
+          .map(prioritizedSection -> {
+            buffer.addAll(treeNode.children); // adding elements into a queue traversal only in case we found a matching section
+
             if (mergingAccumulator == null) {
                 return prioritizedSection;
             } else {
                 return mergingAccumulator.mergeWith(prioritizedSection);
             }
-        });
+          })
+          .orElse(mergingAccumulator); // meaning, we have not found appropriate section in the given .editorconfig file
 
-        buffer.addAll(treeNode.children);
-
-        return bfs(buffer, file, merged.orElse(null));
+        return bfs(buffer, file, merged);
     }
 
     static class TreeNode {
