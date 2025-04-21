@@ -20,7 +20,7 @@ import org.mozilla.universalchardet.UniversalDetector.InputState;
  * <p>
  * Technically, it is indeed impossible to determine the correct charset in case of UTF-8 file and pure ascii usage.
  * However, it is a 100% very common case that we have the java source file, that contains only ascii and the user
- * specifies that it is indeed UTF-8. So becuase we cannot really tell if that is UTF-8, or ASCII or Latin1, we trust the
+ * specifies that it is indeed UTF-8. So because we cannot really tell if that is UTF-8, or ASCII or Latin1, we trust the
  * user.
  *
  * @author Mikhail Polivakha
