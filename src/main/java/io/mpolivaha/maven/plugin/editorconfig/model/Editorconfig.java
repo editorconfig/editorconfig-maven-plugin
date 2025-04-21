@@ -58,7 +58,7 @@ public class Editorconfig {
    * <p>
    * This class is <strong>intentionally</strong> not static, as it is, by design, is created
    * within the {@link Editorconfig}. There might be an option to just composite the {@link Editorconfig}
-   * instance within {@link Section current section}, but the design decicion was made to try to solve this
+   * instance within {@link Section current section}, but the design decision was made to try to solve this
    * via java inner classes.
    */
   public class SectionBuilder {
