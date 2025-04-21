@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 class ByteArrayLineTest {
 
   @Test
-  void test_enfOfLine() {
+  void test_endOfLine() {
 
     // when.
     ByteArrayLine first = new ByteArrayLine(new byte[]{'H', 'e', 'l', 'l', 'o', '\n'}, 5, EndOfLine.LINE_FEED);
