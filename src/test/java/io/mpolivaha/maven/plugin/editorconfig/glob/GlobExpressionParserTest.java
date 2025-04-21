@@ -17,8 +17,8 @@ class GlobExpressionParserTest {
 
   @ParameterizedTest
   @MethodSource("testAcceptsSource")
-  void testAccepts(Path target, Path editrorconfig, String globPattern, boolean expectedAccepts) {
-    boolean actualAccepts = new GlobExpressionParser(editrorconfig.toFile().getAbsolutePath()).accepts(target, globPattern);
+  void testAccepts(Path target, Path editorconfig, String globPattern, boolean expectedAccepts) {
+    boolean actualAccepts = new GlobExpressionParser(editorconfig.toFile().getAbsolutePath()).accepts(target, globPattern);
 
     Assertions.assertThat(actualAccepts).isEqualTo(expectedAccepts);
   }

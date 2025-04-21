@@ -116,7 +116,7 @@ public class Editorconfig {
     }
 
     /**
-     * Obtain the enclosing editroconfig
+     * Obtain the enclosing editorconfig
      */
     public Editorconfig getEditorconfig() {
       return Editorconfig.this;
