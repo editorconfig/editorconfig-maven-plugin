@@ -188,7 +188,7 @@ public class CachingInputStream extends FileInputStream {
   @Override
   public synchronized void mark(int readlimit) {
     // No-Op
-    // WARNING! This violates the contract of the mark/reset API, but this classs is considered to be internal
+    // WARNING! This violates the contract of the mark/reset API, but this class is considered to be internal
   }
 
   @Override
