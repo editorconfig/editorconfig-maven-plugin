@@ -1,13 +1,6 @@
 package io.mpolivaha.maven.plugin.editorconfig.file;
 
-import io.mpolivaha.maven.plugin.editorconfig.common.ThrowingSupplier;
-import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
-import io.mpolivaha.maven.plugin.editorconfig.utils.ExceptionUtils;
-import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -15,12 +8,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+
 import org.apache.maven.plugin.logging.Log;
+
+import io.mpolivaha.maven.plugin.editorconfig.config.PluginConfiguration;
+import io.mpolivaha.maven.plugin.editorconfig.utils.ExceptionUtils;
+import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
 
 public class FileWalker {
 

@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.assertj.core.api.Assertions;
+import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -98,7 +99,7 @@ class EditorconfigParserTest {
   @Test
   void testFileParsing_inNonStrictMode_ErrorsDuringParsing() {
     // Given.
-    PluginConfiguration.buildInstance(Map.of(Param.STRICT_MODE, false, Param.LOG, new DefaultLog(new ConsoleLogger())));
+    PluginConfiguration.buildInstance(Map.of(Param.STRICT_MODE, false, Param.LOG, new DefaultLog(new ConsoleLogger(Logger.LEVEL_INFO, "TestLogger"))));
     EditorconfigParser editorconfigParser = new EditorconfigParser();
 
     // When.

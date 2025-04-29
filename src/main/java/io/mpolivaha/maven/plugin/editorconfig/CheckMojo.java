@@ -29,6 +29,9 @@ public class CheckMojo extends AbstractMojo {
   @Parameter(name = "strictMode", defaultValue = "true", required = true)
   private boolean strictMode;
 
+    /**
+     * Root editorconfig file location relative to the Maven's {@code project.basedir}.
+     */
   @Parameter(name = "rootEditorConfigFileLocation")
   private String rootEditorConfigFileLocation;
 
@@ -38,14 +41,9 @@ public class CheckMojo extends AbstractMojo {
   private final Set<CompoundOptionValidationResult> generationErrors = new HashSet<>();
 
   public void execute() throws MojoExecutionException, MojoFailureException {
-    PluginConfiguration.buildInstance(
-        Map.of(
-            Param.STRICT_MODE, strictMode,
-            Param.LOG, getLog()
-        )
-    );
+      setUpConfiguration();
 
-    generationErrors.clear();
+      generationErrors.clear();
 
     if (rootEditorConfigFileLocation != null && !rootEditorConfigFileLocation.isEmpty()) {
       try {
@@ -72,8 +70,17 @@ public class CheckMojo extends AbstractMojo {
     }
   }
 
-  private Path getEditorConfigInputStream() throws MojoExecutionException {
-    return new RootEditorConfigFileResolver()
+    private void setUpConfiguration() {
+        PluginConfiguration.buildInstance(
+            Map.of(
+                Param.STRICT_MODE, strictMode,
+                Param.LOG, getLog()
+            )
+        );
+    }
+
+    private Path getEditorConfigInputStream() throws MojoExecutionException {
+    return new EditorConfigFileResolver()
         .findRootEditorConfig(project, rootEditorConfigFileLocation)
         .orElseThrow(
             () -> new MojoExecutionException("The specified .editorconfig file was not found : '%s'".formatted(rootEditorConfigFileLocation)));

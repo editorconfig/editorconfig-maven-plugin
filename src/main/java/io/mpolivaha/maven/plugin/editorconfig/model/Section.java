@@ -1,7 +1,6 @@
 package io.mpolivaha.maven.plugin.editorconfig.model;
 
 import java.nio.file.Path;
-import java.util.function.Supplier;
 
 import org.jspecify.annotations.NonNull;
 

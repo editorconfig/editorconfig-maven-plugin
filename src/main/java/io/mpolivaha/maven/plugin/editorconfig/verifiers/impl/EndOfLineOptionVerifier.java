@@ -28,7 +28,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
   protected void forEachLine(ByteArrayLine line, int lineNumber, EndOfLine optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     if (!line.isLastEmptyEOFLine()) {
       if (!Objects.equals(optionValue, line.getEndOfLine())) {
-        // here, we're potentially checking the last line which might be EOF
+        // here, we're potentially checking the last line which might end with EOF
         // In this case, we'll 100% will fail the build, and I think it is the
         // right way to do this since the last line of the file is still a POSIX line
         result.addErrorMessage(ERROR_MESSAGE_PRODUCER.apply(lineNumber, optionValue.getPrintableSpecMarker(), line.getEndOfLine().getPrintableSpecMarker()));

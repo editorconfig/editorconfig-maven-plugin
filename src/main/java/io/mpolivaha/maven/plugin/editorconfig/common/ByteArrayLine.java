@@ -43,6 +43,10 @@ public class ByteArrayLine {
     return endOfLine;
   }
 
+    /**
+     * @return true in case this {@link ByteArrayLine} represents the last line
+     *         of the file that contains the EOF (-1) symbol only
+     */
   public boolean isLastEmptyEOFLine() {
     return isTheLastLine() && getContentWithEol().length == 1;
   }

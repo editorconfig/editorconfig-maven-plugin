@@ -25,7 +25,7 @@ public class InsertFinalNewLineOptionVerifier extends SpecOptionVerifier<TrueFal
   protected void forEachLine(ByteArrayLine line, int lineNumber, TrueFalse optionValue, OptionValidationResult result, Map<String, Object> executionContext) {
     if (line.isTheLastLine()) {
       // The very last line should always be the '\0' line, otherwise we're not terminating the last line with any end of line symbol
-      if (line.lengthWithEoL() != 1) {
+      if (!line.isLastEmptyEOFLine()) {
         result.addErrorMessage("Expected the end_of_line symbol to be present, but file terminates with EOF");
       }
     }
