@@ -1,13 +1,15 @@
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
-import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import io.mpolivaha.maven.plugin.editorconfig.model.EndOfLine;
 
 /**
  * Unit tests for {@link ByteArrayLine}
@@ -143,21 +145,6 @@ class ByteArrayLineTest {
   }
 
   @ParameterizedTest
-  @MethodSource("test_startsNewCodeBlock_args")
-  void test_startsNewCodeBlock(String string, boolean expectedStartsNewCodeBlock) {
-
-    // when.
-    boolean startsNewCodeBlock = new ByteArrayLine(
-        string.getBytes(StandardCharsets.US_ASCII),
-        string.length() - 1,
-        EndOfLine.LINE_FEED
-    ).startsNewCodeBlock();
-
-    // then.
-    Assertions.assertThat(startsNewCodeBlock).isEqualTo(expectedStartsNewCodeBlock);
-  }
-
-  @ParameterizedTest
   @MethodSource("test_isEmpty")
   void test_isEmpty(String string, EndOfLine endOfLine, boolean expectedIsEmpty) {
 
@@ -180,20 +167,6 @@ class ByteArrayLineTest {
         Arguments.of("public static void main() {\n", EndOfLine.LINE_FEED, false),
         Arguments.of("\0", EndOfLine.EOF, true),
         Arguments.of("  \0", EndOfLine.EOF, false)
-    );
-  }
-
-  static Stream<Arguments> test_startsNewCodeBlock_args() {
-    return Stream.of(
-      Arguments.of("package com.example;\n", false),
-      Arguments.of("public static void main() {\n", true),
-      Arguments.of("public static void main() { \n", true),
-      Arguments.of("((CastToSomething) other).invoke (\n", true),
-      Arguments.of("if (something()) \n", false),
-      Arguments.of("[\n", true),
-      Arguments.of("[1, 2, 3].length", false),
-      Arguments.of("if (something()) \n", false),
-      Arguments.of("if (something()) {\n", true)
     );
   }
 }

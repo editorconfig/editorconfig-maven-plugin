@@ -41,7 +41,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
     Assert.notNull(section, "The section cannot be null at this point");
     var currentIndentationBlock = (IndentationBlock) executionContext.getOrDefault(INDENTATION_BLOCK, IndentationBlock.root());
 
-    if (line.isEmpty()) {
+    if (!line.isEmpty()) {
 
     }
 

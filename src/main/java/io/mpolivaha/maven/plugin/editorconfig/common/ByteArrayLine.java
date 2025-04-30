@@ -11,12 +11,6 @@ import java.util.Set;
 
 public class ByteArrayLine {
 
-  private static final Set<Byte> NEW_CODE_BLOCK_START = Set.of(
-      (byte) '{', // code block
-      (byte) '(', // function definition, function call etc
-      (byte) '[' // array declaration
-  );
-
   private final byte[] line;
   private final int eolStartsIndex;
   private final EndOfLine endOfLine;
@@ -93,21 +87,6 @@ public class ByteArrayLine {
       }
     }
     return flatten.lengthWithEoL();
-  }
-
-  public boolean startsNewCodeBlock() {
-    byte[] contentWithEol = getContentWithEol();
-
-    for (int i = contentWithEol.length - 2; i >= 0; i--) {
-      byte current = contentWithEol[i];
-      if (NEW_CODE_BLOCK_START.contains(current)) {
-        return true;
-      } else if (current != ' ' && current != '\t') {
-        return false;
-      }
-    }
-
-    return false;
   }
 
   /**
