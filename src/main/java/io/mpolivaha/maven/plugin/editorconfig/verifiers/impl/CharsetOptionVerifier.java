@@ -1,18 +1,23 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.verifiers.impl;
 
-import static io.mpolivaha.maven.plugin.editorconfig.verifiers.context.ContextKeys.POSSIBLE_CHARSETS;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
-import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.common.ByteArrayLine;
 import io.mpolivaha.maven.plugin.editorconfig.common.PluginCharsetDetector;
 import io.mpolivaha.maven.plugin.editorconfig.model.Charset;
 import io.mpolivaha.maven.plugin.editorconfig.model.Option;
+import io.mpolivaha.maven.plugin.editorconfig.model.Section;
 import io.mpolivaha.maven.plugin.editorconfig.utils.ExecutionUtils;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.OptionValidationResult;
 import io.mpolivaha.maven.plugin.editorconfig.verifiers.SpecOptionVerifier;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+
+import static io.mpolivaha.maven.plugin.editorconfig.verifiers.context.ContextKeys.POSSIBLE_CHARSETS;
 
 /**
  * {@link SpecOptionVerifier} for the {@link Charset}
@@ -21,41 +26,48 @@ import java.util.Map;
  */
 public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
 
-  private final PluginCharsetDetector pluginCharsetDetector;
+    private final PluginCharsetDetector pluginCharsetDetector;
 
-  public CharsetOptionVerifier() {
-    super(Option.CHARSET);
-    this.pluginCharsetDetector = new PluginCharsetDetector();
-  }
-
-  @Override
-  protected OptionValidationResult checkInternal(InputStream content, Section section, Map<String, Object> executionContext) {
-    Charset expectedCharset = getValueFromSection(section);
-    OptionValidationResult result = new OptionValidationResult(targetOption, expectedCharset);
-
-    byte[] contentAsBytes = ExecutionUtils.mapExceptionally(content::readAllBytes);
-    List<Charset> detectedCharsets = pluginCharsetDetector.detect(contentAsBytes);
-
-    if (!detectedCharsets.isEmpty()) {
-      executionContext.put(POSSIBLE_CHARSETS, detectedCharsets);
+    public CharsetOptionVerifier() {
+        super(Option.CHARSET);
+        this.pluginCharsetDetector = new PluginCharsetDetector();
     }
 
-    if (detectedCharsets.stream().noneMatch(charset -> charset.equals(expectedCharset))) {
-      result.addErrorMessage("Expected the file encoding : %s, but possible charsets are : %s".formatted(targetOption.name(), detectedCharsets));
+    @Override
+    protected OptionValidationResult checkInternal(
+            InputStream content, Section section, Map<String, Object> executionContext) {
+        Charset expectedCharset = getValueFromSection(section);
+        OptionValidationResult result = new OptionValidationResult(targetOption, expectedCharset);
+
+        byte[] contentAsBytes = ExecutionUtils.mapExceptionally(content::readAllBytes);
+        List<Charset> detectedCharsets = pluginCharsetDetector.detect(contentAsBytes);
+
+        if (!detectedCharsets.isEmpty()) {
+            executionContext.put(POSSIBLE_CHARSETS, detectedCharsets);
+        }
+
+        if (detectedCharsets.stream().noneMatch(charset -> charset.equals(expectedCharset))) {
+            result.addErrorMessage("Expected the file encoding : %s, but possible charsets are : %s"
+                    .formatted(targetOption.name(), detectedCharsets));
+        }
+        return result;
     }
-    return result;
-  }
 
-  @Override
-  protected void forEachLine(ByteArrayLine line, int lineNumber, Charset optionValue, OptionValidationResult result, Map<String, Object> executionContext) {}
+    @Override
+    protected void forEachLine(
+            ByteArrayLine line,
+            int lineNumber,
+            Charset optionValue,
+            OptionValidationResult result,
+            Map<String, Object> executionContext) {}
 
-  @Override
-  public Charset getValueFromSection(Section section) {
-    return section.getCharset();
-  }
+    @Override
+    public Charset getValueFromSection(Section section) {
+        return section.getCharset();
+    }
 
-  @Override
-  public int getOrder() {
-    return EARLIEST;
-  }
+    @Override
+    public int getOrder() {
+        return EARLIEST;
+    }
 }

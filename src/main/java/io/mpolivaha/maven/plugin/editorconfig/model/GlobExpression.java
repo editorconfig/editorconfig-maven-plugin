@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.model;
 
 import java.nio.file.Path;

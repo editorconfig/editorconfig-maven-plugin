@@ -14,6 +14,7 @@
         <charset-lib.version>2.4.0</charset-lib.version>
         <maven.version>3.9.0</maven.version>
       <jspecify.version>1.0.0</jspecify.version>
+      <spotless.version>2.44.4</spotless.version>
     </properties>
 
     <dependencies>
@@ -92,6 +93,55 @@
                     <release>17</release>
                 </configuration>
             </plugin>
+
+          <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <version>${spotless.version}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <phase>compile</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <formats>
+                <format>
+                  <includes>
+                    <include>.gitattributes</include>
+                    <include>.gitignore</include>
+                    <include>pom.xml</include>
+                  </includes>
+                  <!-- define the steps to apply to those files -->
+                  <trimTrailingWhitespace/>
+                  <endWithNewline/>
+                  <indent>
+                    <spaces>true</spaces>
+                  </indent>
+                </format>
+              </formats>
+              <java>
+                <palantirJavaFormat>
+                  <version>2.63.0</version>
+                  <style>AOSP</style>
+                  <formatJavadoc>false</formatJavadoc>
+                </palantirJavaFormat>
+                <removeUnusedImports/>
+                <formatAnnotations/>
+                <licenseHeader>
+                  <file>${project.basedir}/LICENSE_HEADER</file>
+                </licenseHeader>
+                <importOrder>
+                  <wildcardsLast>false</wildcardsLast> <!-- Optional, default false. Sort wildcard import after specific imports -->
+                  <order>java|javax,org,com,com.diffplug,,\#com.diffplug,\#</order>  <!-- or use <file>${project.basedir}/eclipse.importorder</file> -->
+                  <!-- you can use an empty string for all the imports you didn't specify explicitly, '|' to join group without blank line, and '\#` prefix for static imports. -->
+                  <semanticSort>false</semanticSort>
+                </importOrder>
+              </java>
+            </configuration>
+          </plugin>
         </plugins>
     </build>
 </project>

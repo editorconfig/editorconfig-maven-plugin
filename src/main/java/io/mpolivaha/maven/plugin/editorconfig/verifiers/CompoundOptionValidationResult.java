@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.verifiers;
 
 import java.nio.file.Path;
@@ -13,35 +17,37 @@ import java.util.function.Consumer;
  */
 public class CompoundOptionValidationResult {
 
-  private final List<OptionValidationResult> validationResults;
-  private final Path targetFile;
+    private final List<OptionValidationResult> validationResults;
+    private final Path targetFile;
 
-  public CompoundOptionValidationResult(Path targetFile) {
-    this.targetFile = targetFile;
-    validationResults = new LinkedList<>();
-  }
-
-  public void add(OptionValidationResult result) {
-    this.validationResults.add(result);
-  }
-
-  public boolean isValid() {
-    return validationResults.stream().allMatch(OptionValidationResult::noErrors);
-  }
-
-  public void ifNotValid(Consumer<CompoundOptionValidationResult> action) {
-    if (!isValid()) {
-      action.accept(this);
+    public CompoundOptionValidationResult(Path targetFile) {
+        this.targetFile = targetFile;
+        validationResults = new LinkedList<>();
     }
-  }
 
-  @Override
-  public String toString() {
-    var toString = new StringBuilder(
-        "In the file : '%s' in total encountered %d violations: \n"
-            .formatted(targetFile.toFile().getAbsolutePath(), validationResults.stream().mapToInt(OptionValidationResult::violationsCount).sum())
-    );
-    validationResults.forEach(result -> toString.append(result.renderErrorMessage()));
-    return toString.toString();
-  }
+    public void add(OptionValidationResult result) {
+        this.validationResults.add(result);
+    }
+
+    public boolean isValid() {
+        return validationResults.stream().allMatch(OptionValidationResult::noErrors);
+    }
+
+    public void ifNotValid(Consumer<CompoundOptionValidationResult> action) {
+        if (!isValid()) {
+            action.accept(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        var toString = new StringBuilder("In the file : '%s' in total encountered %d violations: \n"
+                .formatted(
+                        targetFile.toFile().getAbsolutePath(),
+                        validationResults.stream()
+                                .mapToInt(OptionValidationResult::violationsCount)
+                                .sum()));
+        validationResults.forEach(result -> toString.append(result.renderErrorMessage()));
+        return toString.toString();
+    }
 }

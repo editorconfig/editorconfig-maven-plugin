@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig;
 
 import java.nio.file.Path;
@@ -26,12 +30,14 @@ public class ConfigurationTree {
 
     private final TreeNode root;
 
-    private volatile static ConfigurationTree INSTANCE;
+    private static volatile ConfigurationTree INSTANCE;
 
     private ConfigurationTree(TreeNode root) {
         Assert.notNull(root, "The root must not be empty");
         Assert.notNull(root.value, "The editorconfig struct must not be empty");
-        Assert.state(root.value::isRoot, "The passed TreeNode must represent the root Editorconfig file");
+        Assert.state(
+                root.value::isRoot,
+                "The passed TreeNode must represent the root Editorconfig file");
 
         this.root = root;
     }
@@ -68,7 +74,8 @@ public class ConfigurationTree {
      * over the queue and {@link Queue#poll() polling} elements from it, we can satisfy the order of precedence
      * defined in specification. // TODO add a link to a specification section
      */
-    private Optional<Section> bfs(Queue<TreeNode> buffer, Path file, @Nullable Section mergingAccumulator) {
+    private Optional<Section> bfs(
+            Queue<TreeNode> buffer, Path file, @Nullable Section mergingAccumulator) {
         if (buffer.isEmpty()) {
             return Optional.ofNullable(mergingAccumulator);
         }
@@ -77,17 +84,20 @@ public class ConfigurationTree {
         Editorconfig editorconfig = treeNode.value;
 
         Section merged = editorconfig
-          .findTargetSection(file)
-          .map(prioritizedSection -> {
-            buffer.addAll(treeNode.children); // adding elements into a queue traversal only in case we found a matching section
+                .findTargetSection(file)
+                .map(prioritizedSection -> {
+                    buffer.addAll(
+                            treeNode.children); // adding elements into a queue traversal only in
+                    // case we found a matching section
 
-            if (mergingAccumulator == null) {
-                return prioritizedSection;
-            } else {
-                return mergingAccumulator.mergeWith(prioritizedSection);
-            }
-          })
-          .orElse(mergingAccumulator); // meaning, we have not found appropriate section in the given .editorconfig file
+                    if (mergingAccumulator == null) {
+                        return prioritizedSection;
+                    } else {
+                        return mergingAccumulator.mergeWith(prioritizedSection);
+                    }
+                })
+                .orElse(mergingAccumulator); // meaning, we have not found appropriate section in
+        // the given .editorconfig file
 
         return bfs(buffer, file, merged);
     }

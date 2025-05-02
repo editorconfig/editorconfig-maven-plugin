@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.utils;
 
 import java.io.IOException;
@@ -11,22 +15,21 @@ import java.io.StringWriter;
  */
 public class ExceptionUtils {
 
-  /**
-   * Retrieving the stacktrace of the exception as a String
-   *
-   * @param t exception to fetch the stacktrace for
-   * @return exception as {@link String}
-   */
-  public static String getStackTrace(Throwable t) {
-    try (
-        StringWriter writer = new StringWriter();
-        PrintWriter wrapper = new PrintWriter(writer)) {
+    /**
+     * Retrieving the stacktrace of the exception as a String
+     *
+     * @param t exception to fetch the stacktrace for
+     * @return exception as {@link String}
+     */
+    public static String getStackTrace(Throwable t) {
+        try (StringWriter writer = new StringWriter();
+                PrintWriter wrapper = new PrintWriter(writer)) {
 
-      t.printStackTrace(wrapper);
+            t.printStackTrace(wrapper);
 
-      return writer.getBuffer().toString();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+            return writer.getBuffer().toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 }

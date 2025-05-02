@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
 /**
@@ -8,5 +12,5 @@ package io.mpolivaha.maven.plugin.editorconfig.common;
 @FunctionalInterface
 public interface ThrowingRunnable<T, E extends Throwable> {
 
-  void run() throws E;
+    void run() throws E;
 }

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.model;
 
 import java.nio.file.Path;
@@ -27,8 +31,15 @@ public class Section {
 
     private final TrueFalse insertFinalNewLine;
 
-    public Section(IndentationStyle indentationStyle, GlobExpression globExpression, EndOfLine endOfLine, Charset charset, TrueFalse trimTrailingWhitespace, TrueFalse insertFinalNewLine, Integer indentationSize,
-      Integer tabWidth) {
+    public Section(
+            IndentationStyle indentationStyle,
+            GlobExpression globExpression,
+            EndOfLine endOfLine,
+            Charset charset,
+            TrueFalse trimTrailingWhitespace,
+            TrueFalse insertFinalNewLine,
+            Integer indentationSize,
+            Integer tabWidth) {
         this.indentationStyle = indentationStyle;
         this.globExpression = globExpression;
         this.endOfLine = endOfLine;
@@ -75,15 +86,14 @@ public class Section {
      */
     public Section mergeWith(@NonNull Section that) {
         return new Section(
-          orElseGet(that.indentationStyle, this.indentationStyle),
-          orElseGet(that.globExpression, this.globExpression),
-          orElseGet(that.endOfLine, this.endOfLine),
-          orElseGet(that.charset, this.charset),
-          orElseGet(that.trimTrailingWhitespace, this.trimTrailingWhitespace),
-          orElseGet(that.insertFinalNewLine, this.insertFinalNewLine),
-          orElseGet(that.indentationSize, this.indentationSize),
-          orElseGet(that.tabWidth, this.tabWidth)
-        );
+                orElseGet(that.indentationStyle, this.indentationStyle),
+                orElseGet(that.globExpression, this.globExpression),
+                orElseGet(that.endOfLine, this.endOfLine),
+                orElseGet(that.charset, this.charset),
+                orElseGet(that.trimTrailingWhitespace, this.trimTrailingWhitespace),
+                orElseGet(that.insertFinalNewLine, this.insertFinalNewLine),
+                orElseGet(that.indentationSize, this.indentationSize),
+                orElseGet(that.tabWidth, this.tabWidth));
     }
 
     /**

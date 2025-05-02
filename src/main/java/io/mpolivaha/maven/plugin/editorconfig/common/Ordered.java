@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.common;
 
 /**
@@ -7,9 +11,9 @@ package io.mpolivaha.maven.plugin.editorconfig.common;
  */
 public interface Ordered {
 
-  int EARLIEST = Integer.MIN_VALUE;
-  int LATEST = Integer.MAX_VALUE;
-  int NORMAL = 0;
+    int EARLIEST = Integer.MIN_VALUE;
+    int LATEST = Integer.MAX_VALUE;
+    int NORMAL = 0;
 
-  int getOrder();
+    int getOrder();
 }

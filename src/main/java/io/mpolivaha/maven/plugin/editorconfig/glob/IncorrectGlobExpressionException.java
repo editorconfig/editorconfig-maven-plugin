@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package io.mpolivaha.maven.plugin.editorconfig.glob;
 
 /**
@@ -7,7 +11,7 @@ package io.mpolivaha.maven.plugin.editorconfig.glob;
  */
 public class IncorrectGlobExpressionException extends RuntimeException {
 
-  public IncorrectGlobExpressionException(String expression, String reason) {
-    super("The glob expression : %s is not correct. Reason : %s".formatted(expression, reason));
-  }
+    public IncorrectGlobExpressionException(String expression, String reason) {
+        super("The glob expression : %s is not correct. Reason : %s".formatted(expression, reason));
+    }
 }
