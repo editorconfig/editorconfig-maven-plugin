@@ -21,7 +21,7 @@ public class ParsingUtils {
         return line.charAt(0) == '#' || line.charAt(0) == ';';
     }
 
-    public static boolean isSection(String line) {
+    public static boolean isSectionStart(String line) {
         Assert.notNull(line, "Line cannot be null");
 
         String trimmed = line.trim();

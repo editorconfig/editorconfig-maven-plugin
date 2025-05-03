@@ -46,7 +46,7 @@ public class EditorconfigParser {
     private static Editorconfig parseInternally(BufferedReader reader, Path location)
             throws IOException {
         String line;
-        ParingContext context = null;
+        ParsingContext context = null;
 
         do {
             line = reader.readLine();
@@ -54,7 +54,7 @@ public class EditorconfigParser {
                 break;
             }
             if (context == null) {
-                context = new ParingContext(line);
+                context = new ParsingContext(line);
             } else {
                 context.newline(line);
             }
@@ -62,18 +62,12 @@ public class EditorconfigParser {
             parseLineInternally(context);
         } while (true);
 
-        Editorconfig result;
-
-        if (context.getSectionBuilder().getGlobExpression() != null) {
-            result = context.getSectionBuilder().completeSection();
-        } else {
-            result = context.getSectionBuilder().getEditorconfig();
-        }
+        Editorconfig result = context.completeBuild();
         result.setLocation(location);
         return result;
     }
 
-    private static void parseLineInternally(ParingContext context) {
+    private static void parseLineInternally(ParsingContext context) {
         String line = context.getLine();
 
         if (line.isBlank()) {
@@ -85,10 +79,10 @@ public class EditorconfigParser {
         }
     }
 
-    private static void parseSignificantLine(ParingContext context) {
+    private static void parseSignificantLine(ParsingContext context) {
         String line = context.getLine();
 
-        if (ParsingUtils.isSection(line)) {
+        if (ParsingUtils.isSectionStart(line)) {
             context.startNewSection(GlobExpression.from(line.trim()));
         } else {
             final var holder = new LineNumberAndLine(
@@ -115,9 +109,9 @@ public class EditorconfigParser {
     }
 
     private static void checkForRoot(
-            ParingContext context, LineNumberAndLine holder, KeyValue keyValue) {
+            ParsingContext context, LineNumberAndLine holder, KeyValue keyValue) {
         if (keyValue.key().equalsIgnoreCase("root")) {
-            context.getSectionBuilder().getEditorconfig().markAsRoot();
+            context.markAsRoot();
         } else {
             ExecutionUtils.handleError(
                     UNRECOGNIZED_KEY_ERROR.apply(holder.line, holder.lineNumber, keyValue.key()));

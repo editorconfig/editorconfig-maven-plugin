@@ -84,16 +84,16 @@ public enum Option {
 
     /**
      * Represent the merge function that represent a way to merge the parsed {@link KeyValue key-value pair}
-     * into the current {@link Editorconfig.SectionBuilder section} of the editorconfig that we're currently processing
+     * into the current {@link SectionBuilder section} of the editorconfig that we're currently processing
      */
-    private final BiConsumer<KeyValue, Editorconfig.SectionBuilder> mergeFunction;
+    private final BiConsumer<KeyValue, SectionBuilder> mergeFunction;
 
-    Option(String key, BiConsumer<KeyValue, Editorconfig.SectionBuilder> mutator) {
+    Option(String key, BiConsumer<KeyValue, SectionBuilder> mutator) {
         this.key = key;
         this.mergeFunction = mutator;
     }
 
-    public void merge(KeyValue keyValue, Editorconfig.SectionBuilder sectionBuilder) {
+    public void merge(KeyValue keyValue, SectionBuilder sectionBuilder) {
         this.mergeFunction.accept(keyValue, sectionBuilder);
     }
 

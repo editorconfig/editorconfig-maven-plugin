@@ -15,6 +15,7 @@ import org.apache.maven.plugin.MojoExecutionException;
  */
 public class Assert {
 
+    @SuppressWarnings("unchecked")
     public static <T extends Throwable> void sneakyThrows(Throwable exception) throws T {
         throw (T) exception;
     }

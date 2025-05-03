@@ -6,6 +6,9 @@ package org.editorconfig.plugin.maven.parser;
 
 import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.editorconfig.plugin.maven.model.GlobExpression;
+import org.editorconfig.plugin.maven.model.Section;
+import org.editorconfig.plugin.maven.model.SectionBuilder;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -18,7 +21,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Mikhail Polivakha
  */
-public class ParingContext {
+public class ParsingContext {
 
     /**
      * Current line that parser is pointing at
@@ -33,15 +36,21 @@ public class ParingContext {
     /**
      * The current section builder that we're assembling
      */
-    private @Nullable Editorconfig.SectionBuilder sectionBuilder;
+    private @Nullable SectionBuilder sectionBuilder;
 
-    public ParingContext(String line) {
+    /**
+     * The .editorconfig file we're currently parsing
+     */
+    private @NonNull Editorconfig editorconfig;
+
+    public ParsingContext(String line) {
         this.line = line;
         this.lineNumber = 0;
         this.sectionBuilder = null;
+        this.editorconfig = new Editorconfig();
     }
 
-    public ParingContext newline(String line) {
+    public ParsingContext newline(String line) {
         this.lineNumber++;
         this.line = line;
         return this;
@@ -49,14 +58,24 @@ public class ParingContext {
 
     // TODO tests
     public void startNewSection(GlobExpression expression) {
-        Editorconfig editorconfig;
+        completePreviousSection();
+        sectionBuilder = new SectionBuilder(expression);
+    }
+
+    public @NonNull Editorconfig completeBuild() {
+        completePreviousSection();
+        return editorconfig;
+    }
+
+    private void completePreviousSection() {
         if (sectionBuilder != null) {
-            sectionBuilder.completeSection();
-            editorconfig = sectionBuilder.getEditorconfig();
-        } else {
-            editorconfig = new Editorconfig();
+            Section section = sectionBuilder.completeSection();
+            editorconfig.addSection(section);
         }
-        sectionBuilder = editorconfig.new SectionBuilder(expression);
+    }
+
+    public void markAsRoot() {
+        editorconfig.markAsRoot();
     }
 
     public String getLine() {
@@ -67,7 +86,7 @@ public class ParingContext {
         return lineNumber;
     }
 
-    public Editorconfig.SectionBuilder getSectionBuilder() {
+    public SectionBuilder getSectionBuilder() {
         return sectionBuilder;
     }
 }
