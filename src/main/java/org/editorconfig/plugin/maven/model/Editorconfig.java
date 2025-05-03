@@ -5,6 +5,7 @@
 package org.editorconfig.plugin.maven.model;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +21,9 @@ public class Editorconfig {
 
     private Path location;
 
-    private List<Section> sections;
+    private List<Section> sections = new LinkedList<>();
 
     public Editorconfig addSection(Section section) {
-        if (this.sections == null) {
-            this.sections = new LinkedList<>();
-        }
         this.sections.add(section);
         return this;
     }

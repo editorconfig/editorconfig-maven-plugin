@@ -4,6 +4,8 @@
  */
 package org.editorconfig.plugin.maven.parser;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.nio.file.Paths;
 import java.util.Map;
 
@@ -40,36 +42,34 @@ class EditorconfigParserTest {
         EditorconfigParser editorconfigParser = new EditorconfigParser();
 
         // When.
-        String path = ClassLoader.getSystemClassLoader()
-                .getResource("test-files/.root-editorconfig")
-                .getPath();
+        String path = testClassPathResource("test-files/.root-editorconfig");
         Editorconfig result = editorconfigParser.parse(Paths.get(path));
 
         // Then.
-        Assertions.assertThat(result.isRoot()).isTrue();
-        Assertions.assertThat(result.getSections()).hasSize(2);
+        assertThat(result.isRoot()).isTrue();
+        assertThat(result.getSections()).hasSize(2);
 
-        Assertions.assertThat(result.getSections().get(0)).satisfies(section -> {
-            Assertions.assertThat(section.getGlobExpression().getRaw())
+        assertThat(result.getSections().get(0)).satisfies(section -> {
+            assertThat(section.getGlobExpression().getRaw())
                     .isEqualTo("[{file.py,another-file.py}]");
-            Assertions.assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
-            Assertions.assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-            Assertions.assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            Assertions.assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.TRUE);
-            Assertions.assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.FALSE);
-            Assertions.assertThat(section.getIndentationSize()).isEqualTo(2);
+            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
+            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
+            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getIndentationSize()).isEqualTo(2);
         });
 
-        Assertions.assertThat(result.getSections().get(1)).satisfies(section -> {
-            Assertions.assertThat(section.getGlobExpression().getRaw())
+        assertThat(result.getSections().get(1)).satisfies(section -> {
+            assertThat(section.getGlobExpression().getRaw())
                     .isEqualTo("[*.{.kt,.java}]");
-            Assertions.assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            Assertions.assertThat(section.getEndOfLine())
+            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
+            assertThat(section.getEndOfLine())
                     .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-            Assertions.assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            Assertions.assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
-            Assertions.assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
-            Assertions.assertThat(section.getIndentationSize()).isNull();
+            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getIndentationSize()).isNull();
         });
     }
 
@@ -80,34 +80,32 @@ class EditorconfigParserTest {
         EditorconfigParser editorconfigParser = new EditorconfigParser();
 
         // When.
-        String path = ClassLoader.getSystemClassLoader()
-                .getResource("test-files/.root-editorconfig")
-                .getPath();
+        String path = testClassPathResource("test-files/.root-editorconfig");
         Editorconfig result = editorconfigParser.parse(Paths.get(path));
 
         // Then.
-        Assertions.assertThat(result.isRoot()).isTrue();
-        Assertions.assertThat(result.getSections()).hasSize(2);
+        assertThat(result.isRoot()).isTrue();
+        assertThat(result.getSections()).hasSize(2);
 
-        Assertions.assertThat(result.getSections().get(0)).satisfies(section -> {
-            Assertions.assertThat(section.getGlobExpression().getRaw())
+        assertThat(result.getSections().get(0)).satisfies(section -> {
+            assertThat(section.getGlobExpression().getRaw())
                     .isEqualTo("[{file.py,another-file.py}]");
-            Assertions.assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
-            Assertions.assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-            Assertions.assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            Assertions.assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.TRUE);
-            Assertions.assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
+            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
+            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.FALSE);
         });
 
-        Assertions.assertThat(result.getSections().get(1)).satisfies(section -> {
-            Assertions.assertThat(section.getGlobExpression().getRaw())
+        assertThat(result.getSections().get(1)).satisfies(section -> {
+            assertThat(section.getGlobExpression().getRaw())
                     .isEqualTo("[*.{.kt,.java}]");
-            Assertions.assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            Assertions.assertThat(section.getEndOfLine())
+            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
+            assertThat(section.getEndOfLine())
                     .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-            Assertions.assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            Assertions.assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
-            Assertions.assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
         });
     }
 
@@ -122,21 +120,38 @@ class EditorconfigParserTest {
         EditorconfigParser editorconfigParser = new EditorconfigParser();
 
         // When.
-        String path = ClassLoader.getSystemClassLoader()
-                .getResource("test-files/.invalid-editorconfig")
-                .getPath();
+        String path = testClassPathResource("test-files/.invalid-editorconfig");
         Editorconfig result = editorconfigParser.parse(Paths.get(path));
 
         // Then.
-        Assertions.assertThat(result.isRoot()).isTrue();
-        Assertions.assertThat(result.getSections()).hasSize(2);
-        Assertions.assertThat(result.getSections().get(1)).satisfies(section -> {
-            Assertions.assertThat(section.getGlobExpression().getRaw())
+        assertThat(result.isRoot()).isTrue();
+        assertThat(result.getSections()).hasSize(2);
+        assertThat(result.getSections().get(1)).satisfies(section -> {
+            assertThat(section.getGlobExpression().getRaw())
                     .isEqualTo("[*.{.kt,.java}]");
-            Assertions.assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            Assertions.assertThat(section.getEndOfLine())
+            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
+            assertThat(section.getEndOfLine())
                     .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-            Assertions.assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
         });
+    }
+
+    @Test
+    void testFileParsing_shouldTestJustRootEditorConfig() {
+        PluginConfiguration.buildInstance(Map.of(Param.STRICT_MODE, false));
+        EditorconfigParser editorconfigParser = new EditorconfigParser();
+
+        String path = testClassPathResource("test-files/.just-root");
+
+        Editorconfig parsed = editorconfigParser.parse(Paths.get(path));
+
+        assertThat(parsed.isRoot()).isTrue();
+        assertThat(parsed.getSections()).isEmpty();
+    }
+
+    private static String testClassPathResource(String name) {
+        return ClassLoader.getSystemClassLoader()
+          .getResource(name)
+          .getPath();
     }
 }
