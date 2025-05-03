@@ -16,7 +16,6 @@ import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
-
 import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
 
 /**

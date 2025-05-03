@@ -12,8 +12,8 @@ import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.util.regex.PatternSyntaxException;
 
-import org.editorconfig.plugin.maven.assertions.Assert;
 import org.editorconfig.plugin.maven.annotations.ThreadSafe;
+import org.editorconfig.plugin.maven.assertions.Assert;
 
 /**
  * Parser of Glob expressions.

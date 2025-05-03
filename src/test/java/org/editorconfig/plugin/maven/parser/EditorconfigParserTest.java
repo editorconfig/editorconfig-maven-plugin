@@ -11,9 +11,6 @@ import org.apache.maven.monitor.logging.DefaultLog;
 import org.assertj.core.api.Assertions;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
 import org.editorconfig.plugin.maven.config.PluginConfiguration;
 import org.editorconfig.plugin.maven.config.PluginConfiguration.Param;
 import org.editorconfig.plugin.maven.model.Charset;
@@ -21,6 +18,8 @@ import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.IndentationStyle;
 import org.editorconfig.plugin.maven.model.TrueFalse;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for the {@link EditorconfigParser}

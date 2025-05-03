@@ -32,17 +32,19 @@ public enum Option {
     IDENT_SIZE(OptionUtils.INDENT_SIZE, (keyValue, sectionBuilder) -> {
         assign(
                 IntegerUtils.parseIntSafe(keyValue.value()),
-                OptionUtils.ERROR_MESSAGE.apply(OptionUtils.INDENT_SIZE, keyValue.value(), new String[] {
-                    "1", "2", "3", "4", "5", "..."
-                }),
+                OptionUtils.ERROR_MESSAGE.apply(
+                        OptionUtils.INDENT_SIZE,
+                        keyValue.value(),
+                        new String[] {"1", "2", "3", "4", "5", "..."}),
                 sectionBuilder::indentationSize);
     }),
     TAB_WIDTH(OptionUtils.TAB_WIDTH, (keyValue, sectionBuilder) -> {
         assign(
                 IntegerUtils.parseIntSafe(keyValue.value()),
-                OptionUtils.ERROR_MESSAGE.apply(OptionUtils.TAB_WIDTH, keyValue.value(), new String[] {
-                    "1", "2", "3", "4", "5", "..."
-                }),
+                OptionUtils.ERROR_MESSAGE.apply(
+                        OptionUtils.TAB_WIDTH,
+                        keyValue.value(),
+                        new String[] {"1", "2", "3", "4", "5", "..."}),
                 sectionBuilder::tabWidth);
     }),
     END_OF_LINE(OptionUtils.END_OF_LINE, (keyValue, sectionBuilder) -> {

@@ -7,10 +7,9 @@ package org.editorconfig.plugin.maven.utils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.editorconfig.plugin.maven.assertions.Assert;
-import org.editorconfig.plugin.maven.config.PluginConfiguration;
-
 import org.editorconfig.plugin.maven.common.ThrowingRunnable;
 import org.editorconfig.plugin.maven.common.ThrowingSupplier;
+import org.editorconfig.plugin.maven.config.PluginConfiguration;
 
 /**
  * Utility class for handling common execution use cases

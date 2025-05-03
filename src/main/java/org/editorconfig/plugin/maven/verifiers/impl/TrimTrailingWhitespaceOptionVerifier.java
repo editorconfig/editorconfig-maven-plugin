@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.plugin.logging.Log;
-import org.editorconfig.plugin.maven.model.Section;
-
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.common.PluginCharsetDetector;
 import org.editorconfig.plugin.maven.config.PluginConfiguration;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;

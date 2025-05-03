@@ -7,10 +7,10 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 import java.util.Map;
 
 import org.editorconfig.plugin.maven.assertions.Assert;
-import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.common.IndentationBlock;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;

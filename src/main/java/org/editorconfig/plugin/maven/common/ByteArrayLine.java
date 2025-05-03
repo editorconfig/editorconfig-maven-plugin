@@ -9,9 +9,8 @@ import java.util.Arrays;
 
 import org.editorconfig.plugin.maven.assertions.Assert;
 import org.editorconfig.plugin.maven.model.EndOfLine;
-import org.editorconfig.plugin.maven.model.Section;
-
 import org.editorconfig.plugin.maven.model.IndentationStyle;
+import org.editorconfig.plugin.maven.model.Section;
 
 public class ByteArrayLine {
 
@@ -106,7 +105,8 @@ public class ByteArrayLine {
         int i = 0;
         while (i < initialLength) {
             byte currentByte = at(i);
-            if (currentByte != IndentationStyle.SPACE.getEncoding() && currentByte != IndentationStyle.TAB.getEncoding()) {
+            if (currentByte != IndentationStyle.SPACE.getEncoding()
+                    && currentByte != IndentationStyle.TAB.getEncoding()) {
                 // we met first significant byte, newline, or EOL.
                 // Here, the end of line symbol is copied as well since it is included into the
                 // lengthWithEoL()

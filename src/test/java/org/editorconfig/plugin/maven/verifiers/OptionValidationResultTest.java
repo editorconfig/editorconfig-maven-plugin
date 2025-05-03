@@ -5,9 +5,8 @@
 package org.editorconfig.plugin.maven.verifiers;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import org.editorconfig.plugin.maven.model.Option;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link OptionValidationResult}

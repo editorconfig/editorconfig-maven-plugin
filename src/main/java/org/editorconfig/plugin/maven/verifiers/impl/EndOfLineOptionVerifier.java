@@ -7,11 +7,11 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 import java.util.Map;
 import java.util.Objects;
 
-import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.common.TripleFunction;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
 

@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 import org.apache.maven.plugin.MojoExecutionException;
-
 import org.editorconfig.plugin.maven.assertions.Assert;
 import org.editorconfig.plugin.maven.common.TripleFunction;
 import org.editorconfig.plugin.maven.model.Editorconfig;

@@ -5,9 +5,8 @@
 package org.editorconfig.plugin.maven.parser;
 
 import org.editorconfig.plugin.maven.model.Editorconfig;
-import org.jspecify.annotations.Nullable;
-
 import org.editorconfig.plugin.maven.model.GlobExpression;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This class represents the context of the parser. It is supposed to hold all the relevant

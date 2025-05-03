@@ -16,7 +16,6 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import org.apache.maven.plugin.logging.Log;
-
 import org.editorconfig.plugin.maven.config.PluginConfiguration;
 import org.editorconfig.plugin.maven.utils.ExceptionUtils;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;

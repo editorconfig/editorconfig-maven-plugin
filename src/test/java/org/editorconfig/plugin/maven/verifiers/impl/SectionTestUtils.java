@@ -6,13 +6,13 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.util.function.Consumer;
 
-import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.editorconfig.plugin.maven.model.Editorconfig.SectionBuilder;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.GlobExpression;
 import org.editorconfig.plugin.maven.model.IndentationStyle;
+import org.editorconfig.plugin.maven.model.Section;
 
 public class SectionTestUtils {
 

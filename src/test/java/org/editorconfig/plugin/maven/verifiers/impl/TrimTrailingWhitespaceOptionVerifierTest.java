@@ -9,14 +9,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
+import org.editorconfig.plugin.maven.model.Charset;
+import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
+import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import org.editorconfig.plugin.maven.model.Charset;
-import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
-import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
 
 /**
  * Tests for {@link TrimTrailingWhitespaceOptionVerifier}

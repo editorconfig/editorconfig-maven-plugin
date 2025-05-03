@@ -19,13 +19,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.editorconfig.plugin.maven.assertions.Assert;
-import org.editorconfig.plugin.maven.file.FileWalker;
-import org.editorconfig.plugin.maven.model.Section;
-import org.editorconfig.plugin.maven.parser.EditorconfigParser;
-
 import org.editorconfig.plugin.maven.config.PluginConfiguration;
 import org.editorconfig.plugin.maven.config.PluginConfiguration.Param;
+import org.editorconfig.plugin.maven.file.FileWalker;
 import org.editorconfig.plugin.maven.model.Editorconfig;
+import org.editorconfig.plugin.maven.model.Section;
+import org.editorconfig.plugin.maven.parser.EditorconfigParser;
 import org.editorconfig.plugin.maven.verifiers.CompoundOptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.OptionsManager;
 

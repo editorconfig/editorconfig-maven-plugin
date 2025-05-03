@@ -9,9 +9,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import org.editorconfig.plugin.maven.model.EndOfLine;
+import org.junit.jupiter.api.Test;
 
 /**
  * TODO add integration tests with real files

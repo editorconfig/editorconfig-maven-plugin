@@ -7,13 +7,12 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
+import org.editorconfig.plugin.maven.model.EndOfLine;
+import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import org.editorconfig.plugin.maven.model.EndOfLine;
-import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 
 class EndOfLineOptionVerifierTest {
 

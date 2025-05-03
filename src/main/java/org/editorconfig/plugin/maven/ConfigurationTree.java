@@ -12,10 +12,9 @@ import java.util.Optional;
 import java.util.Queue;
 
 import org.editorconfig.plugin.maven.assertions.Assert;
+import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.editorconfig.plugin.maven.model.Section;
 import org.jspecify.annotations.Nullable;
-
-import org.editorconfig.plugin.maven.model.Editorconfig;
 
 /**
  * Represents a tree data structure where nodes hold objects of {@link Editorconfig} type.

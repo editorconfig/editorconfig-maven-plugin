@@ -10,12 +10,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.editorconfig.plugin.maven.annotations.ThreadSafe;
+import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.mozilla.universalchardet.UniversalDetector.InputState;
-
-import org.editorconfig.plugin.maven.annotations.ThreadSafe;
-import org.editorconfig.plugin.maven.model.Charset;
 
 import static java.nio.charset.Charset.*;
 
