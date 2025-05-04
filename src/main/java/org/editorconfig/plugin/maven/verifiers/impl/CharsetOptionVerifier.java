@@ -4,11 +4,11 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
+import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.common.PluginCharsetDetector;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.Option;
@@ -34,7 +34,7 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
 
     @Override
     protected OptionValidationResult checkInternal(
-            InputStream content, Section section, Map<String, Object> executionContext) {
+            CachingInputStream content, Section section, Map<String, Object> executionContext) {
         Charset expectedCharset = getValueFromSection(section);
         OptionValidationResult result = new OptionValidationResult(targetOption, expectedCharset);
 

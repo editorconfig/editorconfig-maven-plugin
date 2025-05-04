@@ -41,18 +41,19 @@ public class PluginCharsetDetector {
         this.universalDetector = new UniversalDetector();
     }
 
+    // TODO: tests
     public synchronized List<Charset> detect(byte[] bytes) {
         universalDetector.handleData(bytes, 0, bytes.length);
         universalDetector.dataEnd();
 
         List<Charset> charsets;
         if (universalDetector.isDone()) {
-            // "done" means that the detector is strongly convinced that it detected the charset
-            // right
+            // "done" means that the detector is strongly convinced
+            // that it detected the charset correctly
             charsets = extractSingleDetectedCharset();
         } else {
-            // we can still have detected charset out of what we have even if the detector is not
-            // done
+            // we can still have detected charset out of what
+            // we have even if the detector is not yet done
             String detectedCharset = universalDetector.getDetectedCharset();
 
             if (detectedCharset != null && !detectedCharset.isEmpty()) {

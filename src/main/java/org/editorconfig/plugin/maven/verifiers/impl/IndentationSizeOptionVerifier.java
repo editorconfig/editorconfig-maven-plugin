@@ -4,41 +4,71 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
+import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.plugin.logging.Log;
 import org.editorconfig.plugin.maven.assertions.Assert;
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
-import org.editorconfig.plugin.maven.common.IndentationBlock;
+import org.editorconfig.plugin.maven.config.PluginConfiguration;
+import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.Option;
 import org.editorconfig.plugin.maven.model.Section;
-import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
+import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
 
 /**
  * {@link SpecOptionVerifier} for indentation_size option
  *
  * @author Mikhail Polivakha
- * @see TrueFalse
  */
 public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
 
     private Section section;
+    private Charset charset;
 
-    private static final String PREVIOUS_LINE_KEY = "PREVIOUS_LINE_KEY";
-
-    /**
-     * The indentation block that is applicable for the given line
-     */
-    private static final String INDENTATION_BLOCK = "INDENTATION_BLOCK";
+    private static final String PREVIOUS_INDENT_LINE = "PREVIOUS_LINE_KEY";
 
     public IndentationSizeOptionVerifier() {
         super(Option.IDENT_SIZE);
     }
 
     @Override
-    protected void onInit(Section section) {
+    protected void onInit(Section section, Map<String, Object> executionContext) {
+        Assert.notNull(section, "The section cannot be null at this point");
         this.section = section;
+        this.charset = detectCharsetForGivenFile(section, executionContext);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Charset detectCharsetForGivenFile(
+            Section section, Map<String, Object> executionContext) {
+        Charset charset = section.getCharset();
+
+        if (charset != null) {
+            return charset; // if possible, we rely on the charset the user has specified.
+        }
+
+        // otherwise, took the first of the detected. It must be either
+        // UTF-8 or ASCII, which in 99% of cases would not matter for
+        // further processing
+
+        List<Charset> possibleCharsets =
+                (List<Charset>) executionContext.get(ContextKeys.POSSIBLE_CHARSETS);
+
+        if (possibleCharsets != null && !possibleCharsets.isEmpty()) {
+            return possibleCharsets.get(0);
+        }
+
+        // Almost impossible to end up here, but if we are, then the
+        // detector was not sure if we're using ascii or utf-8. We're
+        // assuming a utf-16be here
+        PluginConfiguration.getInstance()
+                .<Log>getLog()
+                .warn(
+                        "Attention! Cannot verify the indentation size for the given file. Falling back to utf-16be"); // TODO: add file name
+        return Charset.UTF_16BE;
     }
 
     @Override
@@ -48,19 +78,34 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
             Integer optionValue,
             OptionValidationResult result,
             Map<String, Object> executionContext) {
-        Assert.notNull(section, "The section cannot be null at this point");
-        var currentIndentationBlock = (IndentationBlock)
-                executionContext.getOrDefault(INDENTATION_BLOCK, IndentationBlock.root());
+        int currentLineIndent;
 
-        // TODO:
         if (!line.isEmpty()) {
-            //        line.getIndentInColumns()
+            Integer tabWidth = section.getTabWidth();
+
+            Assert.notNull(
+                    tabWidth,
+                    () ->
+                            "The tab width should be guaranteed to be present, either in the form of 'tab_width' or 'indent_size' setting");
+
+            currentLineIndent = line.getIndent(tabWidth, charset.getJavaCharset());
+
+            Integer previousIndentLine = (Integer) executionContext.get(PREVIOUS_INDENT_LINE);
+
+            if (previousIndentLine != null && previousIndentLine != 0) {
+                int thisIndent = currentLineIndent - previousIndentLine;
+                if (thisIndent != optionValue && thisIndent > 0) {
+                    result.addErrorMessage(
+                            "The line number %d has the indentation level of %d columns in relation to previous line"
+                                    .formatted(lineNumber, thisIndent));
+                }
+            }
+
+        } else {
+            currentLineIndent = 0;
         }
 
-        //    executionContext.put(
-        //        PREVIOUS_LINE_KEY,
-        //        discoverIndentationBlock(line, optionValue, currentIndentationBlock)
-        //    );
+        executionContext.put(PREVIOUS_INDENT_LINE, currentLineIndent);
     }
 
     @Override

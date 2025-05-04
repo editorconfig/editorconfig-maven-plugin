@@ -26,6 +26,12 @@ public class Assert {
         }
     }
 
+    public static <T> void notNull(T element, Supplier<String> message) {
+        if (element == null) {
+            sneakyThrows(new MojoExecutionException(message.get()));
+        }
+    }
+
     public static void state(Supplier<Boolean> element, String message) {
         notNull(element, "Supplier<Boolean> cannot be null");
         if (!element.get()) {

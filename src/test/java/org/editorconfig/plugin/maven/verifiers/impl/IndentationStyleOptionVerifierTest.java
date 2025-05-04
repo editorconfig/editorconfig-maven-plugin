@@ -5,6 +5,7 @@
 package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
@@ -38,7 +39,8 @@ class IndentationStyleOptionVerifierTest {
                                 .toURI())
                         .toFile()),
                 SectionTestUtils.testSection(sectionBuilder ->
-                        sectionBuilder.tabWidth(tabWidth).indentationStyle(indentationStyle)));
+                        sectionBuilder.tabWidth(tabWidth).indentationStyle(indentationStyle)),
+                Map.of());
 
         Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
     }

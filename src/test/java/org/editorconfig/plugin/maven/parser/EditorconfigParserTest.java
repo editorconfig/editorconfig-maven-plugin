@@ -4,13 +4,10 @@
  */
 package org.editorconfig.plugin.maven.parser;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.nio.file.Paths;
 import java.util.Map;
 
 import org.apache.maven.monitor.logging.DefaultLog;
-import org.assertj.core.api.Assertions;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.editorconfig.plugin.maven.config.PluginConfiguration;
@@ -22,6 +19,8 @@ import org.editorconfig.plugin.maven.model.IndentationStyle;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for the {@link EditorconfigParser}
@@ -61,11 +60,9 @@ class EditorconfigParserTest {
         });
 
         assertThat(result.getSections().get(1)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw())
-                    .isEqualTo("[*.{.kt,.java}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("[*.{.kt,.java}]");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            assertThat(section.getEndOfLine())
-                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
             assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
             assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
@@ -98,11 +95,9 @@ class EditorconfigParserTest {
         });
 
         assertThat(result.getSections().get(1)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw())
-                    .isEqualTo("[*.{.kt,.java}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("[*.{.kt,.java}]");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            assertThat(section.getEndOfLine())
-                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
             assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
             assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
@@ -127,11 +122,9 @@ class EditorconfigParserTest {
         assertThat(result.isRoot()).isTrue();
         assertThat(result.getSections()).hasSize(2);
         assertThat(result.getSections().get(1)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw())
-                    .isEqualTo("[*.{.kt,.java}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("[*.{.kt,.java}]");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            assertThat(section.getEndOfLine())
-                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
         });
     }
@@ -150,8 +143,6 @@ class EditorconfigParserTest {
     }
 
     private static String testClassPathResource(String name) {
-        return ClassLoader.getSystemClassLoader()
-          .getResource(name)
-          .getPath();
+        return ClassLoader.getSystemClassLoader().getResource(name).getPath();
     }
 }

@@ -4,9 +4,15 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
+import org.editorconfig.plugin.maven.common.CachingInputStream;
+import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,11 +35,16 @@ class InsertFinalNewLineOptionVerifierTest {
 
     @ParameterizedTest
     @MethodSource(value = "arguments")
-    void testInsertFinalNewLineOptionVerifier(String sourceCodeFile, boolean shouldPass) {
+    void testInsertFinalNewLineOptionVerifier(String sourceCodeFile, boolean shouldPass)
+            throws URISyntaxException, FileNotFoundException {
         // given.
         OptionValidationResult sut = subject.check(
-                ClassLoader.getSystemClassLoader().getResourceAsStream(sourceCodeFile),
-                SectionTestUtils.testSection());
+                new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
+                        .getResource(sourceCodeFile)
+                        .toURI())),
+                SectionTestUtils.testSection(
+                        sectionBuilder -> sectionBuilder.insertFinalNewLine(TrueFalse.TRUE)),
+                Map.of());
 
         // when
         Assertions.assertThat(sut.noErrors()).isEqualTo(shouldPass);

@@ -4,14 +4,18 @@
  */
 package org.editorconfig.plugin.maven.common;
 
-import java.util.ArrayList;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import org.editorconfig.plugin.maven.assertions.Assert;
 import org.editorconfig.plugin.maven.model.EndOfLine;
-import org.editorconfig.plugin.maven.model.IndentationStyle;
-import org.editorconfig.plugin.maven.model.Section;
 
+/**
+ * Abstraction of the line of source code being analyzed. It is backed by the {@code byte[]} in
+ * order to have more control over the interpretation of those bytes on the parsing side.
+ *
+ * @author Mikhail Polivakha
+ */
 public class ByteArrayLine {
 
     private final byte[] line;
@@ -78,63 +82,40 @@ public class ByteArrayLine {
     }
 
     /**
-     * Returns the indentation in columns. One space is one column. One tab has length in column tact is equal
-     * to the {@link Section#getTabWidth() tab_width} option.
+     * Get indentation size of the line in abstract "columns". An assumption is that the 'tab' ('\t' ASCII symbol)
+     * can be broken down into multiple of such columns, and each space used for indentation has size of an exactly
+     * one column.
+     * <p>
+     * The {@link Charset} is an absolute necessity here, since the line that starts with two spaces must always
+     * represent the two columns indentation from the point of view of the user. However, these two spaces may
+     * occupy 2 bytes in case of UTF-8, and 4 bytes in case of UTF-16.
      *
-     * @param softTabsForOneHard how many columns does one tab represents
+     * @param softTabsForOneHard amount of "columns" or "spaces" or "soft tabs" in one tab (also called hard tab)
+     * @param charset charset for interpretation of the line string.
      */
-    public int getIndentInColumns(Integer softTabsForOneHard) {
-        ByteArrayLine flatten = flatten(softTabsForOneHard);
-        for (int i = 0; i < flatten.lengthWithEoL(); i++) {
-            if (flatten.at(i) != IndentationStyle.SPACE.getEncoding()) {
-                return i;
-            }
+    public int getIndent(int softTabsForOneHard, Charset charset) {
+        if (isEmpty()) {
+            return 0;
         }
-        return flatten.lengthWithEoL();
-    }
 
-    /**
-     * Flattens the line, which means that it replaces all the hard tabs (\t) with
-     * the corresponding amount of the soft tabs
-     *
-     * @param softTabsForOneHard - Amount of soft tabs per one hard tab
-     */
-    private ByteArrayLine flatten(Integer softTabsForOneHard) {
-        int initialLength = lengthWithEoL();
-        var newLine = new ArrayList<Byte>(initialLength);
-        int i = 0;
-        while (i < initialLength) {
-            byte currentByte = at(i);
-            if (currentByte != IndentationStyle.SPACE.getEncoding()
-                    && currentByte != IndentationStyle.TAB.getEncoding()) {
-                // we met first significant byte, newline, or EOL.
-                // Here, the end of line symbol is copied as well since it is included into the
-                // lengthWithEoL()
-                // TODO: there is no straightforward way of converting the array of bytes into a
-                // list
-                for (byte b : Arrays.copyOfRange(line, i, initialLength)) {
-                    newLine.add(b);
-                }
-                break;
-            }
-            if (currentByte == IndentationStyle.TAB.getEncoding()) {
-                for (int j = 0; j < softTabsForOneHard; j++) {
-                    newLine.add((byte) IndentationStyle.SPACE.getEncoding());
-                }
-            } else {
-                newLine.add(currentByte);
-            }
-            i++;
-        }
-        return new ByteArrayLine(
-                toPrimitive(newLine.toArray(new Byte[0])), newLine.size(), endOfLine);
-    }
+        var charsetAwareLine = new String(line, charset);
+        int index = 0;
+        int countOfChars = 0;
+        char currentChar;
+        boolean isWhitespace;
 
-    private static byte[] toPrimitive(Byte[] array) {
-        byte[] newArr = new byte[array.length];
-        for (int i = 0; i < array.length; i++) {
-            newArr[i] = array[i];
-        }
-        return newArr;
+        do {
+            currentChar = charsetAwareLine.charAt(index++);
+            isWhitespace = Character.isWhitespace(currentChar);
+            if (isWhitespace) {
+                if (currentChar == '\t') {
+                    countOfChars += softTabsForOneHard;
+                } else {
+                    countOfChars++;
+                }
+            }
+        } while (isWhitespace && index < charsetAwareLine.length());
+
+        return countOfChars;
     }
 }

@@ -5,6 +5,7 @@
 package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
@@ -28,12 +29,14 @@ class CharsetOptionVerifierTest {
     @MethodSource(value = {"arguments"})
     void testCharsetOptionVerifier(String sourceCodeFile, Charset charset, boolean noErrors)
             throws Exception {
+
         OptionValidationResult check = subject.check(
                 new CachingInputStream(Paths.get(ClassLoader.getSystemClassLoader()
                                 .getResource(sourceCodeFile)
                                 .toURI())
                         .toFile()),
-                SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.charset(charset)));
+                SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.charset(charset)),
+                new HashMap<>());
 
         Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
     }

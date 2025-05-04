@@ -27,7 +27,7 @@ public class IndentationStyleOptionVerifier extends SpecOptionVerifier<Indentati
     }
 
     @Override
-    protected void onInit(Section section) {
+    protected void onInit(Section section, Map<String, Object> executionContext) {
         this.section = section;
     }
 

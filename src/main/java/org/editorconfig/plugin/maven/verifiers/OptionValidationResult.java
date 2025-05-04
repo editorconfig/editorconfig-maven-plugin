@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.editorconfig.plugin.maven.assertions.Assert;
 import org.editorconfig.plugin.maven.model.Option;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Result of validation of a given {@link Option} via {@link SpecOptionVerifier}
@@ -17,14 +19,18 @@ import org.editorconfig.plugin.maven.model.Option;
  */
 public class OptionValidationResult {
 
-    private final List<String> errorMessages;
-    private final Option option;
-    private final Object optionValue;
+    private final @NonNull List<String> errorMessages;
+    private final @NonNull Option option;
+    private final @Nullable Object optionValue;
 
     public OptionValidationResult(Option option, Object optionValue) {
         this.option = option;
         this.optionValue = optionValue;
         this.errorMessages = new LinkedList<>();
+    }
+
+    public static OptionValidationResult skippedValidation(Option option) {
+        return new OptionValidationResult(option, null);
     }
 
     public void addErrorMessage(String errorMessage) {

@@ -4,12 +4,17 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
+import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.Charset;
+import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,11 +38,15 @@ class TrimTrailingWhitespaceOptionVerifierTest {
 
     @ParameterizedTest
     @MethodSource(value = "arguments")
-    void testInsertFinalNewLineOptionVerifier(String sourceCodeFile, boolean shouldPass) {
+    void testInsertFinalNewLineOptionVerifier(String sourceCodeFile, boolean shouldPass)
+            throws URISyntaxException, FileNotFoundException {
         // given.
         OptionValidationResult sut = subject.check(
-                ClassLoader.getSystemClassLoader().getResourceAsStream(sourceCodeFile),
-                SectionTestUtils.testSection(),
+                new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
+                        .getResource(sourceCodeFile)
+                        .toURI())),
+                SectionTestUtils.testSection(
+                        sectionBuilder -> sectionBuilder.trimTrailingWhitespace(TrueFalse.TRUE)),
                 Map.of(ContextKeys.POSSIBLE_CHARSETS, List.of(Charset.UTF_8)));
 
         // when

@@ -5,16 +5,17 @@
 package org.editorconfig.plugin.maven.verifiers;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.editorconfig.plugin.maven.common.BufferedInputStream;
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
+import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.common.Ordered;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.Option;
 import org.editorconfig.plugin.maven.model.Section;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This is base class for all other that aim to check for a specific {@link Option option}
@@ -34,16 +35,12 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
         this.targetOption = targetOption;
     }
 
-    public OptionValidationResult check(InputStream content, Section section) {
-        return checkInternal(content, section, new HashMap<>());
-    }
-
     public OptionValidationResult check(
-            InputStream content, Section section, Map<String, Object> executionContext) {
+            CachingInputStream content, Section section, Map<String, Object> executionContext) {
         return checkInternal(content, section, executionContext);
     }
 
-    protected void onInit(Section section) {}
+    protected void onInit(Section section, Map<String, Object> executionContext) {}
 
     /**
      * Checks, whether the content of the file is compliant with the current setting of the {@link #targetOption}
@@ -55,11 +52,15 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
      * @return OptionViolations wrapped
      */
     protected OptionValidationResult checkInternal(
-            InputStream content, Section section, Map<String, Object> executionContext) {
+            CachingInputStream content, Section section, Map<String, Object> executionContext) {
         T optionValue = getValueFromSection(section);
 
+        if (optionValue == null) {
+            return OptionValidationResult.skippedValidation(targetOption);
+        }
+
         try (var reader = new BufferedInputStream(content)) {
-            onInit(section);
+            onInit(section, executionContext);
             int lineNumber = 1;
             ByteArrayLine line;
             OptionValidationResult result = new OptionValidationResult(targetOption, optionValue);
@@ -78,18 +79,18 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
     }
 
     protected abstract void forEachLine(
-            ByteArrayLine line,
-            int lineNumber,
-            T optionValue,
-            OptionValidationResult result,
-            Map<String, Object> context);
+            @NonNull ByteArrayLine line,
+            @NonNull int lineNumber,
+            @NonNull T optionValue,
+            @NonNull OptionValidationResult result,
+            @NonNull Map<String, Object> context);
 
     protected void onCompletion(OptionValidationResult result, T optionValue) {}
 
     /**
      * Function that extracts the value of the required type from given {@link Section}
      */
-    public abstract T getValueFromSection(Section section);
+    public abstract @Nullable T getValueFromSection(Section section);
 
     @Override
     public int getOrder() {
