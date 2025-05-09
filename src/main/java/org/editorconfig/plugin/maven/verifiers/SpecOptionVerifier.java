@@ -4,6 +4,7 @@
  */
 package org.editorconfig.plugin.maven.verifiers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -40,7 +41,7 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
         return checkInternal(content, section, executionContext);
     }
 
-    protected void onInit(Section section, Map<String, Object> executionContext) {}
+    protected void onInit(Section section, Map<String, Object> executionContext, File source) {}
 
     /**
      * Checks, whether the content of the file is compliant with the current setting of the {@link #targetOption}
@@ -60,7 +61,7 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
         }
 
         try (var reader = new BufferedInputStream(content)) {
-            onInit(section, executionContext);
+            onInit(section, executionContext, content.getOriginalFile());
             int lineNumber = 1;
             ByteArrayLine line;
             OptionValidationResult result = new OptionValidationResult(targetOption, optionValue);

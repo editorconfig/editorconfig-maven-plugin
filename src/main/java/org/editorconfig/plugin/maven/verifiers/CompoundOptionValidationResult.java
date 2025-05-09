@@ -48,7 +48,9 @@ public class CompoundOptionValidationResult {
                                 .filter(OptionValidationResult::hasErrors)
                                 .mapToInt(OptionValidationResult::violationsCount)
                                 .sum()));
-        validationResults.stream().filter(OptionValidationResult::hasErrors).forEach(result -> toString.append(result.renderErrorMessage()));
+        validationResults.stream()
+                .filter(OptionValidationResult::hasErrors)
+                .forEach(result -> toString.append(result.renderErrorMessage()));
         return toString.toString();
     }
 }

@@ -1,6 +1,8 @@
+/**
+ * Copyright (c) 2025 EditorConfig Organization
+ * These source file is created by EditorConfig Organization and is distributed under the MIT license.
+ */
 package org.editorconfig.plugin.maven.verifiers;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +24,8 @@ import org.editorconfig.plugin.maven.utils.ExecutionUtils;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Unit tests for the {@link OptionsManager}.
  *
@@ -35,15 +39,24 @@ class OptionsManagerTest {
         // given.
         Queue<Class<?>> invocationQueue = new LinkedList<>();
 
-        ArrayList<SpecOptionVerifier<?>> specOptionVerifiers = new ArrayList<>(List.of(new Normal(Option.CHARSET, invocationQueue), new Latest(Option.CHARSET, invocationQueue), new Earliest(Option.CHARSET, invocationQueue)));
+        ArrayList<SpecOptionVerifier<?>> specOptionVerifiers = new ArrayList<>(List.of(
+                new Normal(Option.CHARSET, invocationQueue),
+                new Latest(Option.CHARSET, invocationQueue),
+                new Earliest(Option.CHARSET, invocationQueue)));
 
         OptionsManager optionsManager = new OptionsManager(specOptionVerifiers);
 
         // when.
-        optionsManager.check(Files.createTempFile("", ""), new SectionBuilder(GlobExpression.from("*")).completeSection());
+        optionsManager.check(
+                Files.createTempFile("", ""),
+                new SectionBuilder(GlobExpression.from("*")).completeSection());
 
         // then.
-        assertThat(invocationQueue).containsExactly(Earliest.class, Normal.class, Latest.class); // the exact invocation order expected
+        assertThat(invocationQueue)
+                .containsExactly(
+                        Earliest.class,
+                        Normal.class,
+                        Latest.class); // the exact invocation order expected
     }
 
     static class Earliest extends AbstractTestVerifier {
@@ -69,6 +82,7 @@ class OptionsManagerTest {
             return Ordered.LATEST;
         }
     }
+
     static class Normal extends AbstractTestVerifier {
 
         public Normal(Option targetOption, Queue<Class<?>> invocationQueue) {
@@ -86,14 +100,21 @@ class OptionsManagerTest {
         private final Queue<Class<?>> invocationQueue;
 
         @Override
-        protected OptionValidationResult checkInternal(CachingInputStream content, Section section, Map<String, Object> executionContext) {
+        protected OptionValidationResult checkInternal(
+                CachingInputStream content, Section section, Map<String, Object> executionContext) {
             invocationQueue.add(this.getClass());
-            ExecutionUtils.executeExceptionally(content::readAllBytes); // we need to consume the entire content stream.
+            ExecutionUtils.executeExceptionally(
+                    content::readAllBytes); // we need to consume the entire content stream.
             return OptionValidationResult.skippedValidation(Option.CHARSET);
         }
 
         @Override
-        protected void forEachLine(@NonNull ByteArrayLine line, @NonNull int lineNumber, Charset optionValue, @NonNull OptionValidationResult result, @NonNull Map context) {}
+        protected void forEachLine(
+                @NonNull ByteArrayLine line,
+                @NonNull int lineNumber,
+                Charset optionValue,
+                @NonNull OptionValidationResult result,
+                @NonNull Map context) {}
 
         @Override
         public Charset getValueFromSection(Section section) {

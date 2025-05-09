@@ -5,6 +5,7 @@
 package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +38,12 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
     }
 
     @Override
-    protected void onInit(Section section, Map<String, Object> executionContext) {
-        super.onInit(section, executionContext);
+    protected void onInit(Section section, Map<String, Object> executionContext, File source) {
+        super.onInit(section, executionContext, source);
         Charset detectedCharset = getDetectedCharset(executionContext);
 
         if (detectedCharset == null) {
-            warnNoCharsetDetected();
+            warnNoCharsetDetected(source);
         }
     }
 
@@ -122,11 +123,12 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
         return null;
     }
 
-    private static void warnNoCharsetDetected() {
+    private static void warnNoCharsetDetected(File source) {
         PluginConfiguration.getInstance()
                 .<Log>getLog()
                 .warn(
-                        "We cannot check for the trim trailing whitespaces because we do not really now the charset being used for the file"); // TODO: add filename
+                        "We cannot check for the trim trailing whitespaces because we do not really now the charset being used for the file : "
+                                + source.getName());
     }
 
     @Override

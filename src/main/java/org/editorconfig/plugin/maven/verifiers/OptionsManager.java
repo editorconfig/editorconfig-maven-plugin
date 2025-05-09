@@ -5,7 +5,6 @@
 package org.editorconfig.plugin.maven.verifiers;
 
 import java.io.IOException;
-import java.lang.constant.Constable;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,8 +25,13 @@ public class OptionsManager {
     private static final OptionsManager INSTANCE;
 
     static {
-        List<SpecOptionVerifier<?>> specOptionVerifiers = new ArrayList<>(
-          List.of(new CharsetOptionVerifier(), new EndOfLineOptionVerifier(), new IndentationSizeOptionVerifier(), new InsertFinalNewLineOptionVerifier(), new IndentationStyleOptionVerifier(), new TrimTrailingWhitespaceOptionVerifier()));
+        List<SpecOptionVerifier<?>> specOptionVerifiers = new ArrayList<>(List.of(
+                new CharsetOptionVerifier(),
+                new EndOfLineOptionVerifier(),
+                new IndentationSizeOptionVerifier(),
+                new InsertFinalNewLineOptionVerifier(),
+                new IndentationStyleOptionVerifier(),
+                new TrimTrailingWhitespaceOptionVerifier()));
 
         INSTANCE = new OptionsManager(specOptionVerifiers);
     }
@@ -60,7 +64,8 @@ public class OptionsManager {
 
         for (SpecOptionVerifier specOptionVerifier : specOptionVerifiers) {
             var context = new HashMap<String, Object>();
-            OptionValidationResult check = specOptionVerifier.check(cachingInputStream, section, context);
+            OptionValidationResult check =
+                    specOptionVerifier.check(cachingInputStream, section, context);
             compoundResult.add(check);
             cachingInputStream.reset();
         }

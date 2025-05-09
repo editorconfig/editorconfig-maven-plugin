@@ -21,8 +21,7 @@ import static org.editorconfig.plugin.maven.utils.ExecutionUtils.mapExceptionall
 class CheckMojoTest {
 
     @Test
-    void test()
-            throws MojoExecutionException, MojoFailureException, URISyntaxException {
+    void test() throws MojoExecutionException, MojoFailureException, URISyntaxException {
         instantiateMojo(testFile("e2e/single-root-config/pom.xml"), ".editorconfig")
                 .execute();
     }

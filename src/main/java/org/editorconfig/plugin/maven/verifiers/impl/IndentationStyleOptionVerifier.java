@@ -4,6 +4,7 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
+import java.io.File;
 import java.util.Map;
 
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
@@ -27,7 +28,7 @@ public class IndentationStyleOptionVerifier extends SpecOptionVerifier<Indentati
     }
 
     @Override
-    protected void onInit(Section section, Map<String, Object> executionContext) {
+    protected void onInit(Section section, Map<String, Object> executionContext, File source) {
         this.section = section;
     }
 

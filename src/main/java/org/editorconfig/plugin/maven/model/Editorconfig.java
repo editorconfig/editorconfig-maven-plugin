@@ -58,6 +58,9 @@ public class Editorconfig {
     }
 
     public Optional<Section> findTargetSection(Path file) {
-        return this.sections.stream().filter(section -> globExpressionParser.accepts(file, section.getGlobExpression().getRaw())).findFirst();
+        return this.sections.stream()
+                .filter(section -> globExpressionParser.accepts(
+                        file, section.getGlobExpression().getRaw()))
+                .findFirst();
     }
 }

@@ -4,8 +4,6 @@
  */
 package org.editorconfig.plugin.maven.model;
 
-import java.nio.file.Path;
-
 import org.jspecify.annotations.NonNull;
 
 /**

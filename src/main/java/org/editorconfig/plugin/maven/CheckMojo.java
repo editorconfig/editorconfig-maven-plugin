@@ -24,9 +24,7 @@ import org.editorconfig.plugin.maven.config.PluginConfiguration.Param;
 import org.editorconfig.plugin.maven.config.TreeBuilder;
 import org.editorconfig.plugin.maven.config.TreeNode;
 import org.editorconfig.plugin.maven.file.FileWalker;
-import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.editorconfig.plugin.maven.model.Section;
-import org.editorconfig.plugin.maven.parser.EditorconfigParser;
 import org.editorconfig.plugin.maven.verifiers.CompoundOptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.OptionsManager;
 
@@ -59,12 +57,14 @@ public class CheckMojo extends AbstractMojo {
             ConfigurationTree.build(editorConfigFilesTree);
 
             new FileWalker()
-                    .walkRecursiveBFS(editorConfigFilesTree.getValue().getParentDir(), (recursivelyFoundFile) -> {
-                        ConfigurationTree.getInstance()
-                                .findMerged(recursivelyFoundFile)
-                                .ifPresent(section ->
-                                        delegateToOptionsManager(recursivelyFoundFile, section));
-                    });
+                    .walkRecursiveBFS(
+                            editorConfigFilesTree.getValue().getParentDir(),
+                            (recursivelyFoundFile) -> {
+                                ConfigurationTree.getInstance()
+                                        .findMerged(recursivelyFoundFile)
+                                        .ifPresent(section -> delegateToOptionsManager(
+                                                recursivelyFoundFile, section));
+                            });
 
             String summary = new PluginExecutionSummary(generationErrors).renderSummary();
 

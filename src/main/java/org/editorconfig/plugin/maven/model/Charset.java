@@ -10,8 +10,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.Nullable;
-
 public enum Charset {
     UTF_8(StandardCharsets.UTF_8, "utf-8", "utf-8-bom"),
     UTF_16LE(StandardCharsets.UTF_16LE, "utf-16le"),

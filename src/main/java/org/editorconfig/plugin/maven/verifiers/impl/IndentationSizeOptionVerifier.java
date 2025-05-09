@@ -4,6 +4,7 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
     }
 
     @Override
-    protected void onInit(Section section, Map<String, Object> executionContext) {
+    protected void onInit(Section section, Map<String, Object> executionContext, File source) {
         Assert.notNull(section, "The section cannot be null at this point");
         this.section = section;
         this.charset = detectCharsetForGivenFile(section, executionContext);

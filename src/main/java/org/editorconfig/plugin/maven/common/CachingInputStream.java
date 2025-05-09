@@ -31,8 +31,11 @@ public class CachingInputStream extends FileInputStream {
 
     private int position;
 
+    private final File source;
+
     public CachingInputStream(File file) throws FileNotFoundException {
         super(file);
+        this.source = file;
         this.upstreamExhausted = false;
         this.position = -1;
         this.buffer = new ByteArrayOutputStream(getBufferSize());
@@ -46,6 +49,10 @@ public class CachingInputStream extends FileInputStream {
         } catch (IOException e) {
             return INITIAL_ESTIMATE_FILE_SIZE;
         }
+    }
+
+    public File getOriginalFile() {
+        return source;
     }
 
     @Override
