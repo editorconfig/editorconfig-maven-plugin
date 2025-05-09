@@ -5,7 +5,6 @@
 package org.editorconfig.plugin.maven.file;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,18 +13,13 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
+
 /**
  * This class exists mainly because the {@link java.nio.file.Files#walkFileTree(Path, Set, int, FileVisitor)} and similar APIs
  * traverse the directory using DFS. This is
  */
 public class FileWalker {
-
-    public void walkRecursiveBFS(Path root, Consumer<Path> contentConsumer)
-            throws IOException {
-        var queue = new LinkedList<Path>();
-        queue.add(root);
-        this.walkRecursiveBFS(queue, contentConsumer);
-    }
 
     /**
      * Walks the files in the given directory using bread-first search.
@@ -51,8 +45,21 @@ public class FileWalker {
      *     <li>Files in the inner dirs, either l1 or v2</li>
      *     <li>Files in the inner dirs, either l2</li>
      * </ol>
+     * @param root the root path from which to start the iteration
+     * @param contentConsumer consumer of the ordinary files. Guaranteed not to be a directory
      */
-    private void walkRecursiveBFS(Queue<Path> paths, Consumer<Path> contentConsumer) {
+    public void walkRecursiveBFS(Path root, Consumer<Path> contentConsumer) {
+        var queue = new LinkedList<Path>();
+        queue.add(root);
+        this.walkRecursiveBFS(queue, contentConsumer);
+    }
+
+    private void walkRecursiveBFS(
+            @NonNull Queue<@NonNull Path> paths, Consumer<Path> contentConsumer) {
+        if (paths.isEmpty()) {
+            return;
+        }
+
         Path currentFile = paths.poll();
 
         if (Files.isDirectory(currentFile)) {

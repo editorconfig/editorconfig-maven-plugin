@@ -4,7 +4,6 @@
  */
 package org.editorconfig.plugin.maven;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,8 +18,11 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.editorconfig.plugin.maven.assertions.Assert;
+import org.editorconfig.plugin.maven.config.ConfigurationTree;
 import org.editorconfig.plugin.maven.config.PluginConfiguration;
 import org.editorconfig.plugin.maven.config.PluginConfiguration.Param;
+import org.editorconfig.plugin.maven.config.TreeBuilder;
+import org.editorconfig.plugin.maven.config.TreeNode;
 import org.editorconfig.plugin.maven.file.FileWalker;
 import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.editorconfig.plugin.maven.model.Section;
@@ -51,27 +53,27 @@ public class CheckMojo extends AbstractMojo {
         generationErrors.clear();
 
         if (rootEditorConfigFileLocation != null && !rootEditorConfigFileLocation.isEmpty()) {
-            try {
-                var rootEditorConfigIs = getEditorConfigInputStream();
-                Editorconfig editorconfig = new EditorconfigParser().parse(rootEditorConfigIs);
-                new FileWalker()
-                        .walkRecursiveFilesInDirectory(
-                                editorconfig.getLocation(), (recursivelyFoundFile) -> {
-                                    editorconfig
-                                            .findTargetSection(recursivelyFoundFile)
-                                            .ifPresent(section -> delegateToOptionsManager(
-                                                    recursivelyFoundFile, section));
-                                });
+            var rootEditorConfig = resolveEditorConfig();
 
-                String summary = new PluginExecutionSummary(generationErrors).renderSummary();
+            TreeNode editorConfigFilesTree = TreeBuilder.INSTANCE.buildTree(rootEditorConfig);
+            ConfigurationTree.build(editorConfigFilesTree);
 
-                if (!generationErrors.isEmpty()) {
-                    throw new MojoFailureException(summary);
-                } else {
-                    PluginConfiguration.getInstance().<Log>getLog().info(summary);
-                }
-            } catch (IOException e) {
-                Assert.sneakyThrows(e);
+            Editorconfig editorconfig = new EditorconfigParser().parse(rootEditorConfig);
+
+            new FileWalker()
+                    .walkRecursiveBFS(editorconfig.getLocation(), (recursivelyFoundFile) -> {
+                        ConfigurationTree.getInstance()
+                                .findMerged(recursivelyFoundFile)
+                                .ifPresent(section ->
+                                        delegateToOptionsManager(recursivelyFoundFile, section));
+                    });
+
+            String summary = new PluginExecutionSummary(generationErrors).renderSummary();
+
+            if (!generationErrors.isEmpty()) {
+                throw new MojoFailureException(summary);
+            } else {
+                PluginConfiguration.getInstance().<Log>getLog().info(summary);
             }
         }
     }
@@ -81,7 +83,7 @@ public class CheckMojo extends AbstractMojo {
                 Map.of(Param.STRICT_MODE, strictMode, Param.LOG, getLog()));
     }
 
-    private Path getEditorConfigInputStream() throws MojoExecutionException {
+    private Path resolveEditorConfig() throws MojoExecutionException {
         return new EditorConfigFileResolver()
                 .findRootEditorConfig(project, rootEditorConfigFileLocation)
                 .orElseThrow(() -> new MojoExecutionException(

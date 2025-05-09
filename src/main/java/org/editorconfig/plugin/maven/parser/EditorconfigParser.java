@@ -24,6 +24,8 @@ import org.editorconfig.plugin.maven.utils.ParsingUtils.KeyValue;
 
 public class EditorconfigParser {
 
+    public static final EditorconfigParser INSTANCE = new EditorconfigParser();
+
     private static final BiFunction<String, Integer, String> KEY_VALUE_PARSE_ERROR =
             (line, lineNumber) ->
                     "For line number '%d' with content : '%s' expected to contain key/value pair, but we cannot parse it"
@@ -43,7 +45,7 @@ public class EditorconfigParser {
         }
     }
 
-    private static Editorconfig parseInternally(BufferedReader reader, Path location)
+    private static Editorconfig parseInternally(BufferedReader reader, Path editorConfigLocation)
             throws IOException {
         String line;
         ParsingContext context = null;
@@ -54,7 +56,7 @@ public class EditorconfigParser {
                 break;
             }
             if (context == null) {
-                context = new ParsingContext(line);
+                context = new ParsingContext(line, editorConfigLocation);
             } else {
                 context.newline(line);
             }
@@ -62,9 +64,12 @@ public class EditorconfigParser {
             parseLineInternally(context);
         } while (true);
 
-        Editorconfig result = context.completeBuild();
-        result.setLocation(location);
-        return result;
+        if (context == null) {
+            // that means the file is empty
+            context = new ParsingContext("\0", editorConfigLocation);
+        }
+
+        return context.completeBuild();
     }
 
     private static void parseLineInternally(ParsingContext context) {

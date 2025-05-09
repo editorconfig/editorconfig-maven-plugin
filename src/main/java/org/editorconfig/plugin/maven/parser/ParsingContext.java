@@ -4,6 +4,8 @@
  */
 package org.editorconfig.plugin.maven.parser;
 
+import java.nio.file.Path;
+
 import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.editorconfig.plugin.maven.model.GlobExpression;
 import org.editorconfig.plugin.maven.model.Section;
@@ -41,22 +43,20 @@ public class ParsingContext {
     /**
      * The .editorconfig file we're currently parsing
      */
-    private @NonNull Editorconfig editorconfig;
+    private final Editorconfig editorconfig;
 
-    public ParsingContext(String line) {
+    public ParsingContext(String line, Path editorConfigLocation) {
         this.line = line;
         this.lineNumber = 0;
         this.sectionBuilder = null;
-        this.editorconfig = new Editorconfig();
+        this.editorconfig = new Editorconfig(editorConfigLocation);
     }
 
-    public ParsingContext newline(String line) {
+    public void newline(String line) {
         this.lineNumber++;
         this.line = line;
-        return this;
     }
 
-    // TODO tests
     public void startNewSection(GlobExpression expression) {
         completePreviousSection();
         sectionBuilder = new SectionBuilder(expression);

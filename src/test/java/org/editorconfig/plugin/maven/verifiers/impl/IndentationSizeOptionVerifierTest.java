@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
@@ -40,16 +39,34 @@ class IndentationSizeOptionVerifierTest {
     static Stream<Arguments> source() {
         return Stream.of(
                 Arguments.of(
-                        "sources/indentation_size/TestJavaClass_IndentationTwo.java_test", 2, 2, true),
+                        "sources/indentation_size/TestJavaClass_IndentationTwo.java_test",
+                        2,
+                        2,
+                        true),
                 Arguments.of(
-                        "sources/indentation_size/TestJavaClass_IndentationTwo.java_test", 2, 3, false),
+                        "sources/indentation_size/TestJavaClass_IndentationTwo.java_test",
+                        2,
+                        3,
+                        false),
                 Arguments.of(
-                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test", 1, 5, false),
+                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test",
+                        1,
+                        5,
+                        false),
                 Arguments.of(
-                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test", 4, 5, true),
+                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test",
+                        4,
+                        5,
+                        true),
                 Arguments.of(
-                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test", 4, 4, false),
+                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test",
+                        4,
+                        4,
+                        false),
                 Arguments.of(
-                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test", 3, 5, false));
+                        "sources/indentation_size/TestJavaClass_IndentationFive.java_test",
+                        3,
+                        5,
+                        false));
     }
 }

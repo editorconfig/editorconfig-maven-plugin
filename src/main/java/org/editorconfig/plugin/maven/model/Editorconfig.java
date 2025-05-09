@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import org.editorconfig.plugin.maven.glob.GlobExpressionParser;
+
 /**
  * .editorconfig file representation
  *
@@ -22,14 +24,21 @@ public class Editorconfig {
 
     private List<Section> sections = new LinkedList<>();
 
+    private final GlobExpressionParser globExpressionParser;
+
+    public Editorconfig(Path location) {
+        this.location = location;
+        this.globExpressionParser =
+                new GlobExpressionParser(location.toAbsolutePath().normalize().toString());
+    }
+
     public Editorconfig addSection(Section section) {
         this.sections.add(section);
         return this;
     }
 
-    public Editorconfig markAsRoot() {
+    public void markAsRoot() {
         this.isRoot = true;
-        return this;
     }
 
     public boolean isRoot() {
@@ -42,11 +51,6 @@ public class Editorconfig {
 
     public Path getLocation() {
         return location;
-    }
-
-    public Editorconfig setLocation(Path location) {
-        this.location = location;
-        return this;
     }
 
     public Optional<Section> findTargetSection(Path file) {

@@ -9,6 +9,8 @@ import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
+import org.editorconfig.plugin.maven.config.ConfigurationTree;
+import org.editorconfig.plugin.maven.config.TreeNode;
 import org.editorconfig.plugin.maven.model.Section;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -51,7 +53,7 @@ class ConfigurationTreeTest {
                                 "Merged section does not contain expected values given precedence in the effect"));
     }
 
-    private static ConfigurationTree.TreeNode build() {
+    private static TreeNode build() {
         throw new UnsupportedOperationException();
     }
 }

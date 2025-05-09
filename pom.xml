@@ -12,7 +12,7 @@
         <junit-jupiter.version>5.9.1</junit-jupiter.version>
         <assertj-core.version>3.26.0</assertj-core.version>
         <charset-lib.version>2.4.0</charset-lib.version>
-        <maven.version>3.9.0</maven.version>
+        <maven.version>3.8.1</maven.version>
         <jspecify.version>1.0.0</jspecify.version>
         <spotless.version>2.44.4</spotless.version>
     </properties>
@@ -22,13 +22,6 @@
             <groupId>com.github.albfernandez</groupId>
             <artifactId>juniversalchardet</artifactId>
             <version>${charset-lib.version}</version>
-        </dependency>
-
-        <dependency>
-          <groupId>org.apache.maven.plugin-testing</groupId>
-          <artifactId>maven-plugin-testing-harness</artifactId>
-          <version>3.3.0</version>
-          <scope>test</scope>
         </dependency>
 
         <dependency>

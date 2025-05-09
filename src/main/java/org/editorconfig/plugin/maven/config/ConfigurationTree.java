@@ -2,12 +2,10 @@
  * Copyright (c) 2025 EditorConfig Organization
  * These source file is created by EditorConfig Organization and is distributed under the MIT license.
  */
-package org.editorconfig.plugin.maven;
+package org.editorconfig.plugin.maven.config;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 
@@ -33,9 +31,9 @@ public class ConfigurationTree {
 
     private ConfigurationTree(TreeNode root) {
         Assert.notNull(root, "The root must not be empty");
-        Assert.notNull(root.value, "The editorconfig struct must not be empty");
+        Assert.notNull(root.getValue(), "The editorconfig struct must not be empty");
         Assert.state(
-                root.value::isRoot,
+                root.getValue()::isRoot,
                 "The passed TreeNode must represent the root Editorconfig file");
 
         this.root = root;
@@ -80,14 +78,14 @@ public class ConfigurationTree {
         }
 
         TreeNode treeNode = buffer.poll();
-        Editorconfig editorconfig = treeNode.value;
+        Editorconfig editorconfig = treeNode.getValue();
 
         Section merged = editorconfig
                 .findTargetSection(file)
                 .map(prioritizedSection -> {
-                    buffer.addAll(
-                            treeNode.children); // adding elements into a queue traversal only in
+                    // adding elements into a queue traversal only in
                     // case we found a matching section
+                    buffer.addAll(treeNode.getChildren());
 
                     if (mergingAccumulator == null) {
                         return prioritizedSection;
@@ -99,21 +97,5 @@ public class ConfigurationTree {
         // the given .editorconfig file
 
         return bfs(buffer, file, merged);
-    }
-
-    static class TreeNode {
-        private final Editorconfig value;
-
-        private final List<TreeNode> children;
-
-        public TreeNode(Editorconfig value) {
-            this.value = value;
-            this.children = new ArrayList<>();
-        }
-
-        public TreeNode addChild(TreeNode treeNode) {
-            this.children.add(treeNode);
-            return this;
-        }
     }
 }
