@@ -45,9 +45,10 @@ public class CompoundOptionValidationResult {
                 .formatted(
                         targetFile.toFile().getAbsolutePath(),
                         validationResults.stream()
+                                .filter(OptionValidationResult::hasErrors)
                                 .mapToInt(OptionValidationResult::violationsCount)
                                 .sum()));
-        validationResults.forEach(result -> toString.append(result.renderErrorMessage()));
+        validationResults.stream().filter(OptionValidationResult::hasErrors).forEach(result -> toString.append(result.renderErrorMessage()));
         return toString.toString();
     }
 }

@@ -53,7 +53,11 @@ public class Editorconfig {
         return location;
     }
 
+    public Path getParentDir() {
+        return location.getParent();
+    }
+
     public Optional<Section> findTargetSection(Path file) {
-        return this.sections.stream().filter(section -> section.accepts(file)).findFirst();
+        return this.sections.stream().filter(section -> globExpressionParser.accepts(file, section.getGlobExpression().getRaw())).findFirst();
     }
 }

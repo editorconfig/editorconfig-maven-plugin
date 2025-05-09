@@ -45,6 +45,10 @@ public class OptionValidationResult {
         return errorMessages.isEmpty();
     }
 
+    public boolean hasErrors() {
+        return !errorMessages.isEmpty();
+    }
+
     public String renderErrorMessage() {
         if (noErrors()) {
             Assert.fail("Called renderErrorMessage() on non-erroneous OptionViolations");

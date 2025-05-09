@@ -58,10 +58,8 @@ public class CheckMojo extends AbstractMojo {
             TreeNode editorConfigFilesTree = TreeBuilder.INSTANCE.buildTree(rootEditorConfig);
             ConfigurationTree.build(editorConfigFilesTree);
 
-            Editorconfig editorconfig = new EditorconfigParser().parse(rootEditorConfig);
-
             new FileWalker()
-                    .walkRecursiveBFS(editorconfig.getLocation(), (recursivelyFoundFile) -> {
+                    .walkRecursiveBFS(editorConfigFilesTree.getValue().getParentDir(), (recursivelyFoundFile) -> {
                         ConfigurationTree.getInstance()
                                 .findMerged(recursivelyFoundFile)
                                 .ifPresent(section ->

@@ -22,8 +22,7 @@ class CheckMojoTest {
 
     @Test
     void test()
-            throws MojoExecutionException, MojoFailureException, URISyntaxException,
-                    IllegalAccessException {
+            throws MojoExecutionException, MojoFailureException, URISyntaxException {
         instantiateMojo(testFile("e2e/single-root-config/pom.xml"), ".editorconfig")
                 .execute();
     }

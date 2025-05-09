@@ -37,6 +37,16 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
     }
 
     @Override
+    protected void onInit(Section section, Map<String, Object> executionContext) {
+        super.onInit(section, executionContext);
+        Charset detectedCharset = getDetectedCharset(executionContext);
+
+        if (detectedCharset == null) {
+            warnNoCharsetDetected();
+        }
+    }
+
+    @Override
     protected void forEachLine(
             ByteArrayLine line,
             int lineNumber,
@@ -46,7 +56,6 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
         Charset charsetForParing = getDetectedCharset(executionContext);
 
         if (charsetForParing == null) {
-            warnNoCharsetDetected();
             return;
         }
 

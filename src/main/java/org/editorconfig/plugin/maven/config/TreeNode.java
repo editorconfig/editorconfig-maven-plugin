@@ -68,15 +68,7 @@ public class TreeNode {
     }
 
     private String extractLocation(Editorconfig editorconfig) {
-        String location =
-                editorconfig.getLocation().normalize().toAbsolutePath().toString();
-
-        if (location.endsWith(TreeBuilder.EDITORCONFIG_FILE_NAME)) {
-            location = location.substring(
-                    0, location.length() - TreeBuilder.EDITORCONFIG_FILE_NAME.length());
-        }
-
-        return location;
+        return editorconfig.getParentDir().normalize().toAbsolutePath().toString();
     }
 
     /**

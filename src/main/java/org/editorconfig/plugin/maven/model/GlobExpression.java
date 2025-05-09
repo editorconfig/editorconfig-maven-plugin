@@ -4,7 +4,7 @@
  */
 package org.editorconfig.plugin.maven.model;
 
-import java.nio.file.Path;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Glob expression of the particular {@link Section}.
@@ -23,11 +23,11 @@ public class GlobExpression {
         return raw;
     }
 
-    public static GlobExpression from(String raw) {
-        return new GlobExpression(raw);
-    }
-
-    public boolean accepts(Path path) {
-        throw new UnsupportedOperationException();
+    public static GlobExpression from(@NonNull String raw) {
+        if (raw.startsWith("[") && raw.endsWith("]")) {
+            return new GlobExpression(raw.substring(1, raw.length() - 1));
+        } else {
+            return new GlobExpression(raw);
+        }
     }
 }

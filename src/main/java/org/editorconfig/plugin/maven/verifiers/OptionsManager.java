@@ -5,7 +5,9 @@
 package org.editorconfig.plugin.maven.verifiers;
 
 import java.io.IOException;
+import java.lang.constant.Constable;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -21,17 +23,21 @@ import org.editorconfig.plugin.maven.verifiers.impl.TrimTrailingWhitespaceOption
 
 public class OptionsManager {
 
-    private static final OptionsManager INSTANCE = new OptionsManager(List.of(
-            new CharsetOptionVerifier(),
-            new EndOfLineOptionVerifier(),
-            new IndentationSizeOptionVerifier(),
-            new InsertFinalNewLineOptionVerifier(),
-            new IndentationStyleOptionVerifier(),
-            new TrimTrailingWhitespaceOptionVerifier()));
+    private static final OptionsManager INSTANCE;
+
+    static {
+        List<SpecOptionVerifier<?>> specOptionVerifiers = new ArrayList<>(
+          List.of(new CharsetOptionVerifier(), new EndOfLineOptionVerifier(), new IndentationSizeOptionVerifier(), new InsertFinalNewLineOptionVerifier(), new IndentationStyleOptionVerifier(), new TrimTrailingWhitespaceOptionVerifier()));
+
+        INSTANCE = new OptionsManager(specOptionVerifiers);
+    }
 
     private final List<SpecOptionVerifier<?>> specOptionVerifiers;
 
-    public OptionsManager(List<SpecOptionVerifier<?>> specOptionVerifiers) {
+    /**
+     * @param specOptionVerifiers mutable {@link List} of verifiers for delegation.
+     */
+    OptionsManager(List<SpecOptionVerifier<?>> specOptionVerifiers) {
         specOptionVerifiers.sort(Comparator.comparing(SpecOptionVerifier::getOrder));
         this.specOptionVerifiers = specOptionVerifiers;
     }
@@ -52,11 +58,9 @@ public class OptionsManager {
         var compoundResult = new CompoundOptionValidationResult(file);
         CachingInputStream cachingInputStream = new CachingInputStream(file.toFile());
 
-        var context = new HashMap<String, Object>();
-
         for (SpecOptionVerifier specOptionVerifier : specOptionVerifiers) {
-            OptionValidationResult check =
-                    specOptionVerifier.check(cachingInputStream, section, context);
+            var context = new HashMap<String, Object>();
+            OptionValidationResult check = specOptionVerifier.check(cachingInputStream, section, context);
             compoundResult.add(check);
             cachingInputStream.reset();
         }

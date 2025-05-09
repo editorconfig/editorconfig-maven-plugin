@@ -74,10 +74,6 @@ public class Section {
         return insertFinalNewLine;
     }
 
-    public boolean accepts(Path file) {
-        return this.globExpression.accepts(file);
-    }
-
     /**
      * Creates a merged {@link Section} from this one and the passed. {@link Option Options} in
      * the past {@link Section} take precedence over this one.
