@@ -49,8 +49,7 @@ class EditorconfigParserTest {
         assertThat(result.getSections()).hasSize(2);
 
         assertThat(result.getSections().get(0)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw())
-                    .isEqualTo("[{file.py,another-file.py}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("{file.py,another-file.py}");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
             assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
@@ -60,7 +59,7 @@ class EditorconfigParserTest {
         });
 
         assertThat(result.getSections().get(1)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw()).isEqualTo("[*.{.kt,.java}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("*.{.kt,.java}");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
             assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
@@ -85,8 +84,7 @@ class EditorconfigParserTest {
         assertThat(result.getSections()).hasSize(2);
 
         assertThat(result.getSections().get(0)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw())
-                    .isEqualTo("[{file.py,another-file.py}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("{file.py,another-file.py}");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
             assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
@@ -95,7 +93,7 @@ class EditorconfigParserTest {
         });
 
         assertThat(result.getSections().get(1)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw()).isEqualTo("[*.{.kt,.java}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("*.{.kt,.java}");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
             assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
@@ -122,7 +120,7 @@ class EditorconfigParserTest {
         assertThat(result.isRoot()).isTrue();
         assertThat(result.getSections()).hasSize(2);
         assertThat(result.getSections().get(1)).satisfies(section -> {
-            assertThat(section.getGlobExpression().getRaw()).isEqualTo("[*.{.kt,.java}]");
+            assertThat(section.getGlobExpression().getRaw()).isEqualTo("*.{.kt,.java}");
             assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
             assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
             assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);

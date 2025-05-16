@@ -6,7 +6,6 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.maven.plugin.logging.Log;
 import org.editorconfig.plugin.maven.assertions.Assert;
@@ -17,7 +16,9 @@ import org.editorconfig.plugin.maven.model.Option;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
+import org.jspecify.annotations.NonNull;
 
 /**
  * {@link SpecOptionVerifier} for indentation_size option
@@ -36,15 +37,15 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
     }
 
     @Override
-    protected void onInit(Section section, Map<String, Object> executionContext, File source) {
+    protected void onInit(
+            Section section, VerifiersExecutionContext executionContext, File source) {
         Assert.notNull(section, "The section cannot be null at this point");
         this.section = section;
         this.charset = detectCharsetForGivenFile(section, executionContext);
     }
 
-    @SuppressWarnings("unchecked")
     private static Charset detectCharsetForGivenFile(
-            Section section, Map<String, Object> executionContext) {
+            Section section, VerifiersExecutionContext executionContext) {
         Charset charset = section.getCharset();
 
         if (charset != null) {
@@ -55,8 +56,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
         // UTF-8 or ASCII, which in 99% of cases would not matter for
         // further processing
 
-        List<Charset> possibleCharsets =
-                (List<Charset>) executionContext.get(ContextKeys.POSSIBLE_CHARSETS);
+        List<Charset> possibleCharsets = executionContext.get(ContextKeys.POSSIBLE_CHARSETS);
 
         if (possibleCharsets != null && !possibleCharsets.isEmpty()) {
             return possibleCharsets.get(0);
@@ -78,7 +78,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
             int lineNumber,
             Integer optionValue,
             OptionValidationResult result,
-            Map<String, Object> executionContext) {
+            @NonNull VerifiersExecutionContext executionContext) {
         int currentLineIndent;
 
         if (!line.isEmpty()) {
@@ -91,7 +91,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
 
             currentLineIndent = line.getIndent(tabWidth, charset.getJavaCharset());
 
-            Integer previousIndentLine = (Integer) executionContext.get(PREVIOUS_INDENT_LINE);
+            Integer previousIndentLine = executionContext.get(PREVIOUS_INDENT_LINE);
 
             if (previousIndentLine != null && previousIndentLine != 0) {
                 int thisIndent = currentLineIndent - previousIndentLine;
@@ -106,7 +106,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
             currentLineIndent = 0;
         }
 
-        executionContext.put(PREVIOUS_INDENT_LINE, currentLineIndent);
+        executionContext.putLocal(PREVIOUS_INDENT_LINE, currentLineIndent);
     }
 
     @Override

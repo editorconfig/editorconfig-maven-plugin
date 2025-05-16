@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
@@ -101,7 +100,9 @@ class OptionsManagerTest {
 
         @Override
         protected OptionValidationResult checkInternal(
-                CachingInputStream content, Section section, Map<String, Object> executionContext) {
+                CachingInputStream content,
+                Section section,
+                VerifiersExecutionContext executionContext) {
             invocationQueue.add(this.getClass());
             ExecutionUtils.executeExceptionally(
                     content::readAllBytes); // we need to consume the entire content stream.
@@ -111,10 +112,10 @@ class OptionsManagerTest {
         @Override
         protected void forEachLine(
                 @NonNull ByteArrayLine line,
-                @NonNull int lineNumber,
+                int lineNumber,
                 Charset optionValue,
                 @NonNull OptionValidationResult result,
-                @NonNull Map context) {}
+                @NonNull VerifiersExecutionContext context) {}
 
         @Override
         public Charset getValueFromSection(Section section) {

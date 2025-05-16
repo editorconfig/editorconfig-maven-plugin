@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
@@ -16,6 +15,7 @@ import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,7 +47,8 @@ class TrimTrailingWhitespaceOptionVerifierTest {
                         .toURI())),
                 SectionTestUtils.testSection(
                         sectionBuilder -> sectionBuilder.trimTrailingWhitespace(TrueFalse.TRUE)),
-                Map.of(ContextKeys.POSSIBLE_CHARSETS, List.of(Charset.UTF_8)));
+                new VerifiersExecutionContext()
+                        .putGlobal(ContextKeys.POSSIBLE_CHARSETS, List.of(Charset.UTF_8)));
 
         // when
         Assertions.assertThat(sut.noErrors()).isEqualTo(shouldPass);

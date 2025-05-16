@@ -5,7 +5,6 @@
 package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.io.File;
-import java.util.Map;
 
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.model.IndentationStyle;
@@ -13,6 +12,8 @@ import org.editorconfig.plugin.maven.model.Option;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
+import org.jspecify.annotations.NonNull;
 
 /**
  * {@link SpecOptionVerifier} for the {@link IndentationStyle}
@@ -28,7 +29,8 @@ public class IndentationStyleOptionVerifier extends SpecOptionVerifier<Indentati
     }
 
     @Override
-    protected void onInit(Section section, Map<String, Object> executionContext, File source) {
+    protected void onInit(
+            Section section, VerifiersExecutionContext executionContext, File source) {
         this.section = section;
     }
 
@@ -38,7 +40,7 @@ public class IndentationStyleOptionVerifier extends SpecOptionVerifier<Indentati
             int lineNumber,
             IndentationStyle optionValue,
             OptionValidationResult result,
-            Map<String, Object> context) {
+            @NonNull VerifiersExecutionContext context) {
         byte[] contentWithEol = line.getContentWithEol();
 
         if (optionValue.equals(IndentationStyle.SPACE)) {

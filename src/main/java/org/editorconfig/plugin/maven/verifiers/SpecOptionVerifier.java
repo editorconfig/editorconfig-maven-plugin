@@ -6,7 +6,6 @@ package org.editorconfig.plugin.maven.verifiers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import org.editorconfig.plugin.maven.common.BufferedInputStream;
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
@@ -37,11 +36,12 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
     }
 
     public OptionValidationResult check(
-            CachingInputStream content, Section section, Map<String, Object> executionContext) {
-        return checkInternal(content, section, executionContext);
+            CachingInputStream content, Section section, VerifiersExecutionContext context) {
+        return checkInternal(content, section, context);
     }
 
-    protected void onInit(Section section, Map<String, Object> executionContext, File source) {}
+    protected void onInit(
+            Section section, VerifiersExecutionContext executionContext, File source) {}
 
     /**
      * Checks, whether the content of the file is compliant with the current setting of the {@link #targetOption}
@@ -53,7 +53,9 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
      * @return OptionViolations wrapped
      */
     protected OptionValidationResult checkInternal(
-            CachingInputStream content, Section section, Map<String, Object> executionContext) {
+            CachingInputStream content,
+            Section section,
+            VerifiersExecutionContext executionContext) {
         T optionValue = getValueFromSection(section);
 
         if (optionValue == null) {
@@ -72,7 +74,6 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
                 lineNumber++;
             } while (!line.isTheLastLine());
 
-            onCompletion(result, optionValue);
             return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -81,12 +82,10 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
 
     protected abstract void forEachLine(
             @NonNull ByteArrayLine line,
-            @NonNull int lineNumber,
+            int lineNumber,
             @NonNull T optionValue,
             @NonNull OptionValidationResult result,
-            @NonNull Map<String, Object> context);
-
-    protected void onCompletion(OptionValidationResult result, T optionValue) {}
+            @NonNull VerifiersExecutionContext context);
 
     /**
      * Function that extracts the value of the required type from given {@link Section}

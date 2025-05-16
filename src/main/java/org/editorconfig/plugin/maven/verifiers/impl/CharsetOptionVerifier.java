@@ -5,7 +5,6 @@
 package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
@@ -16,7 +15,9 @@ import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.editorconfig.plugin.maven.verifiers.context.ContextKeys;
+import org.jspecify.annotations.NonNull;
 
 /**
  * {@link SpecOptionVerifier} for the {@link Charset}
@@ -34,7 +35,9 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
 
     @Override
     protected OptionValidationResult checkInternal(
-            CachingInputStream content, Section section, Map<String, Object> executionContext) {
+            CachingInputStream content,
+            Section section,
+            VerifiersExecutionContext executionContext) {
         Charset expectedCharset = getValueFromSection(section);
         OptionValidationResult result = new OptionValidationResult(targetOption, expectedCharset);
 
@@ -42,7 +45,7 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
         List<Charset> detectedCharsets = pluginCharsetDetector.detect(contentAsBytes);
 
         if (!detectedCharsets.isEmpty()) {
-            executionContext.put(ContextKeys.POSSIBLE_CHARSETS, detectedCharsets);
+            executionContext.putGlobal(ContextKeys.POSSIBLE_CHARSETS, detectedCharsets);
         }
 
         if (detectedCharsets.stream().noneMatch(charset -> charset.equals(expectedCharset))) {
@@ -58,7 +61,7 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
             int lineNumber,
             Charset optionValue,
             OptionValidationResult result,
-            Map<String, Object> executionContext) {}
+            @NonNull VerifiersExecutionContext executionContext) {}
 
     @Override
     public Charset getValueFromSection(Section section) {

@@ -4,7 +4,6 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
-import java.util.Map;
 import java.util.Objects;
 
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
@@ -14,6 +13,8 @@ import org.editorconfig.plugin.maven.model.Option;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
+import org.jspecify.annotations.NonNull;
 
 /**
  * {@link SpecOptionVerifier} for {@link EndOfLine} option
@@ -36,7 +37,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
             int lineNumber,
             EndOfLine optionValue,
             OptionValidationResult result,
-            Map<String, Object> executionContext) {
+            @NonNull VerifiersExecutionContext executionContext) {
         if (!line.isLastEmptyEOFLine()) {
             if (!Objects.equals(optionValue, line.getEndOfLine())) {
                 // here, we're potentially checking the last line which might end with EOF

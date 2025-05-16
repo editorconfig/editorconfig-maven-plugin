@@ -15,10 +15,6 @@ import org.editorconfig.plugin.maven.model.SectionBuilder;
 
 public class SectionTestUtils {
 
-    public static Section testSection() {
-        return testSection(sectionBuilder -> {});
-    }
-
     public static Section testSection(Consumer<SectionBuilder> modifier) {
         SectionBuilder sectionBuilder = new SectionBuilder(GlobExpression.from("[*]"))
                 .endOfLine(EndOfLine.LINE_FEED)

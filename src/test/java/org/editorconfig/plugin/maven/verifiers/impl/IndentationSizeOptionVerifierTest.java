@@ -7,12 +7,12 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,7 +32,7 @@ class IndentationSizeOptionVerifierTest {
                         .toURI())),
                 SectionTestUtils.testSection(
                         sb -> sb.tabWidth(tabWidth).indentationSize(indentSize)),
-                new HashMap<>());
+                new VerifiersExecutionContext());
         Assertions.assertThat(result.noErrors()).isEqualTo(checkShouldPass);
     }
 

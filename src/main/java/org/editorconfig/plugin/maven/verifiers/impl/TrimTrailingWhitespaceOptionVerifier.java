@@ -8,7 +8,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.maven.plugin.logging.Log;
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
@@ -22,6 +21,8 @@ import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
+import org.jspecify.annotations.NonNull;
 
 import static org.editorconfig.plugin.maven.verifiers.context.ContextKeys.POSSIBLE_CHARSETS;
 
@@ -38,7 +39,8 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
     }
 
     @Override
-    protected void onInit(Section section, Map<String, Object> executionContext, File source) {
+    protected void onInit(
+            Section section, VerifiersExecutionContext executionContext, File source) {
         super.onInit(section, executionContext, source);
         Charset detectedCharset = getDetectedCharset(executionContext);
 
@@ -53,7 +55,7 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
             int lineNumber,
             TrueFalse optionValue,
             OptionValidationResult result,
-            Map<String, Object> executionContext) {
+            @NonNull VerifiersExecutionContext executionContext) {
         Charset charsetForParing = getDetectedCharset(executionContext);
 
         if (charsetForParing == null) {
@@ -103,8 +105,8 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
         return false;
     }
 
-    private static Charset getDetectedCharset(Map<String, Object> executionContext) {
-        List<Charset> charsets = (List<Charset>) executionContext.get(POSSIBLE_CHARSETS);
+    private static Charset getDetectedCharset(VerifiersExecutionContext executionContext) {
+        List<Charset> charsets = executionContext.get(POSSIBLE_CHARSETS);
 
         if (charsets == null || charsets.isEmpty()) {
             return null;

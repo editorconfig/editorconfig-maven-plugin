@@ -7,13 +7,13 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -39,7 +39,7 @@ class EndOfLineOptionVerifierTest {
                         .getResource(sourceCodeFile)
                         .toURI())),
                 SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.endOfLine(endOfLine)),
-                Map.of());
+                new VerifiersExecutionContext());
 
         // then.
         Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);

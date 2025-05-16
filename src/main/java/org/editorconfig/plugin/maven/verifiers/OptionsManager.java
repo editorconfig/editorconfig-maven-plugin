@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import org.editorconfig.plugin.maven.common.CachingInputStream;
@@ -61,13 +60,14 @@ public class OptionsManager {
     public CompoundOptionValidationResult check(Path file, Section section) throws IOException {
         var compoundResult = new CompoundOptionValidationResult(file);
         CachingInputStream cachingInputStream = new CachingInputStream(file.toFile());
+        VerifiersExecutionContext context = new VerifiersExecutionContext();
 
         for (SpecOptionVerifier specOptionVerifier : specOptionVerifiers) {
-            var context = new HashMap<String, Object>();
             OptionValidationResult check =
                     specOptionVerifier.check(cachingInputStream, section, context);
             compoundResult.add(check);
             cachingInputStream.reset();
+            context.reset();
         }
 
         return compoundResult;

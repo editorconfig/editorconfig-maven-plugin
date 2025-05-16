@@ -5,13 +5,13 @@
 package org.editorconfig.plugin.maven.verifiers.impl;
 
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -36,7 +36,7 @@ class CharsetOptionVerifierTest {
                                 .toURI())
                         .toFile()),
                 SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.charset(charset)),
-                new HashMap<>());
+                new VerifiersExecutionContext());
 
         Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
     }

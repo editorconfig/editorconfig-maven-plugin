@@ -4,14 +4,14 @@
  */
 package org.editorconfig.plugin.maven.verifiers.impl;
 
-import java.util.Map;
-
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.model.Option;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
+import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
+import org.jspecify.annotations.NonNull;
 
 /**
  * {@link SpecOptionVerifier} for the insert_final_new_line option
@@ -31,7 +31,7 @@ public class InsertFinalNewLineOptionVerifier extends SpecOptionVerifier<TrueFal
             int lineNumber,
             TrueFalse optionValue,
             OptionValidationResult result,
-            Map<String, Object> executionContext) {
+            @NonNull VerifiersExecutionContext executionContext) {
         if (line.isTheLastLine()) {
             // The very last line should always be the '\0' line, otherwise we're not terminating
             // the last line with any end of line symbol
