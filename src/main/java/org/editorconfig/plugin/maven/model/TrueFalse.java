@@ -8,8 +8,7 @@ import java.util.Optional;
 
 public enum TrueFalse {
     TRUE("true"),
-    FALSE("false"),
-    UNSET("unset");
+    FALSE("false");
 
     private final String symbol;
 

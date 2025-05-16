@@ -4,51 +4,54 @@
  */
 package org.editorconfig.plugin.maven.model;
 
+import org.editorconfig.plugin.maven.annotations.Immutable;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Corresponds to a particular section of the .editorconfig file
  *
  * @author Mikhail Polivakha
  */
+@Immutable
 public class Section {
 
-    private final IndentationStyle indentationStyle;
+    private final @NonNull OptionValue<IndentationStyle> indentationStyle;
 
-    private final GlobExpression globExpression;
+    private final @NonNull GlobExpression globExpression;
 
-    private final EndOfLine endOfLine;
+    private final @NonNull OptionValue<EndOfLine> endOfLine;
 
-    private final Charset charset;
+    private final @NonNull OptionValue<Charset> charset;
 
-    private final Integer indentationSize;
+    private final @NonNull OptionValue<Integer> indentationSize;
 
-    private final Integer tabWidth;
+    private final @NonNull OptionValue<Integer> tabWidth;
 
-    private final TrueFalse trimTrailingWhitespace;
+    private final @NonNull OptionValue<TrueFalse> trimTrailingWhitespace;
 
-    private final TrueFalse insertFinalNewLine;
+    private final @NonNull OptionValue<TrueFalse> insertFinalNewLine;
 
     public Section(
-            IndentationStyle indentationStyle,
+            OptionValue<IndentationStyle> indentationStyle,
             GlobExpression globExpression,
-            EndOfLine endOfLine,
-            Charset charset,
-            TrueFalse trimTrailingWhitespace,
-            TrueFalse insertFinalNewLine,
-            Integer indentationSize,
-            Integer tabWidth) {
-        this.indentationStyle = indentationStyle;
+            OptionValue<EndOfLine> endOfLine,
+            OptionValue<Charset> charset,
+            OptionValue<TrueFalse> trimTrailingWhitespace,
+            OptionValue<TrueFalse> insertFinalNewLine,
+            OptionValue<Integer> indentationSize,
+            OptionValue<Integer> tabWidth) {
+        this.indentationStyle = orElseNull(indentationStyle);
         this.globExpression = globExpression;
-        this.endOfLine = endOfLine;
-        this.charset = charset;
-        this.trimTrailingWhitespace = trimTrailingWhitespace;
-        this.insertFinalNewLine = insertFinalNewLine;
-        this.tabWidth = tabWidth;
-        this.indentationSize = indentationSize;
+        this.endOfLine = orElseNull(endOfLine);
+        this.charset = orElseNull(charset);
+        this.trimTrailingWhitespace = orElseNull(trimTrailingWhitespace);
+        this.insertFinalNewLine = orElseNull(insertFinalNewLine);
+        this.tabWidth = orElseNull(tabWidth);
+        this.indentationSize = orElseNull(indentationSize);
     }
 
-    public IndentationStyle getIndentationStyle() {
+    public OptionValue<IndentationStyle> getIndentationStyle() {
         return indentationStyle;
     }
 
@@ -56,53 +59,90 @@ public class Section {
         return globExpression;
     }
 
-    public EndOfLine getEndOfLine() {
+    public OptionValue<EndOfLine> getEndOfLine() {
         return endOfLine;
     }
 
-    public Charset getCharset() {
+    public OptionValue<Charset> getCharset() {
         return charset;
     }
 
-    public TrueFalse getTrimTrailingWhitespace() {
+    public OptionValue<TrueFalse> getTrimTrailingWhitespace() {
         return trimTrailingWhitespace;
     }
 
-    public TrueFalse getInsertFinalNewLine() {
+    public OptionValue<TrueFalse> getInsertFinalNewLine() {
         return insertFinalNewLine;
     }
 
     /**
      * Creates a merged {@link Section} from this one and the passed. {@link Option Options} in
-     * the past {@link Section} take precedence over this one.
-     * <p>
-     * TODO: can we do it better? Code generation like mapstruct can help, theoretically.
+     * the provided {@link Section} take precedence over {@code this} one.
      */
     public Section mergeWith(@NonNull Section that) {
         return new Section(
-                orElseGet(that.indentationStyle, this.indentationStyle),
-                orElseGet(that.globExpression, this.globExpression),
-                orElseGet(that.endOfLine, this.endOfLine),
-                orElseGet(that.charset, this.charset),
-                orElseGet(that.trimTrailingWhitespace, this.trimTrailingWhitespace),
-                orElseGet(that.insertFinalNewLine, this.insertFinalNewLine),
-                orElseGet(that.indentationSize, this.indentationSize),
-                orElseGet(that.tabWidth, this.tabWidth));
+                mergeValues(that.indentationStyle, this.indentationStyle),
+                that.globExpression, // TODO: this is not right...
+                mergeValues(that.endOfLine, this.endOfLine),
+                mergeValues(that.charset, this.charset),
+                mergeValues(that.trimTrailingWhitespace, this.trimTrailingWhitespace),
+                mergeValues(that.insertFinalNewLine, this.insertFinalNewLine),
+                mergeValues(that.indentationSize, this.indentationSize),
+                mergeValues(that.tabWidth, this.tabWidth));
     }
 
     /**
-     * @return the width of the tab
+     * @return the width of the tab, or null if it is either explicitly marked as {@code unset}, or is not set at all.
      * @implSpec for making sense out of why this code is the way it is look<a href="https://spec.editorconfig.org/index.html#supported-pairs">at the spec doc</a>
      */
-    public Integer getTabWidth() {
-        return tabWidth == null ? indentationSize : tabWidth;
+    public @Nullable Integer getTabWidthAsDigit() {
+        if (tabWidth.isUnset()) {
+            return null;
+        }
+
+        if (tabWidth.getValue() != null) {
+            return tabWidth.getValue();
+        }
+
+        return getIndentationSizeAsDigit();
     }
 
-    public Integer getIndentationSize() {
+    public Integer getIndentationSizeAsDigit() {
+        if (indentationSize.isUnset()) {
+            return null;
+        }
+
+        if (indentationSize.getValue() != null) {
+            return indentationSize.getValue();
+        }
+
+        return null;
+    }
+
+    public OptionValue<Integer> getIndentationSize() {
         return indentationSize;
     }
 
-    private <T> T orElseGet(T first, T second) {
-        return first == null ? first : second;
+    private <T> OptionValue<T> mergeValues(OptionValue<T> first, OptionValue<T> second) {
+        // the value was explicitly unset
+        if (first.isUnset()) {
+            return OptionValue.unset();
+        }
+
+        if (first.getValue() == null) {
+            // either not present or was not parsed
+            return second;
+        } else {
+            // value was explicitly set
+            return first;
+        }
+    }
+
+    private <T> OptionValue<T> orElseNull(OptionValue<T> optionValue) {
+        if (optionValue == null) {
+            return OptionValue.fromValue(null);
+        } else {
+            return optionValue;
+        }
     }
 }

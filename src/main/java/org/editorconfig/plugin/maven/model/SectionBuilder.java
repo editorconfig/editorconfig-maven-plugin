@@ -6,51 +6,50 @@ package org.editorconfig.plugin.maven.model;
 
 public class SectionBuilder {
 
-    private IndentationStyle indentationStyle;
-    private Integer indentationSize;
-    private Integer tabWidth;
     private final GlobExpression globExpression;
-    private EndOfLine endOfLine;
-    private Charset charset;
-    private TrueFalse trimTrailingWhitespace;
-
-    private TrueFalse insertFinalNewLine;
+    private OptionValue<IndentationStyle> indentationStyle;
+    private OptionValue<Integer> indentationSize;
+    private OptionValue<Integer> tabWidth;
+    private OptionValue<EndOfLine> endOfLine;
+    private OptionValue<Charset> charset;
+    private OptionValue<TrueFalse> trimTrailingWhitespace;
+    private OptionValue<TrueFalse> insertFinalNewLine;
 
     public SectionBuilder(GlobExpression globExpression) {
         this.globExpression = globExpression;
     }
 
-    public SectionBuilder indentationStyle(IndentationStyle indentationStyle) {
+    public SectionBuilder indentationStyle(OptionValue<IndentationStyle> indentationStyle) {
         this.indentationStyle = indentationStyle;
         return this;
     }
 
-    public SectionBuilder indentationSize(Integer indentationSize) {
+    public SectionBuilder indentationSize(OptionValue<Integer> indentationSize) {
         this.indentationSize = indentationSize;
         return this;
     }
 
-    public SectionBuilder tabWidth(Integer tabWidth) {
+    public SectionBuilder tabWidth(OptionValue<Integer> tabWidth) {
         this.tabWidth = tabWidth;
         return this;
     }
 
-    public SectionBuilder endOfLine(EndOfLine endOfLine) {
+    public SectionBuilder endOfLine(OptionValue<EndOfLine> endOfLine) {
         this.endOfLine = endOfLine;
         return this;
     }
 
-    public SectionBuilder charset(Charset charset) {
+    public SectionBuilder charset(OptionValue<Charset> charset) {
         this.charset = charset;
         return this;
     }
 
-    public SectionBuilder trimTrailingWhitespace(TrueFalse trimTrailingWhitespace) {
+    public SectionBuilder trimTrailingWhitespace(OptionValue<TrueFalse> trimTrailingWhitespace) {
         this.trimTrailingWhitespace = trimTrailingWhitespace;
         return this;
     }
 
-    public SectionBuilder insertFinalNewLine(TrueFalse insertFinalNewLine) {
+    public SectionBuilder insertFinalNewLine(OptionValue<TrueFalse> insertFinalNewLine) {
         this.insertFinalNewLine = insertFinalNewLine;
         return this;
     }

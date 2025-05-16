@@ -13,6 +13,7 @@ import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.config.PluginConfiguration;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
@@ -46,10 +47,11 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
 
     private static Charset detectCharsetForGivenFile(
             Section section, VerifiersExecutionContext executionContext) {
-        Charset charset = section.getCharset();
+        OptionValue<Charset> charset = section.getCharset();
 
-        if (charset != null) {
-            return charset; // if possible, we rely on the charset the user has specified.
+        if (!charset.isUnset() && charset.isRecognized() && charset.getValue() != null) {
+            return charset
+                    .getValue(); // if possible, we rely on the charset the user has specified.
         }
 
         // otherwise, took the first of the detected. It must be either
@@ -82,7 +84,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
         int currentLineIndent;
 
         if (!line.isEmpty()) {
-            Integer tabWidth = section.getTabWidth();
+            Integer tabWidth = section.getTabWidthAsDigit();
 
             Assert.notNull(
                     tabWidth,
@@ -110,7 +112,7 @@ public class IndentationSizeOptionVerifier extends SpecOptionVerifier<Integer> {
     }
 
     @Override
-    public Integer getValueFromSection(Section section) {
+    public OptionValue<Integer> getValueFromSection(Section section) {
         return section.getIndentationSize();
     }
 }

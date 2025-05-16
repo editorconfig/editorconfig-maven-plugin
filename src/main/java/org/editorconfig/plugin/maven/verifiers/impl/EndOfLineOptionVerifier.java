@@ -10,6 +10,7 @@ import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.common.TripleFunction;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
@@ -52,7 +53,7 @@ public class EndOfLineOptionVerifier extends SpecOptionVerifier<EndOfLine> {
     }
 
     @Override
-    public EndOfLine getValueFromSection(Section section) {
+    public OptionValue<EndOfLine> getValueFromSection(Section section) {
         return section.getEndOfLine();
     }
 }

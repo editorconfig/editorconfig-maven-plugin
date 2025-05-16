@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
+import org.editorconfig.plugin.maven.model.OptionValue;
+import org.editorconfig.plugin.maven.utils.IntegerUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,8 +32,10 @@ class IndentationSizeOptionVerifierTest {
                 new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
                         .getResource(sourceCodeFile)
                         .toURI())),
-                SectionTestUtils.testSection(
-                        sb -> sb.tabWidth(tabWidth).indentationSize(indentSize)),
+                SectionTestUtils.testSection(sb -> sb.tabWidth(OptionValue.resolve(
+                                tabWidth.toString(), IntegerUtils::parseIntSafe))
+                        .indentationSize(OptionValue.resolve(
+                                indentSize.toString(), IntegerUtils::parseIntSafe))),
                 new VerifiersExecutionContext());
         Assertions.assertThat(result.noErrors()).isEqualTo(checkShouldPass);
     }

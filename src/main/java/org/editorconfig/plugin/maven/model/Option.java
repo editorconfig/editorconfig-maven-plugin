@@ -23,7 +23,7 @@ public enum Option {
     IDENT_STYLE(
             OptionUtils.INDENT_STYLE,
             (keyValue, sectionBuilder) -> assign(
-                    IndentationStyle.from(keyValue.value()),
+                    OptionValue.resolve(keyValue.value(), IndentationStyle::from),
                     OptionUtils.ERROR_MESSAGE.apply(
                             OptionUtils.INDENT_STYLE,
                             keyValue.value(),
@@ -31,7 +31,7 @@ public enum Option {
                     sectionBuilder::indentationStyle)),
     IDENT_SIZE(OptionUtils.INDENT_SIZE, (keyValue, sectionBuilder) -> {
         assign(
-                IntegerUtils.parseIntSafe(keyValue.value()),
+                OptionValue.resolve(keyValue.value(), IntegerUtils::parseIntSafe),
                 OptionUtils.ERROR_MESSAGE.apply(
                         OptionUtils.INDENT_SIZE,
                         keyValue.value(),
@@ -40,7 +40,7 @@ public enum Option {
     }),
     TAB_WIDTH(OptionUtils.TAB_WIDTH, (keyValue, sectionBuilder) -> {
         assign(
-                IntegerUtils.parseIntSafe(keyValue.value()),
+                OptionValue.resolve(keyValue.value(), IntegerUtils::parseIntSafe),
                 OptionUtils.ERROR_MESSAGE.apply(
                         OptionUtils.TAB_WIDTH,
                         keyValue.value(),
@@ -49,21 +49,21 @@ public enum Option {
     }),
     END_OF_LINE(OptionUtils.END_OF_LINE, (keyValue, sectionBuilder) -> {
         assign(
-                EndOfLine.from(keyValue.value()),
+                OptionValue.resolve(keyValue.value(), EndOfLine::from),
                 OptionUtils.ERROR_MESSAGE.apply(
                         OptionUtils.END_OF_LINE, keyValue.value(), toStringArr(EndOfLine.values())),
                 sectionBuilder::endOfLine);
     }),
     CHARSET(OptionUtils.CHARSET, (keyValue, sectionBuilder) -> {
         assign(
-                Charset.from(keyValue.value()),
+                OptionValue.resolve(keyValue.value(), Charset::from),
                 OptionUtils.ERROR_MESSAGE.apply(
                         OptionUtils.CHARSET, keyValue.value(), toStringArr(Charset.values())),
                 sectionBuilder::charset);
     }),
     TRIM_TRAILING_WHITESPACE(OptionUtils.TRIM_TRAILING_WHITESPACE, (keyValue, sectionBuilder) -> {
         assign(
-                TrueFalse.from(keyValue.value()),
+                OptionValue.resolve(keyValue.value(), TrueFalse::from),
                 OptionUtils.ERROR_MESSAGE.apply(
                         OptionUtils.TRIM_TRAILING_WHITESPACE,
                         keyValue.value(),
@@ -72,7 +72,7 @@ public enum Option {
     }),
     INSERT_FINAL_NEW_LINE(OptionUtils.INSERT_FINAL_NEW_LINE, (keyValue, sectionBuilder) -> {
         assign(
-                TrueFalse.from(keyValue.value()),
+                OptionValue.resolve(keyValue.value(), TrueFalse::from),
                 OptionUtils.ERROR_MESSAGE.apply(
                         OptionUtils.INSERT_FINAL_NEW_LINE,
                         keyValue.value(),
@@ -110,11 +110,15 @@ public enum Option {
         return key;
     }
 
-    private static <T> void assign(Optional<T> source, String errorMessage, Consumer<T> assigner) {
-        if (source.isEmpty()) {
+    private static <T> void assign(
+            OptionValue<T> source, //
+            String errorMessage, //
+            Consumer<OptionValue<T>> assigner) {
+
+        if (!source.isRecognized()) {
             ExecutionUtils.handleError(errorMessage);
         } else {
-            assigner.accept(source.get());
+            assigner.accept(source);
         }
     }
 

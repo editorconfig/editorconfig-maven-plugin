@@ -11,6 +11,7 @@ import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.common.PluginCharsetDetector;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
@@ -38,8 +39,14 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
             CachingInputStream content,
             Section section,
             VerifiersExecutionContext executionContext) {
-        Charset expectedCharset = getValueFromSection(section);
-        OptionValidationResult result = new OptionValidationResult(targetOption, expectedCharset);
+        OptionValue<Charset> expectedCharset = getValueFromSection(section);
+
+        if (expectedCharset.isUnset() || expectedCharset.getValue() == null) {
+            return OptionValidationResult.skippedValidation(targetOption);
+        }
+
+        OptionValidationResult result =
+                new OptionValidationResult(targetOption, expectedCharset.getValue());
 
         byte[] contentAsBytes = ExecutionUtils.mapExceptionally(content::readAllBytes);
         List<Charset> detectedCharsets = pluginCharsetDetector.detect(contentAsBytes);
@@ -48,7 +55,8 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
             executionContext.putGlobal(ContextKeys.POSSIBLE_CHARSETS, detectedCharsets);
         }
 
-        if (detectedCharsets.stream().noneMatch(charset -> charset.equals(expectedCharset))) {
+        if (detectedCharsets.stream()
+                .noneMatch(charset -> charset.equals(expectedCharset.getValue()))) {
             result.addErrorMessage("Expected the file encoding : %s, but possible charsets are : %s"
                     .formatted(targetOption.name(), detectedCharsets));
         }
@@ -64,7 +72,7 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
             @NonNull VerifiersExecutionContext executionContext) {}
 
     @Override
-    public Charset getValueFromSection(Section section) {
+    public OptionValue<Charset> getValueFromSection(Section section) {
         return section.getCharset();
     }
 

@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
@@ -42,8 +43,8 @@ class InsertFinalNewLineOptionVerifierTest {
                 new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
                         .getResource(sourceCodeFile)
                         .toURI())),
-                SectionTestUtils.testSection(
-                        sectionBuilder -> sectionBuilder.insertFinalNewLine(TrueFalse.TRUE)),
+                SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.insertFinalNewLine(
+                        OptionValue.resolve(TrueFalse.TRUE.getSymbol(), TrueFalse::from))),
                 new VerifiersExecutionContext());
 
         // when

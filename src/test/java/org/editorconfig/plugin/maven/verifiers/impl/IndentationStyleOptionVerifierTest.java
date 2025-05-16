@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.IndentationStyle;
+import org.editorconfig.plugin.maven.model.OptionValue;
+import org.editorconfig.plugin.maven.utils.IntegerUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,8 +40,11 @@ class IndentationStyleOptionVerifierTest {
                                 .getResource(sourceCodeFile)
                                 .toURI())
                         .toFile()),
-                SectionTestUtils.testSection(sectionBuilder ->
-                        sectionBuilder.tabWidth(tabWidth).indentationStyle(indentationStyle)),
+                SectionTestUtils.testSection(sectionBuilder -> sectionBuilder
+                        .tabWidth(OptionValue.resolve(
+                                tabWidth.toString(), IntegerUtils::parseIntSafe))
+                        .indentationStyle(OptionValue.resolve(
+                                indentationStyle.name(), IndentationStyle::from))),
                 new VerifiersExecutionContext());
 
         Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);

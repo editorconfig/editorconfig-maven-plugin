@@ -6,6 +6,7 @@ package org.editorconfig.plugin.maven.verifiers.impl;
 
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
@@ -43,7 +44,7 @@ public class InsertFinalNewLineOptionVerifier extends SpecOptionVerifier<TrueFal
     }
 
     @Override
-    public TrueFalse getValueFromSection(Section section) {
+    public OptionValue<TrueFalse> getValueFromSection(Section section) {
         return section.getInsertFinalNewLine();
     }
 }

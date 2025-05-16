@@ -16,6 +16,7 @@ import org.editorconfig.plugin.maven.config.PluginConfiguration;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
@@ -134,7 +135,7 @@ public class TrimTrailingWhitespaceOptionVerifier extends SpecOptionVerifier<Tru
     }
 
     @Override
-    public TrueFalse getValueFromSection(Section section) {
+    public OptionValue<TrueFalse> getValueFromSection(Section section) {
         return section.getTrimTrailingWhitespace();
     }
 

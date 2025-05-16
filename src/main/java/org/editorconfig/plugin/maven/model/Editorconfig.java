@@ -20,9 +20,14 @@ public class Editorconfig {
 
     private boolean isRoot = false;
 
-    private Path location;
+    private final Path location;
 
-    private List<Section> sections = new LinkedList<>();
+    /**
+     * Sections here are stored in order in which they were parsed.
+     * <p>
+     * TODO: maybe we should make Section implemented Ordered?
+     */
+    private final List<Section> sections = new LinkedList<>();
 
     private final GlobExpressionParser globExpressionParser;
 
@@ -57,10 +62,35 @@ public class Editorconfig {
         return location.getParent();
     }
 
+    /**
+     * Finds a target {@link Section} within the {@link Editorconfig} file that matches the given file.
+     * Note, however, that there may be multiple sections matching the same file. In this case, the effective,
+     * merged {@link Section} is returned.
+     */
     public Optional<Section> findTargetSection(Path file) {
-        return this.sections.stream()
-                .filter(section -> globExpressionParser.accepts(
-                        file, section.getGlobExpression().getRaw()))
-                .findFirst();
+        List<Section> matched = new LinkedList<>();
+
+        for (Section section : sections) {
+            if (globExpressionParser.accepts(file, section.getGlobExpression().getRaw())) {
+                matched.add(section);
+            }
+        }
+
+        if (matched.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (matched.size() == 1) {
+            return Optional.ofNullable(sections.get(0));
+        }
+
+        Section effectiveSection = matched.get(0);
+
+        for (int i = 1; i < matched.size(); i++) {
+            Section current = matched.get(i);
+            effectiveSection = effectiveSection.mergeWith(current);
+        }
+
+        return Optional.of(effectiveSection);
     }
 }

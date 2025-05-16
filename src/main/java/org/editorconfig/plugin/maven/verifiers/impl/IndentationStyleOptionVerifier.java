@@ -9,6 +9,7 @@ import java.io.File;
 import org.editorconfig.plugin.maven.common.ByteArrayLine;
 import org.editorconfig.plugin.maven.model.IndentationStyle;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.SpecOptionVerifier;
@@ -53,7 +54,7 @@ public class IndentationStyleOptionVerifier extends SpecOptionVerifier<Indentati
     private void enforceTabIndentationWhenPossible(
             int lineNumber, OptionValidationResult result, byte[] contentWithEol) {
         int numberOfSoftTabs = 0;
-        Integer tabWidth = section.getTabWidth();
+        Integer tabWidth = section.getTabWidthAsDigit();
 
         for (byte currentSymbol : contentWithEol) {
 
@@ -91,7 +92,7 @@ public class IndentationStyleOptionVerifier extends SpecOptionVerifier<Indentati
     }
 
     @Override
-    public IndentationStyle getValueFromSection(Section section) {
+    public OptionValue<IndentationStyle> getValueFromSection(Section section) {
         return section.getIndentationStyle();
     }
 }

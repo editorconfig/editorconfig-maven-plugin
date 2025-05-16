@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.EndOfLine;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,8 @@ class EndOfLineOptionVerifierTest {
                 new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
                         .getResource(sourceCodeFile)
                         .toURI())),
-                SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.endOfLine(endOfLine)),
+                SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.endOfLine(
+                        OptionValue.resolve(endOfLine.getPrintableSpecMarker(), EndOfLine::from))),
                 new VerifiersExecutionContext());
 
         // then.

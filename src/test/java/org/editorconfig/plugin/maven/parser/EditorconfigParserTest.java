@@ -50,22 +50,23 @@ class EditorconfigParserTest {
 
         assertThat(result.getSections().get(0)).satisfies(section -> {
             assertThat(section.getGlobExpression().getRaw()).isEqualTo("{file.py,another-file.py}");
-            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
-            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.TRUE);
-            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.FALSE);
-            assertThat(section.getIndentationSize()).isEqualTo(2);
+            assertThat(section.getIndentationStyle().getValue()).isEqualTo(IndentationStyle.TAB);
+            assertThat(section.getEndOfLine().getValue()).isEqualTo(EndOfLine.LINE_FEED);
+            assertThat(section.getCharset().getValue()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace().getValue()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getInsertFinalNewLine().getValue()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getIndentationSizeAsDigit()).isEqualTo(2);
         });
 
         assertThat(result.getSections().get(1)).satisfies(section -> {
             assertThat(section.getGlobExpression().getRaw()).isEqualTo("*.{.kt,.java}");
-            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
-            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
-            assertThat(section.getIndentationSize()).isNull();
+            assertThat(section.getIndentationStyle().getValue()).isEqualTo(IndentationStyle.SPACE);
+            assertThat(section.getEndOfLine().getValue())
+                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            assertThat(section.getCharset().getValue()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace().getValue()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getInsertFinalNewLine().getValue()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getIndentationSizeAsDigit()).isNull();
         });
     }
 
@@ -85,20 +86,21 @@ class EditorconfigParserTest {
 
         assertThat(result.getSections().get(0)).satisfies(section -> {
             assertThat(section.getGlobExpression().getRaw()).isEqualTo("{file.py,another-file.py}");
-            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.TAB);
-            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.TRUE);
-            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getIndentationStyle().getValue()).isEqualTo(IndentationStyle.TAB);
+            assertThat(section.getEndOfLine().getValue()).isEqualTo(EndOfLine.LINE_FEED);
+            assertThat(section.getCharset().getValue()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace().getValue()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getInsertFinalNewLine().getValue()).isEqualTo(TrueFalse.FALSE);
         });
 
         assertThat(result.getSections().get(1)).satisfies(section -> {
             assertThat(section.getGlobExpression().getRaw()).isEqualTo("*.{.kt,.java}");
-            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
-            assertThat(section.getTrimTrailingWhitespace()).isEqualTo(TrueFalse.FALSE);
-            assertThat(section.getInsertFinalNewLine()).isEqualTo(TrueFalse.TRUE);
+            assertThat(section.getIndentationStyle().getValue()).isEqualTo(IndentationStyle.SPACE);
+            assertThat(section.getEndOfLine().getValue())
+                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            assertThat(section.getCharset().getValue()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getTrimTrailingWhitespace().getValue()).isEqualTo(TrueFalse.FALSE);
+            assertThat(section.getInsertFinalNewLine().getValue()).isEqualTo(TrueFalse.TRUE);
         });
     }
 
@@ -121,9 +123,10 @@ class EditorconfigParserTest {
         assertThat(result.getSections()).hasSize(2);
         assertThat(result.getSections().get(1)).satisfies(section -> {
             assertThat(section.getGlobExpression().getRaw()).isEqualTo("*.{.kt,.java}");
-            assertThat(section.getIndentationStyle()).isEqualTo(IndentationStyle.SPACE);
-            assertThat(section.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-            assertThat(section.getCharset()).isEqualTo(Charset.UTF_8);
+            assertThat(section.getIndentationStyle().getValue()).isEqualTo(IndentationStyle.SPACE);
+            assertThat(section.getEndOfLine().getValue())
+                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            assertThat(section.getCharset().getValue()).isEqualTo(Charset.UTF_8);
         });
     }
 

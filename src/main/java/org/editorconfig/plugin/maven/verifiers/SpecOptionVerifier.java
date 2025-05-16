@@ -13,6 +13,7 @@ import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.common.Ordered;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -56,9 +57,10 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
             CachingInputStream content,
             Section section,
             VerifiersExecutionContext executionContext) {
-        T optionValue = getValueFromSection(section);
 
-        if (optionValue == null) {
+        OptionValue<T> optionValue = getValueFromSection(section);
+
+        if (optionValue.isUnset() || optionValue.getValue() == null) {
             return OptionValidationResult.skippedValidation(targetOption);
         }
 
@@ -66,11 +68,11 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
             onInit(section, executionContext, content.getOriginalFile());
             int lineNumber = 1;
             ByteArrayLine line;
-            OptionValidationResult result = new OptionValidationResult(targetOption, optionValue);
+            OptionValidationResult result = new OptionValidationResult(targetOption, optionValue.getValue());
 
             do {
                 line = reader.readLine();
-                forEachLine(line, lineNumber, optionValue, result, executionContext);
+                forEachLine(line, lineNumber, optionValue.getValue(), result, executionContext);
                 lineNumber++;
             } while (!line.isTheLastLine());
 
@@ -90,7 +92,7 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
     /**
      * Function that extracts the value of the required type from given {@link Section}
      */
-    public abstract @Nullable T getValueFromSection(Section section);
+    public abstract @Nullable OptionValue<T> getValueFromSection(Section section);
 
     @Override
     public int getOrder() {

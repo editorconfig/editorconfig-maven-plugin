@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.Charset;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +28,7 @@ class CharsetOptionVerifierTest {
 
     @ParameterizedTest
     @MethodSource(value = {"arguments"})
-    void testCharsetOptionVerifier(String sourceCodeFile, Charset charset, boolean noErrors)
+    void testCharsetOptionVerifier(String sourceCodeFile, String charset, boolean noErrors)
             throws Exception {
 
         OptionValidationResult check = subject.check(
@@ -35,7 +36,8 @@ class CharsetOptionVerifierTest {
                                 .getResource(sourceCodeFile)
                                 .toURI())
                         .toFile()),
-                SectionTestUtils.testSection(sectionBuilder -> sectionBuilder.charset(charset)),
+                SectionTestUtils.testSection(sectionBuilder ->
+                        sectionBuilder.charset(OptionValue.resolve(charset, Charset::from))),
                 new VerifiersExecutionContext());
 
         Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
@@ -43,16 +45,14 @@ class CharsetOptionVerifierTest {
 
     static Stream<Arguments> arguments() {
         return Stream.of(
-                Arguments.of("sources/charset/TestJavaClass_LATIN1.java", Charset.LATIN1, true),
-                Arguments.of("sources/charset/TestJavaClass_UTF8.java", Charset.UTF_8, true),
-                Arguments.of("sources/charset/TestJavaClass_UTF8.java", Charset.UTF_16LE, false),
+                Arguments.of("sources/charset/TestJavaClass_LATIN1.java", "latin1", true),
+                Arguments.of("sources/charset/TestJavaClass_UTF8.java", "utf-8", true),
+                Arguments.of("sources/charset/TestJavaClass_UTF8.java", "utf-16le", false),
                 Arguments.of(
-                        "sources/charset/TestJavaClass_UTF8_Cyrillic_Comments.java",
-                        Charset.UTF_8,
-                        true),
-                Arguments.of("sources/charset/TestJavaClass_UTF16BE.java", Charset.UTF_16BE, true),
-                Arguments.of("sources/charset/TestJavaClass_UTF16BE.java", Charset.UTF_16LE, false),
-                Arguments.of("sources/charset/TestJavaClass_UTF16LE.java", Charset.UTF_16LE, true),
-                Arguments.of("sources/charset/TestJavaClass_UTF16LE.java", Charset.LATIN1, false));
+                        "sources/charset/TestJavaClass_UTF8_Cyrillic_Comments.java", "utf-8", true),
+                Arguments.of("sources/charset/TestJavaClass_UTF16BE.java", "utf-16be", true),
+                Arguments.of("sources/charset/TestJavaClass_UTF16BE.java", "utf-16le", false),
+                Arguments.of("sources/charset/TestJavaClass_UTF16LE.java", "utf-16le", true),
+                Arguments.of("sources/charset/TestJavaClass_UTF16LE.java", "latin1", false));
     }
 }

@@ -17,6 +17,7 @@ import org.editorconfig.plugin.maven.common.Ordered;
 import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.GlobExpression;
 import org.editorconfig.plugin.maven.model.Option;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.Section;
 import org.editorconfig.plugin.maven.model.SectionBuilder;
 import org.editorconfig.plugin.maven.utils.ExecutionUtils;
@@ -118,8 +119,8 @@ class OptionsManagerTest {
                 @NonNull VerifiersExecutionContext context) {}
 
         @Override
-        public Charset getValueFromSection(Section section) {
-            return Charset.UTF_16BE;
+        public OptionValue<Charset> getValueFromSection(Section section) {
+            return OptionValue.resolve("utf-16le", Charset::from);
         }
 
         public AbstractTestVerifier(Option targetOption, Queue<Class<?>> invocationQueue) {

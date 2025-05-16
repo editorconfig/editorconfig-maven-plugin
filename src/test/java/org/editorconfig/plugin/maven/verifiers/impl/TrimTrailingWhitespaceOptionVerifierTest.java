@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.common.CachingInputStream;
 import org.editorconfig.plugin.maven.model.Charset;
+import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
@@ -46,7 +47,8 @@ class TrimTrailingWhitespaceOptionVerifierTest {
                         .getResource(sourceCodeFile)
                         .toURI())),
                 SectionTestUtils.testSection(
-                        sectionBuilder -> sectionBuilder.trimTrailingWhitespace(TrueFalse.TRUE)),
+                        sectionBuilder -> sectionBuilder.trimTrailingWhitespace(
+                                OptionValue.resolve("true", TrueFalse::from))),
                 new VerifiersExecutionContext()
                         .putGlobal(ContextKeys.POSSIBLE_CHARSETS, List.of(Charset.UTF_8)));
 
