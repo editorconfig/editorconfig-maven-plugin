@@ -6,7 +6,7 @@
   <groupId>org.editorconfig.test</groupId>
   <artifactId>single-root-config</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+   <packaging>jar</packaging>
   <name>Test MyMojo</name>
 
   <dependencies>
