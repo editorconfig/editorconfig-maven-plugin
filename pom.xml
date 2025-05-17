@@ -6,7 +6,7 @@
 
     <groupId>org.editorconfig</groupId>
     <artifactId>editorconfig-maven-plugin</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.0.alpha1</version>
 
     <properties>
         <junit-jupiter.version>5.9.1</junit-jupiter.version>
