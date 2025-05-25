@@ -8,9 +8,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import org.assertj.core.api.Assertions;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * TODO add integration tests with real files
@@ -18,7 +19,7 @@ import org.junit.jupiter.api.Test;
 class BufferedInputStreamTest {
 
     @Test
-    void test_readLine_LF() throws IOException {
+    void getEndOfLine_3LinesLfLfLf_Lf() throws IOException {
         // given
         String firstRow = "first row\n";
         String secondRow = "second row\n";
@@ -30,17 +31,18 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
+        // then
+        assertEquals(EndOfLine.LINE_FEED, firstEndOfLine);
+        assertEquals(EndOfLine.LINE_FEED, secondEndOfLine);
+        assertEquals(EndOfLine.LINE_FEED, thirdEndOfLine);
     }
 
     @Test
-    void test_readLine_LF_lastLineIsEOFEnded() throws IOException {
+    void getEndOfLine_3LinesLfLfEof_Eof() throws IOException {
         // given
         String firstRow = "first row\n";
         String secondRow = "second row\n";
@@ -52,17 +54,18 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.EOF);
+        // then
+        assertEquals(EndOfLine.LINE_FEED, firstEndOfLine);
+        assertEquals(EndOfLine.LINE_FEED, secondEndOfLine);
+        assertEquals(EndOfLine.EOF, thirdEndOfLine);
     }
 
     @Test
-    void test_readLine_CRLF() throws IOException {
+    void getEndOfLine_3LinesCrlfCrlfCrlf_Crlf() throws IOException {
         // given
         String firstRow = "first row\r\n";
         String secondRow = "second row\r\n";
@@ -74,17 +77,18 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        // then
+        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, firstEndOfLine);
+        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, secondEndOfLine);
+        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, thirdEndOfLine);
     }
 
     @Test
-    void test_readLine_CRLF_lastRowEndWithEOF() throws IOException {
+    void getEndOfLine_3LinesCrlfCrlfEof_Eof() throws IOException {
         // given
         String firstRow = "first row\r\n";
         String secondRow = "second row\r\n";
@@ -96,17 +100,18 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.EOF);
+        // then
+        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, firstEndOfLine);
+        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, secondEndOfLine);
+        assertEquals(EndOfLine.EOF, thirdEndOfLine);
     }
 
     @Test
-    void test_readLine_CR() throws IOException {
+    void getEndOfLine_3LinesCrCrCr_Cr() throws IOException {
         // given
         String firstRow = "first row\r";
         String secondRow = "second row\r";
@@ -118,17 +123,18 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        // then
+        assertEquals(EndOfLine.CARRIAGE_RERUN, firstEndOfLine);
+        assertEquals(EndOfLine.CARRIAGE_RERUN, secondEndOfLine);
+        assertEquals(EndOfLine.CARRIAGE_RERUN, thirdEndOfLine);
     }
 
     @Test
-    void test_readLine_CR_lastRowEndWithEOF() throws IOException {
+    void getEndOfLine_3LinesCrCrEof_Eof() throws IOException {
         // given
         String firstRow = "first row\r";
         String secondRow = "second row\r";
@@ -140,13 +146,14 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.EOF);
+        // then
+        assertEquals(EndOfLine.CARRIAGE_RERUN, firstEndOfLine);
+        assertEquals(EndOfLine.CARRIAGE_RERUN, secondEndOfLine);
+        assertEquals(EndOfLine.EOF, thirdEndOfLine);
     }
 
     private static ByteArrayInputStream testFromAsciiString(String asciiString) {

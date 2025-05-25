@@ -17,6 +17,7 @@ import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.editorconfig.plugin.maven.common.ByteArrayLineTestUtils.fromUtf16BEString;
 import static org.editorconfig.plugin.maven.common.ByteArrayLineTestUtils.fromUtf8String;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link ByteArrayLine}
@@ -26,25 +27,28 @@ import static org.editorconfig.plugin.maven.common.ByteArrayLineTestUtils.fromUt
 class ByteArrayLineTest {
 
     @Test
-    void test_endOfLine() {
-
-        // when.
+    void isTheLastLine_2LinesLfEof_FalseTrue() {
+        // given
         ByteArrayLine first = new ByteArrayLine(
                 new byte[] {'H', 'e', 'l', 'l', 'o', '\n'}, 5, EndOfLine.LINE_FEED);
         ByteArrayLine second =
                 new ByteArrayLine(new byte[] {'H', 'e', 'l', 'l', 'o'}, 5, EndOfLine.EOF);
 
-        // then.
-        assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        assertThat(first.isTheLastLine()).isFalse();
-        assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.EOF);
-        assertThat(second.isTheLastLine()).isTrue();
+        // when
+        EndOfLine firstEndOfLine = first.getEndOfLine();
+        EndOfLine secondEndOfLine = second.getEndOfLine();
+
+        // then
+        assertEquals(EndOfLine.LINE_FEED, firstEndOfLine);
+        assertEquals(EndOfLine.EOF, secondEndOfLine);
+
+        assertFalse(first.isTheLastLine());
+        assertTrue(second.isTheLastLine());
     }
 
     @Test
-    void test_getContent() {
-
-        // when.
+    void getContentWithEol_3LinesLfCrlfEof_Ok() {
+        // given
         ByteArrayLine first = new ByteArrayLine(
                 new byte[] {'H', 'e', 'l', 'l', 'o', '\n'}, 5, EndOfLine.LINE_FEED);
         ByteArrayLine second = new ByteArrayLine(
@@ -54,20 +58,20 @@ class ByteArrayLineTest {
         ByteArrayLine third = new ByteArrayLine(
                 new byte[] {'B', 'B', 'B', '\0', '\0', '\0', '\0'}, 3, EndOfLine.EOF);
 
-        // then.
-        assertThat(first.getContentWithEol())
-                .hasSize(6)
-                .containsExactly('H', 'e', 'l', 'l', 'o', '\n');
-        assertThat(second.getContentWithEol())
-                .hasSize(6)
-                .containsExactly('A', 'l', 'e', 'x', '\r', '\n');
-        assertThat(third.getContentWithEol()).hasSize(4).containsExactly('B', 'B', 'B', '\0');
+        // when
+        byte[] firstContent = first.getContentWithEol();
+        byte[] secondContent = second.getContentWithEol();
+        byte[] thirdContent = third.getContentWithEol();
+
+        // then
+        assertThat(firstContent).hasSize(6).containsExactly('H', 'e', 'l', 'l', 'o', '\n');
+        assertThat(secondContent).hasSize(6).containsExactly('A', 'l', 'e', 'x', '\r', '\n');
+        assertThat(thirdContent).hasSize(4).containsExactly('B', 'B', 'B', '\0');
     }
 
     @Test
-    void test_lengthWithEol() {
-
-        // when.
+    void lengthWithEol_3LinesLfCrlfEof_Ok() {
+        // given
         ByteArrayLine first = new ByteArrayLine(
                 new byte[] {'H', 'e', 'l', 'l', 'o', '\n'}, 5, EndOfLine.LINE_FEED);
         ByteArrayLine second = new ByteArrayLine(
@@ -77,33 +81,36 @@ class ByteArrayLineTest {
         ByteArrayLine third = new ByteArrayLine(
                 new byte[] {'B', 'B', 'B', '\0', '\0', '\0', '\0'}, 3, EndOfLine.EOF);
 
-        // then.
-        assertThat(first.lengthWithEoL()).isEqualTo(6);
-        assertThat(second.lengthWithEoL()).isEqualTo(6);
-        assertThat(third.lengthWithEoL()).isEqualTo(4);
+        // then
+        assertEquals(6, first.lengthWithEoL());
+        assertEquals(6, second.lengthWithEoL());
+        assertEquals(4, third.lengthWithEoL());
     }
 
     @ParameterizedTest
     @MethodSource("test_isEmpty")
-    void test_isEmpty(String string, EndOfLine endOfLine, boolean expectedIsEmpty) {
+    void isEmpty_ListOfStrings_Ok(String string, EndOfLine endOfLine, boolean expected) {
+        // given
+        ByteArrayLine line = new ByteArrayLine(
+                string.getBytes(US_ASCII),
+                string.length() - endOfLine.getLengthInBytes(),
+                endOfLine);
 
-        // when.
-        boolean actualIsEmpty = new ByteArrayLine(
-                        string.getBytes(US_ASCII),
-                        string.length() - endOfLine.getLengthInBytes(),
-                        endOfLine)
-                .isEmpty();
+        // when
+        boolean actual = line.isEmpty();
 
-        // then.
-        assertThat(actualIsEmpty).isEqualTo(expectedIsEmpty);
+        // then
+        assertEquals(expected, actual);
     }
 
     @ParameterizedTest
     @MethodSource("test_getIndent")
-    void test_getIndent(ByteArrayLine line, Charset charset, int expectedIndent) {
-        int indent = line.getIndent(2, charset);
+    void getIndent_ListOfStrings_Ok(ByteArrayLine line, Charset charset, int expected) {
+        // when
+        int actual = line.getIndent(2, charset);
 
-        assertThat(indent).isEqualTo(expectedIndent);
+        // then
+        assertEquals(expected, actual);
     }
 
     static Stream<Arguments> test_getIndent() {
