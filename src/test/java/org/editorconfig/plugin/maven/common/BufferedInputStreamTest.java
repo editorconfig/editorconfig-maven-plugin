@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * TODO add integration tests with real files
@@ -36,9 +36,9 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertEquals(EndOfLine.LINE_FEED, firstEndOfLine);
-        assertEquals(EndOfLine.LINE_FEED, secondEndOfLine);
-        assertEquals(EndOfLine.LINE_FEED, thirdEndOfLine);
+        assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
     }
 
     @Test
@@ -59,9 +59,9 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertEquals(EndOfLine.LINE_FEED, firstEndOfLine);
-        assertEquals(EndOfLine.LINE_FEED, secondEndOfLine);
-        assertEquals(EndOfLine.EOF, thirdEndOfLine);
+        assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
     }
 
     @Test
@@ -82,9 +82,9 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, firstEndOfLine);
-        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, secondEndOfLine);
-        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, thirdEndOfLine);
+        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
     }
 
     @Test
@@ -105,9 +105,9 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, firstEndOfLine);
-        assertEquals(EndOfLine.CARRIAGE_RERUN_LINE_FEED, secondEndOfLine);
-        assertEquals(EndOfLine.EOF, thirdEndOfLine);
+        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
     }
 
     @Test
@@ -128,9 +128,9 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertEquals(EndOfLine.CARRIAGE_RERUN, firstEndOfLine);
-        assertEquals(EndOfLine.CARRIAGE_RERUN, secondEndOfLine);
-        assertEquals(EndOfLine.CARRIAGE_RERUN, thirdEndOfLine);
+        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
     }
 
     @Test
@@ -151,9 +151,9 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertEquals(EndOfLine.CARRIAGE_RERUN, firstEndOfLine);
-        assertEquals(EndOfLine.CARRIAGE_RERUN, secondEndOfLine);
-        assertEquals(EndOfLine.EOF, thirdEndOfLine);
+        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
     }
 
     private static ByteArrayInputStream testFromAsciiString(String asciiString) {

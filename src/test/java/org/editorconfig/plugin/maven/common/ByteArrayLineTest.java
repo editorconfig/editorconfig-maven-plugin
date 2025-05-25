@@ -17,7 +17,6 @@ import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.editorconfig.plugin.maven.common.ByteArrayLineTestUtils.fromUtf16BEString;
 import static org.editorconfig.plugin.maven.common.ByteArrayLineTestUtils.fromUtf8String;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link ByteArrayLine}
@@ -39,11 +38,11 @@ class ByteArrayLineTest {
         EndOfLine secondEndOfLine = second.getEndOfLine();
 
         // then
-        assertEquals(EndOfLine.LINE_FEED, firstEndOfLine);
-        assertEquals(EndOfLine.EOF, secondEndOfLine);
+        assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        assertThat(secondEndOfLine).isEqualTo(EndOfLine.EOF);
 
-        assertFalse(first.isTheLastLine());
-        assertTrue(second.isTheLastLine());
+        assertThat(first.isTheLastLine()).isFalse();
+        assertThat(second.isTheLastLine()).isTrue();
     }
 
     @Test
@@ -82,9 +81,9 @@ class ByteArrayLineTest {
                 new byte[] {'B', 'B', 'B', '\0', '\0', '\0', '\0'}, 3, EndOfLine.EOF);
 
         // then
-        assertEquals(6, first.lengthWithEoL());
-        assertEquals(6, second.lengthWithEoL());
-        assertEquals(4, third.lengthWithEoL());
+        assertThat(first.lengthWithEoL()).isEqualTo(6);
+        assertThat(second.lengthWithEoL()).isEqualTo(6);
+        assertThat(third.lengthWithEoL()).isEqualTo(4);
     }
 
     @ParameterizedTest
@@ -100,7 +99,7 @@ class ByteArrayLineTest {
         boolean actual = line.isEmpty();
 
         // then
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -110,7 +109,7 @@ class ByteArrayLineTest {
         int actual = line.getIndent(2, charset);
 
         // then
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     static Stream<Arguments> test_getIndent() {
