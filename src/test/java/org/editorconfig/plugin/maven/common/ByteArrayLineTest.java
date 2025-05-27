@@ -7,6 +7,7 @@ package org.editorconfig.plugin.maven.common;
 import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
+import org.assertj.core.api.SoftAssertions;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,11 +39,12 @@ class ByteArrayLineTest {
         EndOfLine secondEndOfLine = second.getEndOfLine();
 
         // then
-        assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
-        assertThat(secondEndOfLine).isEqualTo(EndOfLine.EOF);
-
-        assertThat(first.isTheLastLine()).isFalse();
-        assertThat(second.isTheLastLine()).isTrue();
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.EOF);
+            softAssertions.assertThat(first.isTheLastLine()).isFalse();
+            softAssertions.assertThat(second.isTheLastLine()).isTrue();
+        });
     }
 
     @Test
@@ -63,9 +65,17 @@ class ByteArrayLineTest {
         byte[] thirdContent = third.getContentWithEol();
 
         // then
-        assertThat(firstContent).hasSize(6).containsExactly('H', 'e', 'l', 'l', 'o', '\n');
-        assertThat(secondContent).hasSize(6).containsExactly('A', 'l', 'e', 'x', '\r', '\n');
-        assertThat(thirdContent).hasSize(4).containsExactly('B', 'B', 'B', '\0');
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions
+                    .assertThat(firstContent)
+                    .hasSize(6)
+                    .containsExactly('H', 'e', 'l', 'l', 'o', '\n');
+            softAssertions
+                    .assertThat(secondContent)
+                    .hasSize(6)
+                    .containsExactly('A', 'l', 'e', 'x', '\r', '\n');
+            softAssertions.assertThat(thirdContent).hasSize(4).containsExactly('B', 'B', 'B', '\0');
+        });
     }
 
     @Test
@@ -81,9 +91,11 @@ class ByteArrayLineTest {
                 new byte[] {'B', 'B', 'B', '\0', '\0', '\0', '\0'}, 3, EndOfLine.EOF);
 
         // then
-        assertThat(first.lengthWithEoL()).isEqualTo(6);
-        assertThat(second.lengthWithEoL()).isEqualTo(6);
-        assertThat(third.lengthWithEoL()).isEqualTo(4);
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(first.lengthWithEoL()).isEqualTo(6);
+            softAssertions.assertThat(second.lengthWithEoL()).isEqualTo(6);
+            softAssertions.assertThat(third.lengthWithEoL()).isEqualTo(4);
+        });
     }
 
     @ParameterizedTest

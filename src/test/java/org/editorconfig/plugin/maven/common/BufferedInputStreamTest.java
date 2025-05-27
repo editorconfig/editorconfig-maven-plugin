@@ -8,10 +8,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import org.assertj.core.api.SoftAssertions;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * TODO add integration tests with real files
@@ -36,9 +35,11 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
-        assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
-        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        });
     }
 
     @Test
@@ -59,9 +60,11 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
-        assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
-        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        });
     }
 
     @Test
@@ -82,9 +85,13 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions
+                    .assertThat(secondEndOfLine)
+                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        });
     }
 
     @Test
@@ -105,9 +112,13 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions
+                    .assertThat(secondEndOfLine)
+                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        });
     }
 
     @Test
@@ -128,9 +139,11 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        });
     }
 
     @Test
@@ -151,9 +164,11 @@ class BufferedInputStreamTest {
         EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
         // then
-        assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        });
     }
 
     private static ByteArrayInputStream testFromAsciiString(String asciiString) {
