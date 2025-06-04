@@ -68,7 +68,8 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
             onInit(section, executionContext, content.getOriginalFile());
             int lineNumber = 1;
             ByteArrayLine line;
-            OptionValidationResult result = new OptionValidationResult(targetOption, optionValue.getValue());
+            OptionValidationResult result =
+                    new OptionValidationResult(targetOption, optionValue.getValue());
 
             do {
                 line = reader.readLine();
