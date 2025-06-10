@@ -18,7 +18,7 @@ import java.util.Arrays;
  * {@link FileInputStream} does not support mark/reset API, and therefore we cannot
  * re-read the stream, unless we read the same file on disk multiple times.
  *
- * @implNote This class is <strong>NOT</strong> thread-safe.
+ * @apiNote This class is <strong>NOT</strong> thread-safe.
  * @author Mikhail Polivakha
  */
 public class CachingInputStream extends FileInputStream {

@@ -18,6 +18,7 @@ import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.editorconfig.plugin.maven.model.IndentationStyle;
 import org.editorconfig.plugin.maven.model.TrueFalse;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class EditorconfigParserTest {
 
     @AfterEach
+    @BeforeEach
     void tearDown() {
         PluginConfiguration.destroyInstance();
     }
