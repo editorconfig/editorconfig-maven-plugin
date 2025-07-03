@@ -7,6 +7,7 @@
     <groupId>org.editorconfig</groupId>
     <artifactId>editorconfig-maven-plugin</artifactId>
     <version>0.1.0.alpha1</version>
+    <packaging>maven-plugin</packaging>
 
     <properties>
         <junit-jupiter.version>5.9.1</junit-jupiter.version>
@@ -78,6 +79,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.15.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

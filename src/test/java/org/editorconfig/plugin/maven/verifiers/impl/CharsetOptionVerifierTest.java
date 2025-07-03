@@ -13,6 +13,7 @@ import org.editorconfig.plugin.maven.model.Charset;
 import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,14 +25,19 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class CharsetOptionVerifierTest {
 
-    private final CharsetOptionVerifier subject = new CharsetOptionVerifier();
+    private CharsetOptionVerifier subject;
+
+    @BeforeEach
+    void setUp() {
+        subject = new CharsetOptionVerifier();
+    }
 
     @ParameterizedTest
     @MethodSource(value = {"arguments"})
-    void testCharsetOptionVerifier(String sourceCodeFile, String charset, boolean noErrors)
-            throws Exception {
+    void check_CharsetOptionVerifier_OptionalValidationResult(
+            String sourceCodeFile, String charset, boolean expected) throws Exception {
 
-        OptionValidationResult check = subject.check(
+        OptionValidationResult actual = subject.check(
                 new CachingInputStream(Paths.get(ClassLoader.getSystemClassLoader()
                                 .getResource(sourceCodeFile)
                                 .toURI())
@@ -40,7 +46,7 @@ class CharsetOptionVerifierTest {
                         sectionBuilder.charset(OptionValue.resolve(charset, Charset::from))),
                 new VerifiersExecutionContext());
 
-        Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
+        Assertions.assertThat(actual.noErrors()).isEqualTo(expected);
     }
 
     static Stream<Arguments> arguments() {

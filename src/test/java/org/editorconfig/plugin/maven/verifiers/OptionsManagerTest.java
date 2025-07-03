@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class OptionsManagerTest {
 
     @Test
-    void testOrderOfVerifiersIsTakenIntoAccount() throws IOException {
+    void check_InvocationQueue_ExactInvocationOrder() throws IOException {
 
         // given.
         Queue<Class<?>> invocationQueue = new LinkedList<>();
