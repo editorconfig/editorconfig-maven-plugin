@@ -6,9 +6,8 @@
 
     <groupId>org.editorconfig</groupId>
     <artifactId>editorconfig-maven-plugin</artifactId>
-    <version>0.1.0.alpha1</version>
+    <version>1.0.0-alpha1</version>
     <packaging>maven-plugin</packaging>
-
     <properties>
         <junit-jupiter.version>5.9.1</junit-jupiter.version>
         <assertj-core.version>3.26.0</assertj-core.version>
@@ -17,6 +16,29 @@
         <jspecify.version>1.0.0</jspecify.version>
         <spotless.version>2.44.4</spotless.version>
     </properties>
+
+    <scm>
+      <url>https://github.com/editorconfig/editorconfig-maven-plugin</url>
+      <connection>scm:git:git://github.com/editorconfig/editorconfig-maven-plugin</connection>
+    </scm>
+
+    <licenses>
+      <license>
+        <name>MIT License</name>
+        <url>http://www.opensource.org/licenses/mit-license.php</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
+
+    <developers>
+      <developer>
+        <id>mipo256</id>
+        <name>Mikhail Polivakha</name>
+        <roles>
+          <role>Project Lead</role>
+        </roles>
+      </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -85,6 +107,55 @@
                 <version>3.15.1</version>
             </plugin>
             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-source-plugin</artifactId>
+              <version>3.3.1</version>
+              <executions>
+                <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                    <goal>jar-no-fork</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>3.11.2</version>
+              <configuration>
+                <tags>
+                  <tag>
+                    <name>apiNote</name>
+                    <placement>a</placement>
+                    <head>Implementation Note:</head>
+                  </tag>
+                </tags>
+              </configuration>
+              <executions>
+                <execution>
+                  <id>attach-javadocs</id>
+                  <goals>
+                    <goal>jar</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <version>3.2.7</version>
+              <executions>
+                <execution>
+                  <id>sign-artifacts</id>
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>sign</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.3</version>
@@ -118,7 +189,6 @@
                       <include>.gitignore</include>
                       <include>pom.xml</include>
                     </includes>
-                    <!-- define the steps to apply to those files -->
                     <trimTrailingWhitespace/>
                     <endWithNewline/>
                     <indent>
@@ -138,9 +208,8 @@
                     <file>${project.basedir}/LICENSE_HEADER</file>
                   </licenseHeader>
                   <importOrder>
-                    <wildcardsLast>false</wildcardsLast> <!-- Optional, default false. Sort wildcard import after specific imports -->
-                    <order>java|javax,org,com,com.diffplug,,\#com.diffplug,\#</order>  <!-- or use <file>${project.basedir}/eclipse.importorder</file> -->
-                    <!-- you can use an empty string for all the imports you didn't specify explicitly, '|' to join group without blank line, and '\#` prefix for static imports. -->
+                    <wildcardsLast>false</wildcardsLast>
+                    <order>java|javax,org,com,com.diffplug,,\#com.diffplug,\#</order>
                     <semanticSort>false</semanticSort>
                   </importOrder>
                 </java>
@@ -148,4 +217,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+      <repository>
+        <id>maven-central-releases</id>
+        <name>maven-central-releases</name>
+        <url>https://central.sonatype.com/service/local/staging/deploy/maven2/</url>
+      </repository>
+    </distributionManagement>
 </project>

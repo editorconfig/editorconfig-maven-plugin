@@ -14,7 +14,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * The discriminated union type between the {@code unset} and the actual value.
  *
- * @implNote See <a href="https://spec.editorconfig.org/#supported-pairs">supported pairs for clarification</>
+ * @apiNote See <a href="https://spec.editorconfig.org/#supported-pairs">supported pairs for clarification</a>
  * @param <T> the type of the actual value
  * @author Mikhail Polivakha
  */

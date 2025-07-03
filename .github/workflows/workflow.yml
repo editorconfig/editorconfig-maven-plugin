@@ -1,0 +1,28 @@
+name: Maven Central deploy
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        server-id: maven-central-release
+        settings-path: ${{ github.workspace }}
+
+    - name: Publish to Maven Central
+      run: mvn deploy -DdryRun=true -s $GITHUB_WORKSPACE/settings.xml
+      env:
+        MAVEN_CENTRAL_RELEASES_USERNAME: ${{ secrets.MAVEN_CENTRAL_RELEASES_USERNAME }}
+        MAVEN_CENTRAL_RELEASES_PASSWORD: ${{ secrets.MAVEN_CENTRAL_RELEASES_PASSWORD }}

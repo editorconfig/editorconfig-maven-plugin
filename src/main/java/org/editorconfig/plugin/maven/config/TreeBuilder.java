@@ -21,7 +21,7 @@ import org.jspecify.annotations.Nullable;
 public class TreeBuilder {
 
     /**
-     * @implSpec <a href="https://spec.editorconfig.org/#file-processing">EditorConfig Specification Naming Section</a>
+     * @apiNote <a href="https://spec.editorconfig.org/#file-processing">EditorConfig Specification Naming Section</a>
      */
     public static final String EDITORCONFIG_FILE_NAME = ".editorconfig";
 

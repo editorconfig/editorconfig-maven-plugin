@@ -93,7 +93,7 @@ public class Section {
 
     /**
      * @return the width of the tab, or null if it is either explicitly marked as {@code unset}, or is not set at all.
-     * @implSpec for making sense out of why this code is the way it is look<a href="https://spec.editorconfig.org/index.html#supported-pairs">at the spec doc</a>
+     * @apiNote for making sense out of why this code is the way it is look<a href="https://spec.editorconfig.org/index.html#supported-pairs">at the spec doc</a>
      */
     public @Nullable Integer getTabWidthAsDigit() {
         if (tabWidth.isUnset()) {

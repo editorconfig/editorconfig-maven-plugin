@@ -7,7 +7,7 @@ Example of plugin usage can be seen below. The configuration settings and plugin
 <plugin>
     <groupId>org.editorconfig</groupId>
     <artifactId>editorconfig-maven-plugin</artifactId>
-    <version>0.1.0.alpha1</version>
+    <version>1.0.0-alpha1</version>
     <executions>
         <execution>
             <goals>
