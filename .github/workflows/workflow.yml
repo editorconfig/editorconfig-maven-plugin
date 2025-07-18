@@ -3,6 +3,7 @@ name: Maven Central deploy
 on:
   release:
     types: [created]
+  pull_request:
 
 jobs:
   build:
@@ -12,17 +13,23 @@ jobs:
       packages: write
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        server-id: maven-central-release
-        settings-path: ${{ github.workspace }}
+      - uses: actions/checkout@v4
 
-    - name: Publish to Maven Central
-      run: mvn deploy -DdryRun=true -s $GITHUB_WORKSPACE/settings.xml
-      env:
-        MAVEN_CENTRAL_RELEASES_USERNAME: ${{ secrets.MAVEN_CENTRAL_RELEASES_USERNAME }}
-        MAVEN_CENTRAL_RELEASES_PASSWORD: ${{ secrets.MAVEN_CENTRAL_RELEASES_PASSWORD }}
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+          server-id: maven-central-release
+          settings-path: ${{ github.workspace }}
+
+      - name: Build with Tests
+        run: mvn -B clean install
+
+      - name: Publish to Maven Central
+        if: github.event_name == 'release'
+        run: mvn deploy -DdryRun=true -s $GITHUB_WORKSPACE/settings.xml
+        env:
+          MAVEN_CENTRAL_RELEASES_USERNAME: ${{ secrets.MAVEN_CENTRAL_RELEASES_USERNAME }}
+          MAVEN_CENTRAL_RELEASES_PASSWORD: ${{ secrets.MAVEN_CENTRAL_RELEASES_PASSWORD }}
