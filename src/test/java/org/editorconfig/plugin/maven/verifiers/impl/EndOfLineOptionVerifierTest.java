@@ -31,11 +31,12 @@ class EndOfLineOptionVerifierTest {
 
     @ParameterizedTest
     @MethodSource(value = "arguments")
-    void testEndOfLineOptionVerifier(String sourceCodeFile, EndOfLine endOfLine, boolean noErrors)
+    void check_EndOfLineOptionVerifier_OptionalValidationResult(
+            String sourceCodeFile, EndOfLine endOfLine, boolean expected)
             throws URISyntaxException, FileNotFoundException {
 
         // when.
-        OptionValidationResult check = subject.check(
+        OptionValidationResult actual = subject.check(
                 new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
                         .getResource(sourceCodeFile)
                         .toURI())),
@@ -44,7 +45,7 @@ class EndOfLineOptionVerifierTest {
                 new VerifiersExecutionContext());
 
         // then.
-        Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
+        Assertions.assertThat(actual.noErrors()).isEqualTo(expected);
     }
 
     static Stream<Arguments> arguments() {

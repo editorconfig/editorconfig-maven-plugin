@@ -5,7 +5,7 @@
 package org.editorconfig.plugin.maven.model;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -16,42 +16,55 @@ import org.junit.jupiter.api.Test;
 class OptionValueTest {
 
     @Test
-    void testUnset() {
-        // given.
+    void isUnset_OptionValueUnset_True() {
+        // given
         OptionValue<Object> unset = OptionValue.unset();
 
-        // when/then.
-        Assertions.assertThat(unset.isUnset()).isTrue();
-        Assertions.assertThatThrownBy(unset::getValue).isInstanceOf(MojoExecutionException.class);
+        // when/then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(unset.isUnset()).isTrue();
+            softAssertions
+                    .assertThatThrownBy(unset::getValue)
+                    .isInstanceOf(MojoExecutionException.class);
+        });
     }
 
     @Test
-    void testResolve_null() {
-        // given.
+    void resolve_NullSource_NullValue() {
+        // given
         OptionValue<IndentationStyle> nullable = OptionValue.resolve(null, IndentationStyle::from);
 
-        // when/then.
-        Assertions.assertThat(nullable.isUnset()).isFalse();
-        Assertions.assertThat(nullable.getValue()).isEqualTo(null);
+        // when/then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(nullable.isUnset()).isFalse();
+
+            softAssertions.assertThat(nullable.getValue()).isEqualTo(null);
+        });
     }
 
     @Test
-    void testResolve_unparsable() {
-        // given.
+    void resolve_UnparsableSource_NullValue() {
+        // given
         OptionValue<IndentationStyle> nullable = OptionValue.resolve("hey", IndentationStyle::from);
 
-        // when/then.
-        Assertions.assertThat(nullable.isUnset()).isFalse();
-        Assertions.assertThat(nullable.getValue()).isEqualTo(null);
+        // when/then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(nullable.isUnset()).isFalse();
+
+            softAssertions.assertThat(nullable.getValue()).isEqualTo(null);
+        });
     }
 
     @Test
-    void testResolve_validValue() {
-        // given.
+    void resolve_TabSource_IndentationStyleTAB() {
+        // given
         OptionValue<IndentationStyle> nullable = OptionValue.resolve("tab", IndentationStyle::from);
 
-        // when/then.
-        Assertions.assertThat(nullable.isUnset()).isFalse();
-        Assertions.assertThat(nullable.getValue()).isEqualTo(IndentationStyle.TAB);
+        // when/then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(nullable.isUnset()).isFalse();
+
+            softAssertions.assertThat(nullable.getValue()).isEqualTo(IndentationStyle.TAB);
+        });
     }
 }

@@ -48,8 +48,8 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
      * Checks, whether the content of the file is compliant with the current setting of the {@link #targetOption}
      *
      * @param content content of the file
-     * @param section section that is assigned to the current file. The section is expected to be already merged with all others that present
-     *               in .editorconfig files in the tree.
+     * @param section section that is assigned to the current file. The section is expected to be already merged with
+     *               all others that present in .editorconfig files in the tree.
      *
      * @return OptionViolations wrapped
      */
@@ -60,7 +60,7 @@ public abstract class SpecOptionVerifier<T> implements Ordered {
 
         OptionValue<T> optionValue = getValueFromSection(section);
 
-        if (optionValue.isUnset() || optionValue.getValue() == null) {
+        if (optionValue == null || optionValue.isUnset() || optionValue.getValue() == null) {
             return OptionValidationResult.skippedValidation(targetOption);
         }
 
