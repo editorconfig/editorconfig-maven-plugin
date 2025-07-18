@@ -26,8 +26,8 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: Build with Tests
-        run: mvn -B clean install
+      - name: Build and Test
+        run: mvn -B clean test
 
       - name: Add GNU GPG private key to runner keyring
         run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
