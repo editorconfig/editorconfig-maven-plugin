@@ -41,7 +41,9 @@ public class CharsetOptionVerifier extends SpecOptionVerifier<Charset> {
             VerifiersExecutionContext executionContext) {
         OptionValue<Charset> expectedCharset = getValueFromSection(section);
 
-        if (expectedCharset.isUnset() || expectedCharset.getValue() == null) {
+        if (expectedCharset == null
+                || expectedCharset.isUnset()
+                || expectedCharset.getValue() == null) {
             return OptionValidationResult.skippedValidation(targetOption);
         }
 
