@@ -9,7 +9,7 @@
     <version>1.0.0-alpha1</version>
 
     <properties>
-        <junit-jupiter.version>5.9.1</junit-jupiter.version>
+        <junit-jupiter.version>5.9.3</junit-jupiter.version>
         <assertj-core.version>3.26.0</assertj-core.version>
         <charset-lib.version>2.4.0</charset-lib.version>
         <maven.version>3.8.2</maven.version>
