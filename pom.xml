@@ -14,7 +14,7 @@
         <charset-lib.version>2.4.0</charset-lib.version>
         <maven.version>3.8.2</maven.version>
         <jspecify.version>1.0.0</jspecify.version>
-        <spotless.version>2.44.4</spotless.version>
+        <spotless.version>2.44.5</spotless.version>
     </properties>
 
     <scm>
