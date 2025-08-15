@@ -10,24 +10,25 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class CachingInputStreamTest {
 
     @Test
-    void test_readAllBytes_twice() throws IOException {
+    void reset_readAllBytesTwice_areEqual() throws IOException {
         CachingInputStream cachingInputStream = fromFile("caching_input_stream/SomeClass.java");
 
         byte[] first = cachingInputStream.readAllBytes();
         cachingInputStream.reset();
         byte[] second = cachingInputStream.readAllBytes();
 
-        Assertions.assertThat(first).isEqualTo(second);
+        assertThat(first).isEqualTo(second);
     }
 
     @Test
-    void test_BufferedInputStream() throws IOException {
+    void reset_writeBytes_areEqual() throws IOException {
         CachingInputStream cachingInputStream = fromFile("caching_input_stream/SimpleRecord.java");
 
         BufferedInputStream bufferedInputStream = new BufferedInputStream(cachingInputStream);
@@ -46,8 +47,7 @@ class CachingInputStreamTest {
             secondIteration.writeBytes(line.getContentWithEol());
         }
 
-        Assertions.assertThat(firstIteration.toByteArray())
-                .isEqualTo(secondIteration.toByteArray());
+        assertThat(firstIteration.toByteArray()).isEqualTo(secondIteration.toByteArray());
     }
 
     private static CachingInputStream fromFile(String file) {

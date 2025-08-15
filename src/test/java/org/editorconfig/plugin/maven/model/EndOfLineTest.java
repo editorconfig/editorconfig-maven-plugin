@@ -13,13 +13,17 @@ class EndOfLineTest {
 
     @ParameterizedTest
     @EnumSource(value = EndOfLine.class, names = "CARRIAGE_RERUN_LINE_FEED", mode = Mode.EXCLUDE)
-    void isSingleCharacter_true(EndOfLine source) {
+    void isSingleCharacter_СrLfEof_True(EndOfLine source) {
+
+        // when/then
         Assertions.assertThat(source.isSingleCharacter()).isTrue();
     }
 
     @ParameterizedTest
     @EnumSource(value = EndOfLine.class, names = "CARRIAGE_RERUN_LINE_FEED", mode = Mode.INCLUDE)
-    void isSingleCharacter_false(EndOfLine source) {
+    void isSingleCharacter_Сrlf_False(EndOfLine source) {
+
+        // when/then
         Assertions.assertThat(source.isSingleCharacter()).isFalse();
     }
 }

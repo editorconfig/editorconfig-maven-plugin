@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TreeBuilderTest {
 
     @Test
-    void testTreeBuilding() throws URISyntaxException {
+    void buildTree_ValidPath_ValidTreeNode() throws URISyntaxException {
         // given.
         File start = new File(ClassLoader.getSystemClassLoader()
                 .getResource("tree-builder/first")

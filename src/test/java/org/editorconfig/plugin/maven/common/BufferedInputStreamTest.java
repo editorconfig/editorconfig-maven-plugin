@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.editorconfig.plugin.maven.model.EndOfLine;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 class BufferedInputStreamTest {
 
     @Test
-    void test_readLine_LF() throws IOException {
+    void getEndOfLine_3LinesLfLfLf_Lf() throws IOException {
         // given
         String firstRow = "first row\n";
         String secondRow = "second row\n";
@@ -30,17 +30,20 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+        });
     }
 
     @Test
-    void test_readLine_LF_lastLineIsEOFEnded() throws IOException {
+    void getEndOfLine_3LinesLfLfEof_Eof() throws IOException {
         // given
         String firstRow = "first row\n";
         String secondRow = "second row\n";
@@ -52,17 +55,20 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.EOF);
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        });
     }
 
     @Test
-    void test_readLine_CRLF() throws IOException {
+    void getEndOfLine_3LinesCrlfCrlfCrlf_Crlf() throws IOException {
         // given
         String firstRow = "first row\r\n";
         String secondRow = "second row\r\n";
@@ -74,17 +80,22 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions
+                    .assertThat(secondEndOfLine)
+                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+        });
     }
 
     @Test
-    void test_readLine_CRLF_lastRowEndWithEOF() throws IOException {
+    void getEndOfLine_3LinesCrlfCrlfEof_Eof() throws IOException {
         // given
         String firstRow = "first row\r\n";
         String secondRow = "second row\r\n";
@@ -96,17 +107,22 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.EOF);
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions
+                    .assertThat(secondEndOfLine)
+                    .isEqualTo(EndOfLine.CARRIAGE_RERUN_LINE_FEED);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        });
     }
 
     @Test
-    void test_readLine_CR() throws IOException {
+    void getEndOfLine_3LinesCrCrCr_Cr() throws IOException {
         // given
         String firstRow = "first row\r";
         String secondRow = "second row\r";
@@ -118,17 +134,20 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+        });
     }
 
     @Test
-    void test_readLine_CR_lastRowEndWithEOF() throws IOException {
+    void getEndOfLine_3LinesCrCrEof_Eof() throws IOException {
         // given
         String firstRow = "first row\r";
         String secondRow = "second row\r";
@@ -140,13 +159,16 @@ class BufferedInputStreamTest {
                 new BufferedInputStream(testFromAsciiString(source));
 
         // when
-        ByteArrayLine first = bufferedInputStream.readLine();
-        ByteArrayLine second = bufferedInputStream.readLine();
-        ByteArrayLine third = bufferedInputStream.readLine();
+        EndOfLine firstEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine secondEndOfLine = bufferedInputStream.readLine().getEndOfLine();
+        EndOfLine thirdEndOfLine = bufferedInputStream.readLine().getEndOfLine();
 
-        Assertions.assertThat(first.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(second.getEndOfLine()).isEqualTo(EndOfLine.CARRIAGE_RERUN);
-        Assertions.assertThat(third.getEndOfLine()).isEqualTo(EndOfLine.EOF);
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(firstEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(secondEndOfLine).isEqualTo(EndOfLine.CARRIAGE_RERUN);
+            softAssertions.assertThat(thirdEndOfLine).isEqualTo(EndOfLine.EOF);
+        });
     }
 
     private static ByteArrayInputStream testFromAsciiString(String asciiString) {

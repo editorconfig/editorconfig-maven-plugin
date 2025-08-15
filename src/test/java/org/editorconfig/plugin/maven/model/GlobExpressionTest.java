@@ -21,7 +21,9 @@ class GlobExpressionTest {
 
     @ParameterizedTest
     @MethodSource(value = "argumentsStream")
-    void testFromRawString(String expected, String actual) {
+    void fromAndGetRaw_ListOfRawStrings_StringValues(String expected, String actual) {
+
+        // when/then
         assertThat(GlobExpression.from(expected).getRaw()).isEqualTo(actual);
     }
 

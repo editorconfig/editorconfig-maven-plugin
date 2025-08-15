@@ -7,10 +7,10 @@ package org.editorconfig.plugin.maven.config;
 import java.nio.file.Paths;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.SoftAssertions;
 import org.editorconfig.plugin.maven.model.Editorconfig;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class TreeNodeTest {
 
     @Test
-    void testSimpleChildInsertion() {
+    void insertNode_InsertIntoTheRoot_ValidTreeNode() {
         // given.
         TreeNode root = buildTestNodeTree();
 
@@ -29,18 +29,21 @@ class TreeNodeTest {
         root.insertNode(new Editorconfig(Paths.get("/root/third/.editorconfig")));
 
         // then.
-        assertThat(root.getChildren()).hasSize(3);
-        assertThat(root.getChildren())
-                .extracting(treeNode ->
-                        treeNode.getValue().getLocation().toAbsolutePath().toString())
-                .containsOnly(
-                        "/root/first/.editorconfig",
-                        "/root/second/.editorconfig",
-                        "/root/third/.editorconfig");
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(root.getChildren()).hasSize(3);
+            softAssertions
+                    .assertThat(root.getChildren())
+                    .extracting(treeNode ->
+                            treeNode.getValue().getLocation().toAbsolutePath().toString())
+                    .containsOnly(
+                            "/root/first/.editorconfig",
+                            "/root/second/.editorconfig",
+                            "/root/third/.editorconfig");
+        });
     }
 
     @Test
-    void testInsertionSingleLevelNesting() {
+    void insertNode_InsertIntoTheLeaf_ValidTreeNode() {
         // given.
         TreeNode root = buildTestNodeTree();
 
@@ -48,33 +51,38 @@ class TreeNodeTest {
         root.insertNode(new Editorconfig(Paths.get("/root/second/inner/.editorconfig")));
 
         // then.
-        assertThat(root.getChildren()).hasSize(2);
-        assertThat(root.getChildren())
-                .filteredOn(treeNode -> treeNode.getValue()
-                        .getLocation()
-                        .toString()
-                        .equals("/root/first/.editorconfig"))
-                .hasSize(1)
-                .element(0)
-                .extracting(TreeNode::getChildren, InstanceOfAssertFactories.list(TreeNode.class))
-                .isEmpty();
-
-        assertThat(root.getChildren())
-                .filteredOn(treeNode -> treeNode.getValue()
-                        .getLocation()
-                        .toString()
-                        .equals("/root/second/.editorconfig"))
-                .hasSize(1)
-                .element(0)
-                .extracting(TreeNode::getChildren, InstanceOfAssertFactories.list(TreeNode.class))
-                .hasSize(1)
-                .element(0)
-                .extracting(treeNode -> treeNode.getValue().getLocation().toString())
-                .isEqualTo("/root/second/inner/.editorconfig");
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(root.getChildren()).hasSize(2);
+            softAssertions
+                    .assertThat(root.getChildren())
+                    .filteredOn(treeNode -> treeNode.getValue()
+                            .getLocation()
+                            .toString()
+                            .equals("/root/first/.editorconfig"))
+                    .hasSize(1)
+                    .element(0)
+                    .extracting(
+                            TreeNode::getChildren, InstanceOfAssertFactories.list(TreeNode.class))
+                    .isEmpty();
+            softAssertions
+                    .assertThat(root.getChildren())
+                    .filteredOn(treeNode -> treeNode.getValue()
+                            .getLocation()
+                            .toString()
+                            .equals("/root/second/.editorconfig"))
+                    .hasSize(1)
+                    .element(0)
+                    .extracting(
+                            TreeNode::getChildren, InstanceOfAssertFactories.list(TreeNode.class))
+                    .hasSize(1)
+                    .element(0)
+                    .extracting(treeNode -> treeNode.getValue().getLocation().toString())
+                    .isEqualTo("/root/second/inner/.editorconfig");
+        });
     }
 
     @Test
-    void testInsertionIntoWrongNodeParent() {
+    void insertNode_InsertIntoTheInvalidRoot_NodeInsertionException() {
         // given.
         TreeNode root = buildTestNodeTree();
 

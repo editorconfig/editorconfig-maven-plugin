@@ -8,10 +8,11 @@ import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Unit tests for {@link GlobExpressionParser}
@@ -22,11 +23,17 @@ class GlobExpressionParserTest {
 
     @ParameterizedTest
     @MethodSource("testAcceptsSource")
-    void testAccepts(Path target, Path editorconfig, String globPattern, boolean expectedAccepts) {
-        boolean actualAccepts = new GlobExpressionParser(editorconfig.toFile().getAbsolutePath())
-                .accepts(target, globPattern);
+    void accepts_ListOfCheckedPaths_Ok(
+            Path target, Path editorconfig, String globPattern, boolean expectedAccepts) {
+        // given.
+        GlobExpressionParser globExpressionParser =
+                new GlobExpressionParser(editorconfig.toFile().getAbsolutePath());
 
-        Assertions.assertThat(actualAccepts).isEqualTo(expectedAccepts);
+        // when.
+        boolean actualAccepts = globExpressionParser.accepts(target, globPattern);
+
+        // than.
+        assertThat(actualAccepts).isEqualTo(expectedAccepts);
     }
 
     static Stream<Arguments> testAcceptsSource() {

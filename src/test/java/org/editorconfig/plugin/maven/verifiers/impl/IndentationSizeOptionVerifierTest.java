@@ -15,20 +15,26 @@ import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.utils.IntegerUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class IndentationSizeOptionVerifierTest {
 
-    private final IndentationSizeOptionVerifier subject = new IndentationSizeOptionVerifier();
+    private IndentationSizeOptionVerifier subject;
+
+    @BeforeEach
+    void setUp() {
+        subject = new IndentationSizeOptionVerifier();
+    }
 
     @ParameterizedTest
     @MethodSource(value = "source")
-    void testIndentationSizeOptionVerifier(
-            String sourceCodeFile, Integer tabWidth, Integer indentSize, boolean checkShouldPass)
+    void check_IndentationSizeOptionVerifier_OptionalValidationResult(
+            String sourceCodeFile, Integer tabWidth, Integer indentSize, boolean expected)
             throws URISyntaxException, FileNotFoundException {
-        OptionValidationResult result = subject.check(
+        OptionValidationResult actual = subject.check(
                 new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
                         .getResource(sourceCodeFile)
                         .toURI())),
@@ -37,7 +43,7 @@ class IndentationSizeOptionVerifierTest {
                         .indentationSize(OptionValue.resolve(
                                 indentSize.toString(), IntegerUtils::parseIntSafe))),
                 new VerifiersExecutionContext());
-        Assertions.assertThat(result.noErrors()).isEqualTo(checkShouldPass);
+        Assertions.assertThat(actual.noErrors()).isEqualTo(expected);
     }
 
     static Stream<Arguments> source() {

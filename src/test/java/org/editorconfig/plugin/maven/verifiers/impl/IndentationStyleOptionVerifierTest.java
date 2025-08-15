@@ -14,6 +14,7 @@ import org.editorconfig.plugin.maven.model.OptionValue;
 import org.editorconfig.plugin.maven.utils.IntegerUtils;
 import org.editorconfig.plugin.maven.verifiers.OptionValidationResult;
 import org.editorconfig.plugin.maven.verifiers.VerifiersExecutionContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,17 +26,22 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 class IndentationStyleOptionVerifierTest {
 
-    private final IndentationStyleOptionVerifier subject = new IndentationStyleOptionVerifier();
+    private IndentationStyleOptionVerifier subject;
+
+    @BeforeEach
+    void setUp() {
+        subject = new IndentationStyleOptionVerifier();
+    }
 
     @ParameterizedTest
     @MethodSource(value = {"arguments"})
-    void testIndentationStyleOptionVerifier(
+    void check_IndentationStyleOptionVerifier_OptionalValidationResult(
             String sourceCodeFile,
             IndentationStyle indentationStyle,
             Integer tabWidth,
-            boolean noErrors)
+            boolean expected)
             throws Exception {
-        OptionValidationResult check = subject.check(
+        OptionValidationResult actual = subject.check(
                 new CachingInputStream(Paths.get(ClassLoader.getSystemClassLoader()
                                 .getResource(sourceCodeFile)
                                 .toURI())
@@ -47,7 +53,7 @@ class IndentationStyleOptionVerifierTest {
                                 indentationStyle.name(), IndentationStyle::from))),
                 new VerifiersExecutionContext());
 
-        Assertions.assertThat(check.noErrors()).isEqualTo(noErrors);
+        Assertions.assertThat(actual.noErrors()).isEqualTo(expected);
     }
 
     static Stream<Arguments> arguments() {

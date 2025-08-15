@@ -36,10 +36,11 @@ class InsertFinalNewLineOptionVerifierTest {
 
     @ParameterizedTest
     @MethodSource(value = "arguments")
-    void testInsertFinalNewLineOptionVerifier(String sourceCodeFile, boolean shouldPass)
+    void check_InsertFinalNewLineOptionVerifier_OptionalValidationResult(
+            String sourceCodeFile, boolean expected)
             throws URISyntaxException, FileNotFoundException {
         // given.
-        OptionValidationResult sut = subject.check(
+        OptionValidationResult actual = subject.check(
                 new CachingInputStream(new File(ClassLoader.getSystemClassLoader()
                         .getResource(sourceCodeFile)
                         .toURI())),
@@ -48,7 +49,7 @@ class InsertFinalNewLineOptionVerifierTest {
                 new VerifiersExecutionContext());
 
         // when
-        Assertions.assertThat(sut.noErrors()).isEqualTo(shouldPass);
+        Assertions.assertThat(actual.noErrors()).isEqualTo(expected);
     }
 
     static Stream<Arguments> arguments() {
